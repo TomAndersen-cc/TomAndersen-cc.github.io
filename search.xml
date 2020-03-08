@@ -145,10 +145,14 @@
 
 <h3 id="3）flume3-properties"><a href="#3）flume3-properties" class="headerlink" title="3）flume3.properties"></a>3）flume3.properties</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># flume3:此配置用于将来自指定Avro端口的数据输出到控制台</span></span><br><span class="line"><span class="comment"># a3:Avro Source-&gt;Memory Channel-&gt;Logger Sink</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Agent</span></span><br><span class="line">a3.sources = r1</span><br><span class="line">a3.channels = c1</span><br><span class="line">a3.sinks = k1</span><br><span class="line"></span><br><span class="line"><span class="comment"># Sources</span></span><br><span class="line"><span class="comment"># a3.sources.r1</span></span><br><span class="line">a3.sources.r1.type = avro</span><br><span class="line"><span class="comment"># 设置监听本地IP</span></span><br><span class="line">a3.sources.r1.bind = 0.0.0.0</span><br><span class="line"><span class="comment"># 设置监听端口号</span></span><br><span class="line">a3.sources.r1.port = 4141</span><br><span class="line"></span><br><span class="line"><span class="comment"># Channels</span></span><br><span class="line"><span class="comment"># a3.channels.c1</span></span><br><span class="line"><span class="comment"># 使用内存作为缓存/最多缓存的Event个数/单次传输的Event个数</span></span><br><span class="line">a3.channels.c1.type = memory</span><br><span class="line">a3.channels.c1.capacity = 1000</span><br><span class="line">a3.channels.c1.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line"><span class="comment"># Sinks</span></span><br><span class="line"><span class="comment"># 运行时设置参数 -Dflume.root.logger=INFO,console 即输出到控制台实时显示</span></span><br><span class="line">a3.sinks.k1.type = logger</span><br><span class="line"><span class="comment"># 设置Event的Body中写入log的最大字节数(默认值为16)</span></span><br><span class="line">a3.sinks.k1.maxBytesToLog = 256</span><br><span class="line"></span><br><span class="line"><span class="comment"># Bind</span></span><br><span class="line">a3.sources.r1.channels = c1</span><br><span class="line">a3.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
 
-<h3 id="4）启动命令"><a href="#4）启动命令" class="headerlink" title="4）启动命令"></a>4）启动命令</h3><p><strong>Flume Agent a1至a3分别运行在主机hadoop101、hadoop102、hadoop103上</strong></p>
+<h3 id="4）对应功能"><a href="#4）对应功能" class="headerlink" title="4）对应功能"></a>4）对应功能</h3><p><strong>agent a1将指定端口的监听数据采用轮询的方式传输给a2和a3，并分别输出到各自的控制台</strong></p>
+<h3 id="5）启动命令"><a href="#5）启动命令" class="headerlink" title="5）启动命令"></a>5）启动命令</h3><p><strong>Flume Agent a1至a3分别运行在主机hadoop101、hadoop102、hadoop103上</strong></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./bin/flume-ng agent -n a1 -c conf -f flume1.properties</span><br><span class="line">./bin/flume-ng agent -n a2 -c conf -f flume2.properties -Dflume.root.logger=INFO,console</span><br><span class="line">./bin/flume-ng agent -n a3 -c conf -f flume3.properties -Dflume.root.logger=INFO,console</span><br></pre></td></tr></table></figure>
 
-<h3 id="5）实现功能"><a href="#5）实现功能" class="headerlink" title="5）实现功能"></a>5）实现功能</h3><p><strong>agent a1将指定端口的监听数据采用轮询的方式传输给a2和a3，并分别输出到各自的控制台</strong></p>
+
+
+
+
 <hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
       <categories>
@@ -181,17 +185,17 @@
 
 <h3 id="3）flume3-properties"><a href="#3）flume3-properties" class="headerlink" title="3）flume3.properties"></a>3）flume3.properties</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># flume3:此配置用于将来自指定Avro端口的数据输出到控制台</span></span><br><span class="line"><span class="comment"># a3:Avro Source-&gt;Memory Channel-&gt;Logger Sink</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Agent</span></span><br><span class="line">a3.sources = r1</span><br><span class="line">a3.channels = c1</span><br><span class="line">a3.sinks = k1</span><br><span class="line"></span><br><span class="line"><span class="comment"># Sources</span></span><br><span class="line"><span class="comment"># a3.sources.r1</span></span><br><span class="line">a3.sources.r1.type = avro</span><br><span class="line"><span class="comment"># 设置监听本地IP</span></span><br><span class="line">a3.sources.r1.bind = 0.0.0.0</span><br><span class="line"><span class="comment"># 设置监听端口号</span></span><br><span class="line">a3.sources.r1.port = 4141</span><br><span class="line"></span><br><span class="line"><span class="comment"># Channels</span></span><br><span class="line"><span class="comment"># a3.channels.c1</span></span><br><span class="line"><span class="comment"># 使用内存作为缓存/最多缓存的Event个数/单次传输的Event个数</span></span><br><span class="line">a3.channels.c1.type = memory</span><br><span class="line">a3.channels.c1.capacity = 1000</span><br><span class="line">a3.channels.c1.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line"><span class="comment"># Sinks</span></span><br><span class="line"><span class="comment"># 运行时设置参数 -Dflume.root.logger=INFO,console 即输出到控制台实时显示</span></span><br><span class="line">a3.sinks.k1.type = logger</span><br><span class="line"><span class="comment"># 设置Event的Body中写入log的最大字节数(默认值为16)</span></span><br><span class="line">a3.sinks.k1.maxBytesToLog = 256</span><br><span class="line"></span><br><span class="line"><span class="comment"># Bind</span></span><br><span class="line">a3.sources.r1.channels = c1</span><br><span class="line">a3.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
 
-<h3 id="4）启动命令"><a href="#4）启动命令" class="headerlink" title="4）启动命令"></a>4）启动命令</h3><p><strong>Flume Agent a1至a3分别运行在主机hadoop101、hadoop102、hadoop103上</strong></p>
+
+
+<h3 id="4）对应功能"><a href="#4）对应功能" class="headerlink" title="4）对应功能"></a>4）对应功能</h3><ul>
+<li><strong>Aent a1将指定端口的监听数据输出到a2或者a3的控制台</strong></li>
+<li><strong>当Event从Channel中传输给Sink Group之前，首先会根据配置Failover sink processor优先级表尝试将此Event发送给优先级最高的可用Sink，如果成功则继续处理下一个Event。如果在发送过程中，当前Sink宕机，则将其加入黑名单，一定时间内不再尝试将Event发往此Sink，并且退避时间呈指数增长，直到最大退避时间maxpenalty，以此来实现Sink的故障转移</strong></li>
+</ul>
+<h3 id="5）启动命令"><a href="#5）启动命令" class="headerlink" title="5）启动命令"></a>5）启动命令</h3><p><strong>Flume Agent a1至a3分别运行在主机hadoop101、hadoop102、hadoop103上</strong></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./bin/flume-ng agent -n a1 -c conf -f flume1.properties</span><br><span class="line">./bin/flume-ng agent -n a2 -c conf -f flume2.properties -Dflume.root.logger=INFO,console</span><br><span class="line">./bin/flume-ng agent -n a3 -c conf -f flume3.properties -Dflume.root.logger=INFO,console</span><br></pre></td></tr></table></figure>
 
 
 
-<h3 id="5）实现功能"><a href="#5）实现功能" class="headerlink" title="5）实现功能"></a>5）实现功能</h3><ul>
-<li><p><strong>Aent a1将指定端口的监听数据输出到a2或者a3的控制台</strong></p>
-</li>
-<li><p><strong>当Event从Channel中传输给Sink Group之前，首先会根据配置Failover sink processor优先级表尝试将此Event发送给优先级最高的可用Sink，如果成功则继续处理下一个Event。如果在发送过程中，当前Sink宕机，则将其加入黑名单，一定时间内不再尝试将Event发往此Sink，并且退避时间呈指数增长，直到最大退避时间maxpenalty，以此来实现Sink的故障转移</strong></p>
-</li>
-</ul>
 <hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
       <categories>
@@ -220,12 +224,14 @@
 
 <h3 id="3）flume3-properties"><a href="#3）flume3-properties" class="headerlink" title="3）flume3.properties"></a>3）flume3.properties</h3><figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># flume3:此配置用于将来自指定Avro端口的数据输出到控制台中</span></span><br><span class="line"><span class="comment"># a3:Avro Source-&gt;Memory Channel-&gt;Logger Sink</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Agent</span></span><br><span class="line"><span class="meta">a3.sources</span> = <span class="string">r1</span></span><br><span class="line"><span class="meta">a3.channels</span> = <span class="string">c1</span></span><br><span class="line"><span class="meta">a3.sinks</span> = <span class="string">k1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Sources</span></span><br><span class="line"><span class="meta">a3.sources.r1.type</span> = <span class="string">avro</span></span><br><span class="line"><span class="meta">a3.sources.r1.bind</span> = <span class="string">0.0.0.0</span></span><br><span class="line"><span class="meta">a3.sources.r1.port</span> = <span class="string">4141</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Channels</span></span><br><span class="line"><span class="meta">a3.channels.c1.type</span> = <span class="string">memory</span></span><br><span class="line"><span class="meta">a3.channels.c1.capacity</span> = <span class="string">1000</span></span><br><span class="line"><span class="meta">a3.channels.c1.transactionCapacity</span> = <span class="string">100</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Sinks</span></span><br><span class="line"><span class="comment"># 运行时设置参数 -Dflume.root.logger=INFO,console 即输出到控制台实时显示</span></span><br><span class="line"><span class="meta">a3.sinks.k1.type</span> = <span class="string">logger</span></span><br><span class="line"><span class="comment"># 设置Event的Body中写入log的最大字节数(默认值为16)</span></span><br><span class="line"><span class="meta">a3.sinks.k1.maxBytesToLog</span> = <span class="string">256</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Bind</span></span><br><span class="line"><span class="attr">r1-&gt;c1-&gt;k1</span></span><br><span class="line"><span class="meta">a3.sources.r1.channels</span> = <span class="string">c1</span></span><br><span class="line"><span class="meta">a3.sinks.k1.channel</span> = <span class="string">c1</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="4）启动命令"><a href="#4）启动命令" class="headerlink" title="4）启动命令"></a>4）启动命令</h3><p><strong>Flume Agent a1至a3分别运行在主机hadoop101、hadoop102、hadoop103上</strong></p>
+<h3 id="4）对应功能"><a href="#4）对应功能" class="headerlink" title="4）对应功能"></a>4）对应功能</h3><p><strong>Agent a1监听本地指定文件,将监听到的数据组装成Event通过自定义的 TypeInterceptor 来根据其Body中的内容向Header中添加不同的type字段键值，然后通过 Multiplexing Channel Selector将不同type的Event发送给不同的Channel，并最终分别在a2和a3的控制台上输出</strong></p>
+<h3 id="5）启动命令"><a href="#5）启动命令" class="headerlink" title="5）启动命令"></a>5）启动命令</h3><p><strong>Agent a1至a3分别运行在主机hadoop101、hadoop102、hadoop103上</strong></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./bin/flume-ng agent -n a1 -c conf -f flume1.properties</span><br><span class="line">./bin/flume-ng agent -n a2 -c conf -f flume2.properties -Dflume.root.logger=INFO,console</span><br><span class="line">./bin/flume-ng agent -n a3 -c conf -f flume3.properties -Dflume.root.logger=INFO,console</span><br></pre></td></tr></table></figure>
 
 
 
-<h3 id="5）实现功能"><a href="#5）实现功能" class="headerlink" title="5）实现功能"></a>5）实现功能</h3><p><strong>Agent a1监听本地指定文件,将监听到的数据组装成Event通过自定义的 TypeInterceptor 来根据其Body中的内容向Header中添加不同的type字段键值，然后通过 Multiplexing Channel Selector将不同type的Event发送给不同的Channel，并最终分别在a2和a3的控制台上输出</strong></p>
+
+
 <hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
       <categories>
@@ -262,8 +268,14 @@
 
 <h3 id="3）flume3-properties"><a href="#3）flume3-properties" class="headerlink" title="3）flume3.properties"></a>3）flume3.properties</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># flume3:此配置用于将来自指定Avro端口的数据输出到控制台中</span></span><br><span class="line"><span class="comment"># a3:Avro Source-&gt;Memory Channel-&gt;Logger Sink</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Agent</span></span><br><span class="line">a3.sources = r1</span><br><span class="line">a3.channels = c1</span><br><span class="line">a3.sinks = k1</span><br><span class="line"></span><br><span class="line"><span class="comment"># Sources</span></span><br><span class="line">a3.sources.r1.type = avro</span><br><span class="line">a3.sources.r1.bind = 0.0.0.0</span><br><span class="line">a3.sources.r1.port = 4141</span><br><span class="line"></span><br><span class="line"><span class="comment"># Channels</span></span><br><span class="line">a3.channels.c1.type = memory</span><br><span class="line">a3.channels.c1.capacity = 1000</span><br><span class="line">a3.channels.c1.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line"><span class="comment"># Sinks</span></span><br><span class="line"><span class="comment"># 运行时设置参数 -Dflume.root.logger=INFO,console 即输出到控制台实时显示</span></span><br><span class="line">a3.sinks.k1.type = logger</span><br><span class="line"><span class="comment"># 设置Event的Body中写入log的最大字节数(默认值为16)</span></span><br><span class="line">a3.sinks.k1.maxBytesToLog = 256</span><br><span class="line"></span><br><span class="line"><span class="comment"># Bind</span></span><br><span class="line">r1-&gt;c1-&gt;k1</span><br><span class="line">a3.sources.r1.channels = c1</span><br><span class="line">a3.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
 
-<p><strong>Flume Agent a1至a3分别运行在主机hadoop101、hadoop102、hadoop103上</strong></p>
+
+
 <h3 id="4）对应功能"><a href="#4）对应功能" class="headerlink" title="4）对应功能"></a>4）对应功能</h3><p><strong>Flume Agent a1监听本地指定文件,将监听到的数据组装成Event通过自定义的 TypeInterceptor 来根据其Body中的内容向Header中添加不同的type字段键值，然后通过 Multiplexing Channel Selector将不同type的Event发送给不同的Channel，并最终分别在Flume Agent a2和a3的控制台上输出</strong></p>
+<h3 id="5）启动命令"><a href="#5）启动命令" class="headerlink" title="5）启动命令"></a>5）启动命令</h3><p><strong>Flume Agent a1至a3分别运行在主机hadoop101、hadoop102、hadoop103上</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./bin/flume-ng agent -n a1 -c conf -f flume1.properties</span><br><span class="line">./bin/flume-ng agent -n a2 -c conf -f flume2.properties -Dflume.root.logger=INFO,console</span><br><span class="line">./bin/flume-ng agent -n a3 -c conf -f flume3.properties -Dflume.root.logger=INFO,console</span><br></pre></td></tr></table></figure>
+
+
+
 <hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
       <categories>
@@ -338,7 +350,7 @@
 <li>Flume agent配置：Netcat TCP Source、Memory Channel、HDFS Sink</li>
 </ul>
 <hr>
-<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><h3 id="a-拷贝Hadoop相关jar包至flume-lib-路径下"><a href="#a-拷贝Hadoop相关jar包至flume-lib-路径下" class="headerlink" title="a) 拷贝Hadoop相关jar包至flume/lib/路径下"></a>a) 拷贝Hadoop相关jar包至<code>flume/lib/</code>路径下</h3><h5 id="在hadoop-2-7-7-share-路径下找到以下对应jar包，并将其拷贝至flume-lib-路径下。Flume启动时，会将此路径添加至ClassPath"><a href="#在hadoop-2-7-7-share-路径下找到以下对应jar包，并将其拷贝至flume-lib-路径下。Flume启动时，会将此路径添加至ClassPath" class="headerlink" title="在hadoop-2.7.7/share/路径下找到以下对应jar包，并将其拷贝至flume/lib/路径下。Flume启动时，会将此路径添加至ClassPath"></a>在<code>hadoop-2.7.7/share/</code>路径下找到以下对应jar包，并将其拷贝至<code>flume/lib/</code>路径下。Flume启动时，会将此路径添加至ClassPath</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">commons-configuration-1.6.jar</span><br><span class="line">commons-io-2.4.jar</span><br><span class="line">hadoop-auth-2.7.7.jar</span><br><span class="line">hadoop-common-2.7.7.jar</span><br><span class="line">hadoop-hdfs-2.7.7.jar</span><br><span class="line">htrace-core-3.1.0-incubating.jar</span><br></pre></td></tr></table></figure>
+<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><h3 id="a-拷贝Hadoop相关jar包至flume-lib-路径下"><a href="#a-拷贝Hadoop相关jar包至flume-lib-路径下" class="headerlink" title="a) 拷贝Hadoop相关jar包至flume/lib/路径下"></a>a) 拷贝Hadoop相关jar包至<code>flume/lib/</code>路径下</h3><h4 id="在hadoop-2-7-7-share-路径下找到以下对应jar包，并将其拷贝至flume-lib-路径下。Flume启动时，会将此路径添加至ClassPath"><a href="#在hadoop-2-7-7-share-路径下找到以下对应jar包，并将其拷贝至flume-lib-路径下。Flume启动时，会将此路径添加至ClassPath" class="headerlink" title="在hadoop-2.7.7/share/路径下找到以下对应jar包，并将其拷贝至flume/lib/路径下。Flume启动时，会将此路径添加至ClassPath"></a>在<code>hadoop-2.7.7/share/</code>路径下找到以下对应jar包，并将其拷贝至<code>flume/lib/</code>路径下。Flume启动时，会将此路径添加至ClassPath</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">commons-configuration-1.6.jar</span><br><span class="line">commons-io-2.4.jar</span><br><span class="line">hadoop-auth-2.7.7.jar</span><br><span class="line">hadoop-common-2.7.7.jar</span><br><span class="line">hadoop-hdfs-2.7.7.jar</span><br><span class="line">htrace-core-3.1.0-incubating.jar</span><br></pre></td></tr></table></figure>
 
 
 
@@ -346,16 +358,16 @@
 
 
 
-<h3 id="c-使用此配置文件启动agent"><a href="#c-使用此配置文件启动agent" class="headerlink" title="c) 使用此配置文件启动agent"></a>c) 使用此配置文件启动agent</h3><h5 id="启动脚本前保证HDFS集群正常运行"><a href="#启动脚本前保证HDFS集群正常运行" class="headerlink" title="启动脚本前保证HDFS集群正常运行"></a>启动脚本前保证HDFS集群正常运行</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[tomandersen@hadoop101 flume-1.8.0]$ call-cluster.sh jps</span><br><span class="line">----------hadoop103----------</span><br><span class="line">18272 Jps</span><br><span class="line">17794 DataNode</span><br><span class="line">17987 NodeManager</span><br><span class="line">18105 JobHistoryServer</span><br><span class="line">17868 SecondaryNameNode</span><br><span class="line">----------hadoop102----------</span><br><span class="line">17826 DataNode</span><br><span class="line">18457 Jps</span><br><span class="line">17950 ResourceManager</span><br><span class="line">18079 NodeManager</span><br><span class="line">----------hadoop101----------</span><br><span class="line">10321 DataNode</span><br><span class="line">10785 Jps</span><br><span class="line">10619 NodeManager</span><br><span class="line">10205 NameNode</span><br><span class="line"></span><br><span class="line">----------execute <span class="string">"jps"</span> <span class="keyword">in</span> cluster takes 6 seconds----------</span><br><span class="line"></span><br><span class="line">[tomandersen@hadoop101 flume-1.8.0]$</span><br></pre></td></tr></table></figure>
+<h3 id="c-使用此配置文件启动agent"><a href="#c-使用此配置文件启动agent" class="headerlink" title="c) 使用此配置文件启动agent"></a>c) 使用此配置文件启动agent</h3><h4 id="启动脚本前保证HDFS集群正常运行"><a href="#启动脚本前保证HDFS集群正常运行" class="headerlink" title="启动脚本前保证HDFS集群正常运行"></a>启动脚本前保证HDFS集群正常运行</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[tomandersen@hadoop101 flume-1.8.0]$ call-cluster.sh jps</span><br><span class="line">----------hadoop103----------</span><br><span class="line">18272 Jps</span><br><span class="line">17794 DataNode</span><br><span class="line">17987 NodeManager</span><br><span class="line">18105 JobHistoryServer</span><br><span class="line">17868 SecondaryNameNode</span><br><span class="line">----------hadoop102----------</span><br><span class="line">17826 DataNode</span><br><span class="line">18457 Jps</span><br><span class="line">17950 ResourceManager</span><br><span class="line">18079 NodeManager</span><br><span class="line">----------hadoop101----------</span><br><span class="line">10321 DataNode</span><br><span class="line">10785 Jps</span><br><span class="line">10619 NodeManager</span><br><span class="line">10205 NameNode</span><br><span class="line"></span><br><span class="line">----------execute <span class="string">"jps"</span> <span class="keyword">in</span> cluster takes 6 seconds----------</span><br><span class="line"></span><br><span class="line">[tomandersen@hadoop101 flume-1.8.0]$</span><br></pre></td></tr></table></figure>
 
-<h5 id="在Flume安装路径下通过bin-flume-ng脚本启动agent"><a href="#在Flume安装路径下通过bin-flume-ng脚本启动agent" class="headerlink" title="在Flume安装路径下通过bin/flume-ng脚本启动agent"></a>在Flume安装路径下通过<code>bin/flume-ng</code>脚本启动agent</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./bin/flume-ng agent -n a1 -c conf/ -f job/netcat-memory-hdfs.properties</span><br></pre></td></tr></table></figure>
+<h4 id="在Flume安装路径下通过bin-flume-ng脚本启动agent"><a href="#在Flume安装路径下通过bin-flume-ng脚本启动agent" class="headerlink" title="在Flume安装路径下通过bin/flume-ng脚本启动agent"></a>在Flume安装路径下通过<code>bin/flume-ng</code>脚本启动agent</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./bin/flume-ng agent -n a1 -c conf/ -f job/netcat-memory-hdfs.properties</span><br></pre></td></tr></table></figure>
 
 
 
-<h3 id="d-发送测试数据并检查HDFS中是否成功上传对应数据"><a href="#d-发送测试数据并检查HDFS中是否成功上传对应数据" class="headerlink" title="d) 发送测试数据并检查HDFS中是否成功上传对应数据"></a>d) 发送测试数据并检查HDFS中是否成功上传对应数据</h3><h5 id="发送测试数据"><a href="#发送测试数据" class="headerlink" title="发送测试数据"></a>发送测试数据</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[tomandersen@hadoop101 ~]$ <span class="built_in">echo</span> Hello World! | nc localhost 44444</span><br><span class="line">OK</span><br><span class="line">[tomandersen@hadoop101 ~]$ </span><br><span class="line">[tomandersen@hadoop101 ~]$</span><br></pre></td></tr></table></figure>
+<h3 id="d-发送测试数据并检查HDFS中是否成功上传对应数据"><a href="#d-发送测试数据并检查HDFS中是否成功上传对应数据" class="headerlink" title="d) 发送测试数据并检查HDFS中是否成功上传对应数据"></a>d) 发送测试数据并检查HDFS中是否成功上传对应数据</h3><h4 id="发送测试数据"><a href="#发送测试数据" class="headerlink" title="发送测试数据"></a>发送测试数据</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[tomandersen@hadoop101 ~]$ <span class="built_in">echo</span> Hello World! | nc localhost 44444</span><br><span class="line">OK</span><br><span class="line">[tomandersen@hadoop101 ~]$ </span><br><span class="line">[tomandersen@hadoop101 ~]$</span><br></pre></td></tr></table></figure>
 
-<h5 id="进入NameNode-Web-UI页面查看HDFS文件"><a href="#进入NameNode-Web-UI页面查看HDFS文件" class="headerlink" title="进入NameNode Web UI页面查看HDFS文件"></a>进入NameNode Web UI页面查看HDFS文件</h5><p><img src="https://img-blog.csdnimg.cn/20200305113842376.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="查看HDFS文件"></p>
-<h5 id="下载并查看查看HDFS文件内容"><a href="#下载并查看查看HDFS文件内容" class="headerlink" title="下载并查看查看HDFS文件内容"></a>下载并查看查看HDFS文件内容</h5><p><img src="https://img-blog.csdnimg.cn/20200305113859854.png" alt="查看HDFS文件"></p>
+<h4 id="进入NameNode-Web-UI页面查看HDFS文件"><a href="#进入NameNode-Web-UI页面查看HDFS文件" class="headerlink" title="进入NameNode Web UI页面查看HDFS文件"></a>进入NameNode Web UI页面查看HDFS文件</h4><p><img src="https://img-blog.csdnimg.cn/20200305113842376.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="查看HDFS文件"></p>
+<h4 id="下载并查看查看HDFS文件内容"><a href="#下载并查看查看HDFS文件内容" class="headerlink" title="下载并查看查看HDFS文件内容"></a>下载并查看查看HDFS文件内容</h4><p><img src="https://img-blog.csdnimg.cn/20200305113859854.png" alt="查看HDFS文件"></p>
 <hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
       <categories>
@@ -444,7 +456,9 @@
 <h3 id="3-发布Github-Page"><a href="#3-发布Github-Page" class="headerlink" title="3. 发布Github Page"></a>3. 发布Github Page</h3><h4 id="a）进入Github-Page仓库页面，点击Setting"><a href="#a）进入Github-Page仓库页面，点击Setting" class="headerlink" title="a）进入Github Page仓库页面，点击Setting"></a>a）进入Github Page仓库页面，点击Setting</h4><p><img src="https://img-blog.csdnimg.cn/20200304231309815.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="Setting"></p>
 <h4 id="b）在其中找到Github-Page，通过编辑Custom-domain并保存来实现Github-Page发布"><a href="#b）在其中找到Github-Page，通过编辑Custom-domain并保存来实现Github-Page发布" class="headerlink" title="b）在其中找到Github Page，通过编辑Custom domain并保存来实现Github Page发布"></a>b）在其中找到Github Page，通过编辑<code>Custom domain</code>并保存来实现Github Page发布</h4><p><img src="https://img-blog.csdnimg.cn/20200304231323491.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="发布GithubPage"></p>
 <h4 id="同时会发现在仓库中多出了CNAME文件，后续如果想要取消发布直接删除此文件即可，同时要清除浏览器缓存，否则会一直访问之前设置的页面"><a href="#同时会发现在仓库中多出了CNAME文件，后续如果想要取消发布直接删除此文件即可，同时要清除浏览器缓存，否则会一直访问之前设置的页面" class="headerlink" title="同时会发现在仓库中多出了CNAME文件，后续如果想要取消发布直接删除此文件即可，同时要清除浏览器缓存，否则会一直访问之前设置的页面"></a>同时会发现在仓库中多出了CNAME文件，后续如果想要取消发布直接删除此文件即可，同时要清除浏览器缓存，否则会一直访问之前设置的页面</h4><p><img src="https://img-blog.csdnimg.cn/20200304231342835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="CNAME文件"></p>
-<h4 id="至此就实现了个人域名和映射和Github-Page的发布，通过之前设置的个人域名就能直接访问Github-Page"><a href="#至此就实现了个人域名和映射和Github-Page的发布，通过之前设置的个人域名就能直接访问Github-Page" class="headerlink" title="至此就实现了个人域名和映射和Github Page的发布，通过之前设置的个人域名就能直接访问Github Page"></a>至此就实现了个人域名和映射和Github Page的发布，通过之前设置的个人域名就能直接访问Github Page</h4><hr>
+<h4 id="至此就实现了个人域名和映射和Github-Page的发布，通过之前设置的个人域名就能直接访问Github-Page"><a href="#至此就实现了个人域名和映射和Github-Page的发布，通过之前设置的个人域名就能直接访问Github-Page" class="headerlink" title="至此就实现了个人域名和映射和Github Page的发布，通过之前设置的个人域名就能直接访问Github Page"></a>至此就实现了个人域名和映射和Github Page的发布，通过之前设置的个人域名就能直接访问Github Page</h4><h3 id="4-在Hexo-source路径下创建CNAME文件"><a href="#4-在Hexo-source路径下创建CNAME文件" class="headerlink" title="4. 在Hexo/source路径下创建CNAME文件"></a>4. 在<code>Hexo/source</code>路径下创建CNAME文件</h3><p><strong>由于每次Deploy本地Hexo仓库时，都会清除GitHub上仓库中的CNAME文件，所以需要在Hexo根目录的source文件夹下创建CNAME文件，文件内容为个人域名，如：<code>blog.tomandersen.cn</code></strong></p>
+<p><strong>这样每次部署时都会将CNMAE文件同时打包至远端Repository中，避免每次都要设置GitHub Page发布域名</strong></p>
+<hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
       <categories>
         <category>个人博客搭建</category>
@@ -963,7 +977,7 @@
 <li>所有配置操作都必须在同一用户下</li>
 </ul>
 <hr>
-<h2 id="1-下载Zookeeper"><a href="#1-下载Zookeeper" class="headerlink" title="1. 下载Zookeeper"></a>1. 下载Zookeeper</h2><h4 id="在Zookeeper官网提供的镜像网站上下载合适版本，本次下载的版本是3-4-14"><a href="#在Zookeeper官网提供的镜像网站上下载合适版本，本次下载的版本是3-4-14" class="headerlink" title="在Zookeeper官网提供的镜像网站上下载合适版本，本次下载的版本是3.4.14"></a>在<a href="http://zookeeper.apache.org/" target="_blank" rel="noopener">Zookeeper官网</a>提供的<a href="http://archive.apache.org/dist/zookeeper/" target="_blank" rel="noopener">镜像网站</a>上下载合适版本，本次下载的版本是3.4.14</h4><ul>
+<h2 id="1-下载Zookeeper"><a href="#1-下载Zookeeper" class="headerlink" title="1. 下载Zookeeper"></a>1. 下载Zookeeper</h2><h3 id="在Zookeeper官网提供的镜像网站上下载合适版本，本次下载的版本是3-4-14"><a href="#在Zookeeper官网提供的镜像网站上下载合适版本，本次下载的版本是3-4-14" class="headerlink" title="在Zookeeper官网提供的镜像网站上下载合适版本，本次下载的版本是3.4.14"></a>在<a href="http://zookeeper.apache.org/" target="_blank" rel="noopener">Zookeeper官网</a>提供的<a href="http://archive.apache.org/dist/zookeeper/" target="_blank" rel="noopener">镜像网站</a>上下载合适版本，本次下载的版本是3.4.14</h3><ul>
 <li><img src="https://img-blog.csdnimg.cn/2020022016535789.png" alt="下载Zookeeper"></li>
 </ul>
 <ul>
@@ -973,7 +987,7 @@
 </li>
 </ul>
 <hr>
-<h2 id="2-安装Zookeeper"><a href="#2-安装Zookeeper" class="headerlink" title="2. 安装Zookeeper"></a>2. 安装Zookeeper</h2><h4 id="直接使用普通用户将压缩包解压到目标路径下即可，本次解压路径为-opt-module-，具体命令如下："><a href="#直接使用普通用户将压缩包解压到目标路径下即可，本次解压路径为-opt-module-，具体命令如下：" class="headerlink" title="直接使用普通用户将压缩包解压到目标路径下即可，本次解压路径为/opt/module/，具体命令如下："></a>直接使用普通用户将压缩包解压到目标路径下即可，本次解压路径为<code>/opt/module/</code>，具体命令如下：</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[tomandersen@hadoop101 software]$ tar -xzvf zookeeper-3.4.14.tar.gz -C /opt/module/</span><br></pre></td></tr></table></figure>
+<h2 id="2-安装Zookeeper"><a href="#2-安装Zookeeper" class="headerlink" title="2. 安装Zookeeper"></a>2. 安装Zookeeper</h2><h3 id="直接使用普通用户将压缩包解压到目标路径下即可，本次解压路径为-opt-module-，具体命令如下："><a href="#直接使用普通用户将压缩包解压到目标路径下即可，本次解压路径为-opt-module-，具体命令如下：" class="headerlink" title="直接使用普通用户将压缩包解压到目标路径下即可，本次解压路径为/opt/module/，具体命令如下："></a>直接使用普通用户将压缩包解压到目标路径下即可，本次解压路径为<code>/opt/module/</code>，具体命令如下：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[tomandersen@hadoop101 software]$ tar -xzvf zookeeper-3.4.14.tar.gz -C /opt/module/</span><br></pre></td></tr></table></figure>
 
 <p><strong>注意：本次实验中此路径已经使用root用户将所有权给了用户tomandersen，默认是root用户才能访问，如果要使用相同路径，记得先排查确保文件所属用户，避免后续因为权限而出现混乱。为了避免麻烦，建议使用自定义路径</strong></p>
 <hr>
@@ -1359,7 +1373,11 @@
 <li><strong>小结：使用<code>.</code>加上脚本相对路径的方式执行脚本，实际上也是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量</strong></li>
 </ul>
 <hr>
-<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><h3 id="①使用绝对路径执行脚本-root-script-test-test-sh，实际上是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量"><a href="#①使用绝对路径执行脚本-root-script-test-test-sh，实际上是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量" class="headerlink" title="①使用绝对路径执行脚本/root/script_test/test.sh，实际上是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量"></a>①使用绝对路径执行脚本<code>/root/script_test/test.sh</code>，实际上是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量</h3><h3 id="②直接使用脚本名test-sh作为命令执行脚本，实际上也是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量。前提是环境变量PATH中含有脚本路径"><a href="#②直接使用脚本名test-sh作为命令执行脚本，实际上也是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量。前提是环境变量PATH中含有脚本路径" class="headerlink" title="②直接使用脚本名test.sh作为命令执行脚本，实际上也是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量。前提是环境变量PATH中含有脚本路径"></a>②直接使用脚本名<code>test.sh</code>作为命令执行脚本，实际上也是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量。前提是环境变量PATH中含有脚本路径</h3><h3 id="③使用-test-sh格式命令执行脚本，相当于将脚本中的所有命令取出在当前Shell中顺序执行，所以有相同的环境变量、局部变量、状态变量等。前提是脚本在当前路径下，或者环境变量PATH中能够找到脚本"><a href="#③使用-test-sh格式命令执行脚本，相当于将脚本中的所有命令取出在当前Shell中顺序执行，所以有相同的环境变量、局部变量、状态变量等。前提是脚本在当前路径下，或者环境变量PATH中能够找到脚本" class="headerlink" title="③使用. test.sh格式命令执行脚本，相当于将脚本中的所有命令取出在当前Shell中顺序执行，所以有相同的环境变量、局部变量、状态变量等。前提是脚本在当前路径下，或者环境变量PATH中能够找到脚本"></a>③使用<code>. test.sh</code>格式命令执行脚本，相当于将脚本中的所有命令取出在当前Shell中顺序执行，所以有相同的环境变量、局部变量、状态变量等。前提是脚本在当前路径下，或者环境变量PATH中能够找到脚本</h3><h3 id="④使用-加上脚本相对路径的方式-test-sh执行脚本，实际上也是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量"><a href="#④使用-加上脚本相对路径的方式-test-sh执行脚本，实际上也是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量" class="headerlink" title="④使用.加上脚本相对路径的方式./test.sh执行脚本，实际上也是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量"></a>④使用<code>.</code>加上脚本相对路径的方式<code>./test.sh</code>执行脚本，实际上也是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量</h3><hr>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p><strong>①使用绝对路径执行脚本<code>/root/script_test/test.sh</code>，实际上是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量</strong></p>
+<p><strong>②直接使用脚本名<code>test.sh</code>作为命令执行脚本，实际上也是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量。前提是环境变量PATH中含有脚本路径</strong></p>
+<p><strong>③使用<code>. test.sh</code>格式命令执行脚本，相当于将脚本中的所有命令取出在当前Shell中顺序执行，所以有相同的环境变量、局部变量、状态变量等。前提是脚本在当前路径下，或者环境变量PATH中能够找到脚本</strong></p>
+<p><strong>④使用<code>.</code>加上脚本相对路径的方式<code>./test.sh</code>执行脚本，实际上也是新建一个子Shell执行脚本中的命令，并且新建脚本会继承当前Shell的环境变量，但是不继承当前Shell的其他变量</strong></p>
+<hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
       <categories>
         <category>Shell</category>
@@ -1975,6 +1993,7 @@
 </ul>
 <hr>
 <h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><h3 id="1-检查crond工具是否安装"><a href="#1-检查crond工具是否安装" class="headerlink" title="(1) 检查crond工具是否安装"></a>(1) 检查crond工具是否安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum list installed | grep crontabs</span><br></pre></td></tr></table></figure>
+
 <p><img src="https://img-blog.csdnimg.cn/2020020917463039.png" alt="检查crond工具是否安装"></p>
 <ul>
 <li><strong>若未安装，则使用如下所示命令安装</strong></li>
@@ -1989,11 +2008,9 @@
 </li>
 </ul>
 <h3 id="3-使用crond工具创建任务计划"><a href="#3-使用crond工具创建任务计划" class="headerlink" title="(3) 使用crond工具创建任务计划"></a>(3) 使用crond工具创建任务计划</h3><ul>
-<li><strong>crontab命令使用方法</strong></li>
-</ul>
+<li><p><strong>crontab命令使用方法</strong></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Usage:</span><br><span class="line"> crontab [options] file</span><br><span class="line"> crontab [options]</span><br><span class="line"> crontab -n [hostname]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"> -u &lt;user&gt;  define user</span><br><span class="line"> -e         edit user<span class="string">'s crontab</span></span><br><span class="line"><span class="string"> -l         list user'</span>s crontab</span><br><span class="line"> -r         delete user<span class="string">'s crontab</span></span><br><span class="line"><span class="string"> -i         prompt before deleting</span></span><br><span class="line"><span class="string"> -n &lt;host&gt;  set host in cluster to run users'</span> crontabs</span><br><span class="line"> -c         get host <span class="keyword">in</span> cluster to run users<span class="string">' crontabs</span></span><br><span class="line"><span class="string"> -s         selinux context</span></span><br><span class="line"><span class="string"> -x &lt;mask&gt;  enable debugging</span></span><br><span class="line"><span class="string"> # 注意 crontab -r 是删除用户的所有定时任务(慎用！)</span></span><br></pre></td></tr></table></figure>
-
-<ul>
+</li>
 <li><p><strong>可以通过 /etc/crontab 文件查看任务定义格式和设定任务执行环境</strong><br><img src="https://img-blog.csdnimg.cn/20200209181629395.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="任务定义格式"></p>
 </li>
 <li><p><strong>字段：分（0-59），时（0-23），日（1-31），月（1-12），星期（0-6，其中0和7代表星期天）</strong></p>
@@ -2048,7 +2065,8 @@
 <h2 id="systemctl-常用命令"><a href="#systemctl-常用命令" class="headerlink" title="systemctl 常用命令"></a>systemctl 常用命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">列出所有服务：systemctl list-unit-files --<span class="built_in">type</span>=service</span><br><span class="line">列出服务层级和依赖关系：systemctl list-dependencies sshd.service</span><br><span class="line"></span><br><span class="line">显示服务状态：systemctl status sshd.service</span><br><span class="line">启动服务：systemctl start sshd.service</span><br><span class="line">关闭服务：systemctl stop sshd.service</span><br><span class="line">重启服务：systemctl restart sshd.service</span><br><span class="line"></span><br><span class="line">设置服务开机自启动：systemctl <span class="built_in">enable</span> sshd.service</span><br><span class="line">禁止服务开机自启动：systemctl <span class="built_in">disable</span> sshd.service</span><br><span class="line"></span><br><span class="line">查看服务是否自启动：systemctl is-enabled sshd.service</span><br><span class="line">列出系统所有服务的启动情况：systemctl list-units --<span class="built_in">type</span>=service</span><br><span class="line">列出所有自启动服务：systemctl list-unit-files|grep enabled</span><br></pre></td></tr></table></figure>
 <hr>
 <h2 id="service、chkconfig-常用命令"><a href="#service、chkconfig-常用命令" class="headerlink" title="service、chkconfig 常用命令"></a>service、chkconfig 常用命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">显示服务状态：service sshd status</span><br><span class="line">启动服务：service sshd start</span><br><span class="line">关闭服务：service sshd stop</span><br><span class="line">重启服务：service sshd restart</span><br><span class="line"></span><br><span class="line">设置服务自启动：chkconfig --level 3 sshd on</span><br><span class="line">禁止服务自启动：chkconfig --level 3 sshd off</span><br><span class="line"></span><br><span class="line">查看服务是否自启动：chkconfig --list sshd</span><br><span class="line">列出系统所有服务的启动情况：chkconfig --list</span><br></pre></td></tr></table></figure>
-<h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><p><a href="https://www.cnblogs.com/anliven/p/7944790.html" target="_blank" rel="noopener">Linux - 利用systemctl命令管理服务</a><br><a href="https://blog.csdn.net/qq_38265137/article/details/83081881" target="_blank" rel="noopener">Linux下systemctl命令和service、chkconfig命令的区别</a></p>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.cnblogs.com/anliven/p/7944790.html" target="_blank" rel="noopener">Linux - 利用systemctl命令管理服务</a><br><a href="https://blog.csdn.net/qq_38265137/article/details/83081881" target="_blank" rel="noopener">Linux下systemctl命令和service、chkconfig命令的区别</a></p>
 <hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
       <categories>
@@ -2117,6 +2135,7 @@
 </ul>
 <hr>
 <h2 id="每次启动时显示行号"><a href="#每次启动时显示行号" class="headerlink" title="每次启动时显示行号"></a>每次启动时显示行号</h2><p>-使用sudo命令编辑 <strong>/etc/virc</strong> 和  <strong>/etc/vimrc</strong> 文件，在第一行插入 <strong>set nu</strong> 或者 <strong>set number</strong> 命令即可<br><img src="https://img-blog.csdnimg.cn/20200208181342885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="每次启动时显示行号"></p>
+<hr>
 <h2 id="临时关闭行号"><a href="#临时关闭行号" class="headerlink" title="临时关闭行号"></a>临时关闭行号</h2><ul>
 <li>进入vi或者vim编辑器的<strong>底线命令模式</strong>下，输入 <strong>:set nonu</strong> 或者 <strong>:set nonumber</strong>，按下回车就显示行号了</li>
 </ul>
@@ -2260,35 +2279,28 @@
 <a id="more"></a>
 
 <hr>
-<ul>
-<li><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2> 最近在学习Shell脚本编程时，发现别人程序的 <strong>if-then代码块</strong> 中if的条件语句中存在 <strong>双括号(())、双中括号[[]]</strong> 的使用，因而查阅了相关资料，同时也看到了一篇不错的博文，对Shell脚本中括号的使用作出了总结，特此记录和分享</li>
-</ul>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在学习Shell脚本编程时，发现别人程序的 <strong>if-then代码块</strong> 中if的条件语句中存在 <strong>双括号(())、双中括号[[]]</strong> 的使用，因而查阅了相关资料，同时也看到了一篇不错的博文，对Shell脚本中括号的使用作出了总结，特此记录和分享</p>
 <hr>
-<ul>
-<li><h2 id="1-括号"><a href="#1-括号" class="headerlink" title="1. 括号( )"></a>1. 括号( )</h2></li>
-<li><p>括号一般在命令替换时使用，与美元符号$配合使用，如</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 输出今年的年份</span></span><br><span class="line">year=$(date +%Y)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"This year is <span class="variable">$year</span>"</span></span><br></pre></td></tr></table></figure>
-</li>
+<h2 id="1-括号"><a href="#1-括号" class="headerlink" title="1. 括号( )"></a>1. 括号( )</h2><ul>
+<li>括号一般在命令替换时使用，与美元符号$配合使用，如</li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 输出今年的年份</span></span><br><span class="line">year=$(date +%Y)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"This year is <span class="variable">$year</span>"</span></span><br></pre></td></tr></table></figure>
+
 <hr>
-<ul>
-<li><h2 id="2-方括号"><a href="#2-方括号" class="headerlink" title="2. 方括号[ ]"></a>2. 方括号[ ]</h2></li>
-<li><p><strong>Shell中的方括号一般有两种使用场景，一种是和美元符号$搭配用于Shell中整型数据运算；另一种是单独使用，作为test命令的简写形式</strong></p>
-</li>
-<li><h4 id="2-1-搭配美元符号-用于整型计算"><a href="#2-1-搭配美元符号-用于整型计算" class="headerlink" title="2.1 搭配美元符号$用于整型计算"></a>2.1 搭配美元符号$用于整型计算</h4></li>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 用于整型数据计算</span></span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 可以使用 $+双方括号来表示整型运算</span></span><br><span class="line">var3=$[ <span class="variable">$var1</span>+<span class="variable">$var2</span>+1 ]</span><br><span class="line"><span class="comment"># 也可以使用 $+双括号来表示整型运算</span></span><br><span class="line">var4=$((<span class="variable">$var1</span> + <span class="variable">$var2</span> + 1))</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var3</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var4</span></span><br></pre></td></tr></table></figure>
-
-
-
-</li>
+<h2 id="2-方括号"><a href="#2-方括号" class="headerlink" title="2. 方括号[ ]"></a>2. 方括号[ ]</h2><ul>
+<li><strong>Shell中的方括号一般有两种使用场景，一种是和美元符号$搭配用于Shell中整型数据运算；另一种是单独使用，作为test命令的简写形式</strong></li>
 </ul>
-<ul>
-<li><p>由于 <strong>if-then语句</strong> 不能测试命令状态码之外的条件，所以Bash Shell提供了 <strong>test命令</strong> 用于帮助 <strong>if-then语句</strong> 测试其他的条件，如<strong>数值比较、字符串比较、文件比较等</strong>，而test命令的简写形式就是<strong>方括号[  ]</strong>，其中第一个方括号和第二个方括号之前都必须加上空格，否则会报错</p>
-</li>
-<li><h4 id="2-2-数值比较"><a href="#2-2-数值比较" class="headerlink" title="2.2 数值比较"></a>2.2 数值比较</h4></li>
+<h3 id="2-1-搭配美元符号-用于整型计算"><a href="#2-1-搭配美元符号-用于整型计算" class="headerlink" title="2.1 搭配美元符号$用于整型计算"></a>2.1 搭配美元符号$用于整型计算</h3><ul>
+<li><strong>示例如下：</strong></li>
 </ul>
-<table>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 用于整型数据计算</span></span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 可以使用 $+双方括号来表示整型运算</span></span><br><span class="line">var3=$[ <span class="variable">$var1</span>+<span class="variable">$var2</span>+1 ]</span><br><span class="line"><span class="comment"># 也可以使用 $+双括号来表示整型运算</span></span><br><span class="line">var4=$((<span class="variable">$var1</span> + <span class="variable">$var2</span> + 1))</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var3</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var4</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>由于 <strong>if-then语句</strong> 不能测试命令状态码之外的条件，所以Bash Shell提供了 <strong>test命令</strong> 用于帮助 <strong>if-then语句</strong> 测试其他的条件，如<strong>数值比较、字符串比较、文件比较等</strong>，而test命令的简写形式就是<strong>方括号[  ]</strong>，其中第一个方括号和第二个方括号之前都必须加上空格，否则会报错</li>
+</ul>
+<h3 id="2-2-数值比较"><a href="#2-2-数值比较" class="headerlink" title="2.2 数值比较"></a>2.2 数值比较</h3><table>
 <thead>
 <tr>
 <th>比较</th>
@@ -2321,11 +2333,13 @@
 </tr>
 </tbody></table>
 <ul>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 2. 数值比较</span></span><br><span class="line">n1=20</span><br><span class="line">n2=10</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$n1</span> -ge <span class="variable">$n2</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"n1 is greater than or euqal to n2"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"n1 is less than n2"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure></li>
-<li><p><strong>注意：Bash Shell只能直接处理整数，赋值浮点数会报错</strong></p>
-</li>
-<li><h4 id="2-3-字符串比较"><a href="#2-3-字符串比较" class="headerlink" title="2.3 字符串比较"></a>2.3 字符串比较</h4><table>
+<li><strong>示例如下：</strong></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 2. 数值比较</span></span><br><span class="line">n1=20</span><br><span class="line">n2=10</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$n1</span> -ge <span class="variable">$n2</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"n1 is greater than or euqal to n2"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"n1 is less than n2"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>注意：Bash Shell只能直接处理整数，赋值浮点数会报错</strong></li>
+</ul>
+<h3 id="2-3-字符串比较"><a href="#2-3-字符串比较" class="headerlink" title="2.3 字符串比较"></a>2.3 字符串比较</h3><table>
 <thead>
 <tr>
 <th>比较</th>
@@ -2357,11 +2371,12 @@
 <td>检查str1的长度是否为0</td>
 </tr>
 </tbody></table>
-</li>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 3. 字符串比较</span></span><br><span class="line">user=root</span><br><span class="line"><span class="keyword">if</span> [ $(whoami)=<span class="variable">$user</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"root is online"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"root is offline"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><h4 id="2-4-文件比较"><a href="#2-4-文件比较" class="headerlink" title="2.4 文件比较"></a>2.4 文件比较</h4><table>
+<ul>
+<li><strong>示例如下：</strong></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 3. 字符串比较</span></span><br><span class="line">user=root</span><br><span class="line"><span class="keyword">if</span> [ $(whoami)=<span class="variable">$user</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"root is online"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"root is offline"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-文件比较"><a href="#2-4-文件比较" class="headerlink" title="2.4 文件比较"></a>2.4 文件比较</h3><table>
 <thead>
 <tr>
 <th>比较</th>
@@ -2417,25 +2432,19 @@
 <td>检查file1是否比file2旧</td>
 </tr>
 </tbody></table>
-</li>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 4. 文件比较</span></span><br><span class="line">fileName=test3</span><br><span class="line"><span class="keyword">if</span> [ -e <span class="variable">$fileName</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$fileName</span>  exists"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$fileName</span> doesn't exists"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
 <ul>
-<li><h2 id="2-花括号"><a href="#2-花括号" class="headerlink" title="2. 花括号{ }"></a>2. 花括号{ }</h2></li>
-<li><p><strong>花括号</strong>一般用于需要变量和字符串组合输出时，若想要实现变量后拼接字符串就需要使用花括号</p>
-</li>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 花括号使用练习</span></span><br><span class="line">var=50</span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 若想要实现var变量后拼接字符串就需要使用花括号</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var1</span> <span class="variable">$&#123;var&#125;</span>1</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var2</span> <span class="variable">$&#123;var&#125;</span>2</span><br></pre></td></tr></table></figure>
-</li>
+<li><strong>示例如下：</strong></li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 4. 文件比较</span></span><br><span class="line">fileName=test3</span><br><span class="line"><span class="keyword">if</span> [ -e <span class="variable">$fileName</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$fileName</span>  exists"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$fileName</span> doesn't exists"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
 <hr>
-<ul>
-<li><h2 id="3-双括号"><a href="#3-双括号" class="headerlink" title="3. 双括号(( ))"></a>3. 双括号(( ))</h2></li>
-<li><p><strong>双括号</strong>允许在比较语句中使用<strong>高级数学表达式</strong>，<strong>也可以与美元符号搭配，用于整型数据计算</strong></p>
-</li>
+<h2 id="2-花括号"><a href="#2-花括号" class="headerlink" title="2. 花括号{ }"></a>2. 花括号{ }</h2><ul>
+<li><strong>花括号</strong>一般用于需要变量和字符串组合输出时，若想要实现变量后拼接字符串就需要使用花括号</li>
+<li><strong>示例如下：</strong></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 花括号使用练习</span></span><br><span class="line">var=50</span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 若想要实现var变量后拼接字符串就需要使用花括号</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var1</span> <span class="variable">$&#123;var&#125;</span>1</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var2</span> <span class="variable">$&#123;var&#125;</span>2</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="3-双括号"><a href="#3-双括号" class="headerlink" title="3. 双括号(( ))"></a>3. 双括号(( ))</h2><ul>
+<li><strong>双括号</strong>允许在比较语句中使用<strong>高级数学表达式</strong>，<strong>也可以与美元符号搭配，用于整型数据计算</strong></li>
 </ul>
 <table>
 <thead>
@@ -2498,35 +2507,26 @@
 </tr>
 </tbody></table>
 <ul>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 双括号使用练习</span></span><br><span class="line"><span class="comment"># 用于高级数学表达式</span></span><br><span class="line">var1=10</span><br><span class="line"><span class="keyword">if</span> ((<span class="variable">$var1</span> &gt;= 10)); <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">for</span> ((i = 0; i &lt; 3; i++)); <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<li><strong>示例如下：</strong><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 双括号使用练习</span></span><br><span class="line"><span class="comment"># 用于高级数学表达式</span></span><br><span class="line">var1=10</span><br><span class="line"><span class="keyword">if</span> ((<span class="variable">$var1</span> &gt;= 10)); <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">for</span> ((i = 0; i &lt; 3; i++)); <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
 
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 用于整型数据计算</span></span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 可以使用$+双方括号来表示整型运算</span></span><br><span class="line">var3=$[ <span class="variable">$var1</span>+<span class="variable">$var2</span>+1 ]</span><br><span class="line"><span class="comment"># 也可以使用$+双括号来表示整型运算</span></span><br><span class="line">var4=$((<span class="variable">$var1</span> + <span class="variable">$var2</span> + 1))</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var3</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var4</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 用于整型数据计算</span></span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 可以使用$+双方括号来表示整型运算</span></span><br><span class="line">var3=$[ <span class="variable">$var1</span>+<span class="variable">$var2</span>+1 ]</span><br><span class="line"><span class="comment"># 也可以使用$+双括号来表示整型运算</span></span><br><span class="line">var4=$((<span class="variable">$var1</span> + <span class="variable">$var2</span> + 1))</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var3</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var4</span></span><br></pre></td></tr></table></figure>
 <hr>
-<ul>
-<li><h2 id="4-双方括号"><a href="#4-双方括号" class="headerlink" title="4. 双方括号[[ ]]"></a>4. 双方括号[[ ]]</h2></li>
-<li><p>双方括号提供了针对字符串比较的高级特性，能够使用数学符号比较字符串，并实现了模式匹配</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 双方括号使用练习</span></span><br><span class="line">fileName=test5</span><br><span class="line"><span class="keyword">if</span> [[ <span class="variable">$fileName</span>==<span class="built_in">test</span>* ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"This is a test file!"</span></span><br><span class="line">    <span class="keyword">if</span> [[ <span class="variable">$fileName</span>==test5 ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"This file is test5!"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
-
-
-</li>
+<h2 id="4-双方括号"><a href="#4-双方括号" class="headerlink" title="4. 双方括号[[ ]]"></a>4. 双方括号[[ ]]</h2><ul>
+<li>双方括号提供了针对字符串比较的高级特性，能够使用数学符号比较字符串，并实现了模式匹配</li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 双方括号使用练习</span></span><br><span class="line">fileName=test5</span><br><span class="line"><span class="keyword">if</span> [[ <span class="variable">$fileName</span>==<span class="built_in">test</span>* ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"This is a test file!"</span></span><br><span class="line">    <span class="keyword">if</span> [[ <span class="variable">$fileName</span>==test5 ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"This file is test5!"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+
 <ul>
 <li><strong>注意：不是所有的Shell都支持双方括号</strong></li>
 </ul>
 <hr>
-<ul>
-<li><h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2></li>
-</ul>
-<blockquote>
+<h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2><blockquote>
 <p>《Linux命令行与shell脚本编程大全（第三版）》</p>
 </blockquote>
-<ul>
-<li><h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2></li>
-</ul>
-]]></content>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
       <categories>
         <category>Shell</category>
       </categories>
@@ -2638,14 +2638,10 @@
 <a id="more"></a>
 
 <hr>
-<h2 id="例如"><a href="#例如" class="headerlink" title="例如"></a>例如</h2><p><strong>现在时间：2019年4月21日08:59:12，英伟达官网 notebook-win10-64bit-international-whql 最新的驱动版本号为425.31 ，下载地址为：</strong><br>    <a href="https://cn.download.nvidia.cn/Windows/425.31/425.31-notebook-win10-64bit-international-whql.exe" target="_blank" rel="noopener">https://cn.download.nvidia.cn/Windows/425.31/425.31-notebook-win10-64bit-international-whql.exe</a></p>
-<p><strong>次新的 notebook-win10-64bit-international-whql 驱动版本号为 419.67  ，下载地址为：</strong><br>    <a href="https://cn.download.nvidia.cn/Windows/419.67/419.67-notebook-win10-64bit-international-whql.exe" target="_blank" rel="noopener">https://cn.download.nvidia.cn/Windows/419.67/419.67-notebook-win10-64bit-international-whql.exe</a></p>
-<p><strong>观察其中的规律，我们便可以在已经知道版本号的情况下推出其下载地址（除了某些特殊的版本）</strong></p>
-<p><strong>如版本号391.24下载地址可由以上规律推得：</strong></p>
-<pre><code>https://us.download.nvidia.cn/Windows/391.24/391.24-notebook-win10-64bit-international-whql.exe</code></pre><p><strong>又或者如版本号391.01的下载地址可以由以上规律推得：</strong></p>
-<pre><code>https://us.download.nvidia.cn/Windows/391.01/391.01-notebook-win10-64bit-international-whql.exe</code></pre><p><strong>又或者不知道版本号码的话可以直接使用以下网址，其中可以检索到一些不太旧的版本驱动：</strong></p>
-<pre><code>https://www.nvidia.cn/Download/Find.aspx?lang=cn#</code></pre><p><strong>声明：以上规律不保证切实可用，略略略<del>~</del></strong></p>
-<p><strong>新人发帖，不喜轻喷，只求一赞<del>~</del>。</strong></p>
+<h2 id="例如"><a href="#例如" class="headerlink" title="例如"></a>例如</h2><h3 id="现在时间：2019年4月21日08-59-12，英伟达官网-notebook-win10-64bit-international-whql-最新的驱动版本号为425-31-，下载地址为："><a href="#现在时间：2019年4月21日08-59-12，英伟达官网-notebook-win10-64bit-international-whql-最新的驱动版本号为425-31-，下载地址为：" class="headerlink" title="现在时间：2019年4月21日08:59:12，英伟达官网 notebook-win10-64bit-international-whql 最新的驱动版本号为425.31 ，下载地址为："></a>现在时间：2019年4月21日08:59:12，英伟达官网 notebook-win10-64bit-international-whql 最新的驱动版本号为425.31 ，下载地址为：</h3><p>​    <a href="https://cn.download.nvidia.cn/Windows/425.31/425.31-notebook-win10-64bit-international-whql.exe" target="_blank" rel="noopener">https://cn.download.nvidia.cn/Windows/425.31/425.31-notebook-win10-64bit-international-whql.exe</a></p>
+<h3 id="次新的-notebook-win10-64bit-international-whql-驱动版本号为-419-67-，下载地址为："><a href="#次新的-notebook-win10-64bit-international-whql-驱动版本号为-419-67-，下载地址为：" class="headerlink" title="次新的 notebook-win10-64bit-international-whql 驱动版本号为 419.67  ，下载地址为："></a>次新的 notebook-win10-64bit-international-whql 驱动版本号为 419.67  ，下载地址为：</h3><p>​    <a href="https://cn.download.nvidia.cn/Windows/419.67/419.67-notebook-win10-64bit-international-whql.exe" target="_blank" rel="noopener">https://cn.download.nvidia.cn/Windows/419.67/419.67-notebook-win10-64bit-international-whql.exe</a></p>
+<h3 id="观察其中的规律，我们便可以在已经知道版本号的情况下推出其下载地址（除了某些特殊的版本）"><a href="#观察其中的规律，我们便可以在已经知道版本号的情况下推出其下载地址（除了某些特殊的版本）" class="headerlink" title="观察其中的规律，我们便可以在已经知道版本号的情况下推出其下载地址（除了某些特殊的版本）"></a>观察其中的规律，我们便可以在已经知道版本号的情况下推出其下载地址（除了某些特殊的版本）</h3><h3 id="如版本号391-24下载地址可由以上规律推得："><a href="#如版本号391-24下载地址可由以上规律推得：" class="headerlink" title="如版本号391.24下载地址可由以上规律推得："></a>如版本号391.24下载地址可由以上规律推得：</h3><pre><code>https://us.download.nvidia.cn/Windows/391.24/391.24-notebook-win10-64bit-international-whql.exe</code></pre><h3 id="又或者如版本号391-01的下载地址可以由以上规律推得："><a href="#又或者如版本号391-01的下载地址可以由以上规律推得：" class="headerlink" title="又或者如版本号391.01的下载地址可以由以上规律推得："></a>又或者如版本号391.01的下载地址可以由以上规律推得：</h3><pre><code>https://us.download.nvidia.cn/Windows/391.01/391.01-notebook-win10-64bit-international-whql.exe</code></pre><h3 id="又或者不知道版本号码的话可以直接使用以下网址，其中可以检索到一些不太旧的版本驱动："><a href="#又或者不知道版本号码的话可以直接使用以下网址，其中可以检索到一些不太旧的版本驱动：" class="headerlink" title="又或者不知道版本号码的话可以直接使用以下网址，其中可以检索到一些不太旧的版本驱动："></a>又或者不知道版本号码的话可以直接使用以下网址，其中可以检索到一些不太旧的版本驱动：</h3><pre><code>https://www.nvidia.cn/Download/Find.aspx?lang=cn#</code></pre><p><strong>声明：以上规律不保证切实可用，略略略<del>~</del></strong></p>
+<p><strong>新人博客，不喜轻喷，只求一赞<del>~</del>。</strong></p>
 <hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
       <categories>

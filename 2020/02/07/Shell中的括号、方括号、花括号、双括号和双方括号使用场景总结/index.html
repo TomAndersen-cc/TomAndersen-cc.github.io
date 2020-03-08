@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Eden">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-02-07T13:56:49.000Z">
-<meta property="article:modified_time" content="2020-03-06T12:22:04.238Z">
+<meta property="article:modified_time" content="2020-03-08T14:02:35.133Z">
 <meta property="article:author" content="Tom Andersen">
 <meta property="article:tag" content="CentOS7">
 <meta property="article:tag" content="Linux">
@@ -222,7 +222,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-06 20:22:04" itemprop="dateModified" datetime="2020-03-06T20:22:04+08:00">2020-03-06</time>
+                <time title="Modified: 2020-03-08 22:02:35" itemprop="dateModified" datetime="2020-03-08T22:02:35+08:00">2020-03-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -286,35 +286,28 @@
 <a id="more"></a>
 
 <hr>
-<ul>
-<li><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2> 最近在学习Shell脚本编程时，发现别人程序的 <strong>if-then代码块</strong> 中if的条件语句中存在 <strong>双括号(())、双中括号[[]]</strong> 的使用，因而查阅了相关资料，同时也看到了一篇不错的博文，对Shell脚本中括号的使用作出了总结，特此记录和分享</li>
-</ul>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在学习Shell脚本编程时，发现别人程序的 <strong>if-then代码块</strong> 中if的条件语句中存在 <strong>双括号(())、双中括号[[]]</strong> 的使用，因而查阅了相关资料，同时也看到了一篇不错的博文，对Shell脚本中括号的使用作出了总结，特此记录和分享</p>
 <hr>
-<ul>
-<li><h2 id="1-括号"><a href="#1-括号" class="headerlink" title="1. 括号( )"></a>1. 括号( )</h2></li>
-<li><p>括号一般在命令替换时使用，与美元符号$配合使用，如</p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 输出今年的年份</span></span><br><span class="line">year=$(date +%Y)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"This year is <span class="variable">$year</span>"</span></span><br></pre></td></tr></table></figure>
-</li>
+<h2 id="1-括号"><a href="#1-括号" class="headerlink" title="1. 括号( )"></a>1. 括号( )</h2><ul>
+<li>括号一般在命令替换时使用，与美元符号$配合使用，如</li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 输出今年的年份</span></span><br><span class="line">year=$(date +%Y)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"This year is <span class="variable">$year</span>"</span></span><br></pre></td></tr></table></figure>
+
 <hr>
-<ul>
-<li><h2 id="2-方括号"><a href="#2-方括号" class="headerlink" title="2. 方括号[ ]"></a>2. 方括号[ ]</h2></li>
-<li><p><strong>Shell中的方括号一般有两种使用场景，一种是和美元符号$搭配用于Shell中整型数据运算；另一种是单独使用，作为test命令的简写形式</strong></p>
-</li>
-<li><h4 id="2-1-搭配美元符号-用于整型计算"><a href="#2-1-搭配美元符号-用于整型计算" class="headerlink" title="2.1 搭配美元符号$用于整型计算"></a>2.1 搭配美元符号$用于整型计算</h4></li>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 用于整型数据计算</span></span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 可以使用 $+双方括号来表示整型运算</span></span><br><span class="line">var3=$[ <span class="variable">$var1</span>+<span class="variable">$var2</span>+1 ]</span><br><span class="line"><span class="comment"># 也可以使用 $+双括号来表示整型运算</span></span><br><span class="line">var4=$((<span class="variable">$var1</span> + <span class="variable">$var2</span> + 1))</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var3</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var4</span></span><br></pre></td></tr></table></figure>
-
-
-
-</li>
+<h2 id="2-方括号"><a href="#2-方括号" class="headerlink" title="2. 方括号[ ]"></a>2. 方括号[ ]</h2><ul>
+<li><strong>Shell中的方括号一般有两种使用场景，一种是和美元符号$搭配用于Shell中整型数据运算；另一种是单独使用，作为test命令的简写形式</strong></li>
 </ul>
-<ul>
-<li><p>由于 <strong>if-then语句</strong> 不能测试命令状态码之外的条件，所以Bash Shell提供了 <strong>test命令</strong> 用于帮助 <strong>if-then语句</strong> 测试其他的条件，如<strong>数值比较、字符串比较、文件比较等</strong>，而test命令的简写形式就是<strong>方括号[  ]</strong>，其中第一个方括号和第二个方括号之前都必须加上空格，否则会报错</p>
-</li>
-<li><h4 id="2-2-数值比较"><a href="#2-2-数值比较" class="headerlink" title="2.2 数值比较"></a>2.2 数值比较</h4></li>
+<h3 id="2-1-搭配美元符号-用于整型计算"><a href="#2-1-搭配美元符号-用于整型计算" class="headerlink" title="2.1 搭配美元符号$用于整型计算"></a>2.1 搭配美元符号$用于整型计算</h3><ul>
+<li><strong>示例如下：</strong></li>
 </ul>
-<table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 用于整型数据计算</span></span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 可以使用 $+双方括号来表示整型运算</span></span><br><span class="line">var3=$[ <span class="variable">$var1</span>+<span class="variable">$var2</span>+1 ]</span><br><span class="line"><span class="comment"># 也可以使用 $+双括号来表示整型运算</span></span><br><span class="line">var4=$((<span class="variable">$var1</span> + <span class="variable">$var2</span> + 1))</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var3</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var4</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>由于 <strong>if-then语句</strong> 不能测试命令状态码之外的条件，所以Bash Shell提供了 <strong>test命令</strong> 用于帮助 <strong>if-then语句</strong> 测试其他的条件，如<strong>数值比较、字符串比较、文件比较等</strong>，而test命令的简写形式就是<strong>方括号[  ]</strong>，其中第一个方括号和第二个方括号之前都必须加上空格，否则会报错</li>
+</ul>
+<h3 id="2-2-数值比较"><a href="#2-2-数值比较" class="headerlink" title="2.2 数值比较"></a>2.2 数值比较</h3><table>
 <thead>
 <tr>
 <th>比较</th>
@@ -347,11 +340,13 @@
 </tr>
 </tbody></table>
 <ul>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 2. 数值比较</span></span><br><span class="line">n1=20</span><br><span class="line">n2=10</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$n1</span> -ge <span class="variable">$n2</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"n1 is greater than or euqal to n2"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"n1 is less than n2"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure></li>
-<li><p><strong>注意：Bash Shell只能直接处理整数，赋值浮点数会报错</strong></p>
-</li>
-<li><h4 id="2-3-字符串比较"><a href="#2-3-字符串比较" class="headerlink" title="2.3 字符串比较"></a>2.3 字符串比较</h4><table>
+<li><strong>示例如下：</strong></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 2. 数值比较</span></span><br><span class="line">n1=20</span><br><span class="line">n2=10</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$n1</span> -ge <span class="variable">$n2</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"n1 is greater than or euqal to n2"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"n1 is less than n2"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>注意：Bash Shell只能直接处理整数，赋值浮点数会报错</strong></li>
+</ul>
+<h3 id="2-3-字符串比较"><a href="#2-3-字符串比较" class="headerlink" title="2.3 字符串比较"></a>2.3 字符串比较</h3><table>
 <thead>
 <tr>
 <th>比较</th>
@@ -383,11 +378,12 @@
 <td>检查str1的长度是否为0</td>
 </tr>
 </tbody></table>
-</li>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 3. 字符串比较</span></span><br><span class="line">user=root</span><br><span class="line"><span class="keyword">if</span> [ $(whoami)=<span class="variable">$user</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"root is online"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"root is offline"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><h4 id="2-4-文件比较"><a href="#2-4-文件比较" class="headerlink" title="2.4 文件比较"></a>2.4 文件比较</h4><table>
+<ul>
+<li><strong>示例如下：</strong></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 3. 字符串比较</span></span><br><span class="line">user=root</span><br><span class="line"><span class="keyword">if</span> [ $(whoami)=<span class="variable">$user</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"root is online"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"root is offline"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-文件比较"><a href="#2-4-文件比较" class="headerlink" title="2.4 文件比较"></a>2.4 文件比较</h3><table>
 <thead>
 <tr>
 <th>比较</th>
@@ -443,25 +439,19 @@
 <td>检查file1是否比file2旧</td>
 </tr>
 </tbody></table>
-</li>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 4. 文件比较</span></span><br><span class="line">fileName=test3</span><br><span class="line"><span class="keyword">if</span> [ -e <span class="variable">$fileName</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$fileName</span>  exists"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$fileName</span> doesn't exists"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
 <ul>
-<li><h2 id="2-花括号"><a href="#2-花括号" class="headerlink" title="2. 花括号{ }"></a>2. 花括号{ }</h2></li>
-<li><p><strong>花括号</strong>一般用于需要变量和字符串组合输出时，若想要实现变量后拼接字符串就需要使用花括号</p>
-</li>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 花括号使用练习</span></span><br><span class="line">var=50</span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 若想要实现var变量后拼接字符串就需要使用花括号</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var1</span> <span class="variable">$&#123;var&#125;</span>1</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var2</span> <span class="variable">$&#123;var&#125;</span>2</span><br></pre></td></tr></table></figure>
-</li>
+<li><strong>示例如下：</strong></li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 4. 文件比较</span></span><br><span class="line">fileName=test3</span><br><span class="line"><span class="keyword">if</span> [ -e <span class="variable">$fileName</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$fileName</span>  exists"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$fileName</span> doesn't exists"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
 <hr>
-<ul>
-<li><h2 id="3-双括号"><a href="#3-双括号" class="headerlink" title="3. 双括号(( ))"></a>3. 双括号(( ))</h2></li>
-<li><p><strong>双括号</strong>允许在比较语句中使用<strong>高级数学表达式</strong>，<strong>也可以与美元符号搭配，用于整型数据计算</strong></p>
-</li>
+<h2 id="2-花括号"><a href="#2-花括号" class="headerlink" title="2. 花括号{ }"></a>2. 花括号{ }</h2><ul>
+<li><strong>花括号</strong>一般用于需要变量和字符串组合输出时，若想要实现变量后拼接字符串就需要使用花括号</li>
+<li><strong>示例如下：</strong></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 花括号使用练习</span></span><br><span class="line">var=50</span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 若想要实现var变量后拼接字符串就需要使用花括号</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var1</span> <span class="variable">$&#123;var&#125;</span>1</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var2</span> <span class="variable">$&#123;var&#125;</span>2</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="3-双括号"><a href="#3-双括号" class="headerlink" title="3. 双括号(( ))"></a>3. 双括号(( ))</h2><ul>
+<li><strong>双括号</strong>允许在比较语句中使用<strong>高级数学表达式</strong>，<strong>也可以与美元符号搭配，用于整型数据计算</strong></li>
 </ul>
 <table>
 <thead>
@@ -524,35 +514,26 @@
 </tr>
 </tbody></table>
 <ul>
-<li><p><strong>示例如下：</strong></p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 双括号使用练习</span></span><br><span class="line"><span class="comment"># 用于高级数学表达式</span></span><br><span class="line">var1=10</span><br><span class="line"><span class="keyword">if</span> ((<span class="variable">$var1</span> &gt;= 10)); <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">for</span> ((i = 0; i &lt; 3; i++)); <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<li><strong>示例如下：</strong><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 双括号使用练习</span></span><br><span class="line"><span class="comment"># 用于高级数学表达式</span></span><br><span class="line">var1=10</span><br><span class="line"><span class="keyword">if</span> ((<span class="variable">$var1</span> &gt;= 10)); <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">for</span> ((i = 0; i &lt; 3; i++)); <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
 
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用于整型数据计算</span></span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 可以使用$+双方括号来表示整型运算</span></span><br><span class="line">var3=$[ <span class="variable">$var1</span>+<span class="variable">$var2</span>+1 ]</span><br><span class="line"><span class="comment"># 也可以使用$+双括号来表示整型运算</span></span><br><span class="line">var4=$((<span class="variable">$var1</span> + <span class="variable">$var2</span> + 1))</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var3</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var4</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用于整型数据计算</span></span><br><span class="line">var1=100</span><br><span class="line">var2=200</span><br><span class="line"><span class="comment"># 可以使用$+双方括号来表示整型运算</span></span><br><span class="line">var3=$[ <span class="variable">$var1</span>+<span class="variable">$var2</span>+1 ]</span><br><span class="line"><span class="comment"># 也可以使用$+双括号来表示整型运算</span></span><br><span class="line">var4=$((<span class="variable">$var1</span> + <span class="variable">$var2</span> + 1))</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var3</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var4</span></span><br></pre></td></tr></table></figure>
 <hr>
-<ul>
-<li><h2 id="4-双方括号"><a href="#4-双方括号" class="headerlink" title="4. 双方括号[[ ]]"></a>4. 双方括号[[ ]]</h2></li>
-<li><p>双方括号提供了针对字符串比较的高级特性，能够使用数学符号比较字符串，并实现了模式匹配</p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 双方括号使用练习</span></span><br><span class="line">fileName=test5</span><br><span class="line"><span class="keyword">if</span> [[ <span class="variable">$fileName</span>==<span class="built_in">test</span>* ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"This is a test file!"</span></span><br><span class="line">    <span class="keyword">if</span> [[ <span class="variable">$fileName</span>==test5 ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"This file is test5!"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
-
-
-</li>
+<h2 id="4-双方括号"><a href="#4-双方括号" class="headerlink" title="4. 双方括号[[ ]]"></a>4. 双方括号[[ ]]</h2><ul>
+<li>双方括号提供了针对字符串比较的高级特性，能够使用数学符号比较字符串，并实现了模式匹配</li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 双方括号使用练习</span></span><br><span class="line">fileName=test5</span><br><span class="line"><span class="keyword">if</span> [[ <span class="variable">$fileName</span>==<span class="built_in">test</span>* ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"This is a test file!"</span></span><br><span class="line">    <span class="keyword">if</span> [[ <span class="variable">$fileName</span>==test5 ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"This file is test5!"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+
 <ul>
 <li><strong>注意：不是所有的Shell都支持双方括号</strong></li>
 </ul>
 <hr>
-<ul>
-<li><h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2></li>
-</ul>
-<blockquote>
+<h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2><blockquote>
 <p>《Linux命令行与shell脚本编程大全（第三版）》</p>
 </blockquote>
-<ul>
-<li><h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2></li>
-</ul>
-
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>
     </div>
 
     
@@ -660,7 +641,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-括号"><span class="nav-number">2.</span> <span class="nav-text">1. 括号( )</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-方括号"><span class="nav-number">3.</span> <span class="nav-text">2. 方括号[ ]</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-搭配美元符号-用于整型计算"><span class="nav-number">3.0.1.</span> <span class="nav-text">2.1 搭配美元符号$用于整型计算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-数值比较"><span class="nav-number">3.0.2.</span> <span class="nav-text">2.2 数值比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-字符串比较"><span class="nav-number">3.0.3.</span> <span class="nav-text">2.3 字符串比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-文件比较"><span class="nav-number">3.0.4.</span> <span class="nav-text">2.4 文件比较</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-花括号"><span class="nav-number">4.</span> <span class="nav-text">2. 花括号{ }</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-双括号"><span class="nav-number">5.</span> <span class="nav-text">3. 双括号(( ))</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-双方括号"><span class="nav-number">6.</span> <span class="nav-text">4. 双方括号[[ ]]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参考资料"><span class="nav-number">7.</span> <span class="nav-text">5. 参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End"><span class="nav-number">8.</span> <span class="nav-text">End~</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-括号"><span class="nav-number">2.</span> <span class="nav-text">1. 括号( )</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-方括号"><span class="nav-number">3.</span> <span class="nav-text">2. 方括号[ ]</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-搭配美元符号-用于整型计算"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 搭配美元符号$用于整型计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-数值比较"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 数值比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-字符串比较"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 字符串比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-文件比较"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 文件比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-花括号"><span class="nav-number">4.</span> <span class="nav-text">2. 花括号{ }</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-双括号"><span class="nav-number">5.</span> <span class="nav-text">3. 双括号(( ))</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-双方括号"><span class="nav-number">6.</span> <span class="nav-text">4. 双方括号[[ ]]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参考资料"><span class="nav-number">7.</span> <span class="nav-text">5. 参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End"><span class="nav-number">8.</span> <span class="nav-text">End~</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
