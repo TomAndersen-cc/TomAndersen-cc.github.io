@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Eden">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-02-20T03:45:29.000Z">
-<meta property="article:modified_time" content="2020-03-06T12:25:44.458Z">
+<meta property="article:modified_time" content="2020-03-07T01:36:02.110Z">
 <meta property="article:author" content="Tom Andersen">
 <meta property="article:tag" content="CentOS7">
 <meta property="article:tag" content="大数据">
@@ -222,7 +222,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-06 20:25:44" itemprop="dateModified" datetime="2020-03-06T20:25:44+08:00">2020-03-06</time>
+                <time title="Modified: 2020-03-07 09:36:02" itemprop="dateModified" datetime="2020-03-07T09:36:02+08:00">2020-03-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,7 +263,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>674</span>
+              <span>663</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -291,10 +291,43 @@
 
 
 <hr>
-<h2 id="参数介绍"><a href="#参数介绍" class="headerlink" title="参数介绍"></a>参数介绍</h2><h4 id="1-cZxid-创建节点的事务zxid"><a href="#1-cZxid-创建节点的事务zxid" class="headerlink" title="1.  cZxid-创建节点的事务zxid"></a>1.  cZxid-创建节点的事务zxid</h4><ul>
-<li>每次修改zookeeper状态都会收到一个zxid形式的时间戳,也就是zookeeper事务ID。事务ID是zookeeper中所有修改总的次序。每个修改都有唯一的zxid,如果zxid1小于zxid,那么zxid在zxid2之前发生。</li>
+<h2 id="参数介绍"><a href="#参数介绍" class="headerlink" title="参数介绍"></a>参数介绍</h2><h3 id="1-cZxid"><a href="#1-cZxid" class="headerlink" title="1.  cZxid"></a>1.  cZxid</h3><ul>
+<li><p>创建节点的事务zxid</p>
+</li>
+<li><p>每次修改zookeeper状态都会收到一个zxid形式的时间戳,也就是zookeeper事务ID。事务ID是zookeeper中所有修改总的次序。每个修改都有唯一的zxid,如果zxid1小于zxid,那么zxid在zxid2之前发生。</p>
+</li>
 </ul>
-<h4 id="2-ctime-znode被创建的毫秒数-从1970年开始"><a href="#2-ctime-znode被创建的毫秒数-从1970年开始" class="headerlink" title="2.  ctime-znode被创建的毫秒数(从1970年开始)"></a>2.  ctime-znode被创建的毫秒数(从1970年开始)</h4><h4 id="3-mZxid-znode最后更新的事务zxid"><a href="#3-mZxid-znode最后更新的事务zxid" class="headerlink" title="3.  mZxid-znode最后更新的事务zxid"></a>3.  mZxid-znode最后更新的事务zxid</h4><h4 id="4-mtime-znode最后修改的毫秒数-从1970年开始"><a href="#4-mtime-znode最后修改的毫秒数-从1970年开始" class="headerlink" title="4.  mtime-znode最后修改的毫秒数(从1970年开始)"></a>4.  mtime-znode最后修改的毫秒数(从1970年开始)</h4><h4 id="5-pZxid-最后更新的子节点zxid"><a href="#5-pZxid-最后更新的子节点zxid" class="headerlink" title="5.  pZxid-最后更新的子节点zxid"></a>5.  pZxid-最后更新的子节点zxid</h4><h4 id="6-cversion-znode子节点变化号-znode子节点修改次数"><a href="#6-cversion-znode子节点变化号-znode子节点修改次数" class="headerlink" title="6.  cversion-znode子节点变化号,znode子节点修改次数"></a>6.  cversion-znode子节点变化号,znode子节点修改次数</h4><h4 id="7-dataversion-znode数据变化号"><a href="#7-dataversion-znode数据变化号" class="headerlink" title="7.  dataversion-znode数据变化号"></a>7.  dataversion-znode数据变化号</h4><h4 id="8-aclVersion-znode访问控制列表的变化号"><a href="#8-aclVersion-znode访问控制列表的变化号" class="headerlink" title="8.  aclVersion-znode访问控制列表的变化号"></a>8.  aclVersion-znode访问控制列表的变化号</h4><h4 id="9-ephemeralOwner-如果是临时节点-这个是znode拥有session-id。如果不是临时节点则是0。"><a href="#9-ephemeralOwner-如果是临时节点-这个是znode拥有session-id。如果不是临时节点则是0。" class="headerlink" title="9.  ephemeralOwner-如果是临时节点,这个是znode拥有session id。如果不是临时节点则是0。"></a>9.  ephemeralOwner-如果是临时节点,这个是znode拥有session id。如果不是临时节点则是0。</h4><h4 id="10-dataLength-znode的数据长度"><a href="#10-dataLength-znode的数据长度" class="headerlink" title="10.  dataLength-znode的数据长度"></a>10.  dataLength-znode的数据长度</h4><h4 id="11-numChildren-znode子节点数量"><a href="#11-numChildren-znode子节点数量" class="headerlink" title="11.  numChildren-znode子节点数量"></a>11.  numChildren-znode子节点数量</h4><hr>
+<h3 id="2-ctime"><a href="#2-ctime" class="headerlink" title="2.  ctime"></a>2.  ctime</h3><ul>
+<li>znode被创建的毫秒数(从1970年开始)</li>
+</ul>
+<h3 id="3-mZxid"><a href="#3-mZxid" class="headerlink" title="3.  mZxid"></a>3.  mZxid</h3><ul>
+<li>znode最后更新的事务zxid</li>
+</ul>
+<h3 id="4-mtime"><a href="#4-mtime" class="headerlink" title="4.  mtime"></a>4.  mtime</h3><ul>
+<li>znode最后修改的毫秒数(从1970年开始)</li>
+</ul>
+<h3 id="5-pZxid"><a href="#5-pZxid" class="headerlink" title="5.  pZxid"></a>5.  pZxid</h3><ul>
+<li>最后更新的子节点zxid</li>
+</ul>
+<h3 id="6-cversion"><a href="#6-cversion" class="headerlink" title="6.  cversion"></a>6.  cversion</h3><ul>
+<li>znode子节点变化号,znode子节点修改次数</li>
+</ul>
+<h3 id="7-dataversion"><a href="#7-dataversion" class="headerlink" title="7.  dataversion"></a>7.  dataversion</h3><ul>
+<li>znode数据变化号</li>
+</ul>
+<h3 id="8-aclVersion"><a href="#8-aclVersion" class="headerlink" title="8.  aclVersion"></a>8.  aclVersion</h3><ul>
+<li>znode访问控制列表的变化号</li>
+</ul>
+<h3 id="9-ephemeralOwner"><a href="#9-ephemeralOwner" class="headerlink" title="9.  ephemeralOwner"></a>9.  ephemeralOwner</h3><ul>
+<li>如果是临时节点,这个是znode拥有session id。如果不是临时节点则是0。</li>
+</ul>
+<h3 id="10-dataLength"><a href="#10-dataLength" class="headerlink" title="10.  dataLength"></a>10.  dataLength</h3><ul>
+<li>znode的数据长度</li>
+</ul>
+<h3 id="11-numChildren"><a href="#11-numChildren" class="headerlink" title="11.  numChildren"></a>11.  numChildren</h3><ul>
+<li>znode子节点数量</li>
+</ul>
+<hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>
     </div>
 
@@ -403,7 +436,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#stat结构体示例"><span class="nav-number">1.</span> <span class="nav-text">stat结构体示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数介绍"><span class="nav-number">2.</span> <span class="nav-text">参数介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-cZxid-创建节点的事务zxid"><span class="nav-number">2.0.1.</span> <span class="nav-text">1.  cZxid-创建节点的事务zxid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-ctime-znode被创建的毫秒数-从1970年开始"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.  ctime-znode被创建的毫秒数(从1970年开始)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-mZxid-znode最后更新的事务zxid"><span class="nav-number">2.0.3.</span> <span class="nav-text">3.  mZxid-znode最后更新的事务zxid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-mtime-znode最后修改的毫秒数-从1970年开始"><span class="nav-number">2.0.4.</span> <span class="nav-text">4.  mtime-znode最后修改的毫秒数(从1970年开始)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-pZxid-最后更新的子节点zxid"><span class="nav-number">2.0.5.</span> <span class="nav-text">5.  pZxid-最后更新的子节点zxid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-cversion-znode子节点变化号-znode子节点修改次数"><span class="nav-number">2.0.6.</span> <span class="nav-text">6.  cversion-znode子节点变化号,znode子节点修改次数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-dataversion-znode数据变化号"><span class="nav-number">2.0.7.</span> <span class="nav-text">7.  dataversion-znode数据变化号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-aclVersion-znode访问控制列表的变化号"><span class="nav-number">2.0.8.</span> <span class="nav-text">8.  aclVersion-znode访问控制列表的变化号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-ephemeralOwner-如果是临时节点-这个是znode拥有session-id。如果不是临时节点则是0。"><span class="nav-number">2.0.9.</span> <span class="nav-text">9.  ephemeralOwner-如果是临时节点,这个是znode拥有session id。如果不是临时节点则是0。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-dataLength-znode的数据长度"><span class="nav-number">2.0.10.</span> <span class="nav-text">10.  dataLength-znode的数据长度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-numChildren-znode子节点数量"><span class="nav-number">2.0.11.</span> <span class="nav-text">11.  numChildren-znode子节点数量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End"><span class="nav-number">3.</span> <span class="nav-text">End~</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#stat结构体示例"><span class="nav-number">1.</span> <span class="nav-text">stat结构体示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数介绍"><span class="nav-number">2.</span> <span class="nav-text">参数介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-cZxid"><span class="nav-number">2.1.</span> <span class="nav-text">1.  cZxid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-ctime"><span class="nav-number">2.2.</span> <span class="nav-text">2.  ctime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-mZxid"><span class="nav-number">2.3.</span> <span class="nav-text">3.  mZxid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-mtime"><span class="nav-number">2.4.</span> <span class="nav-text">4.  mtime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-pZxid"><span class="nav-number">2.5.</span> <span class="nav-text">5.  pZxid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-cversion"><span class="nav-number">2.6.</span> <span class="nav-text">6.  cversion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-dataversion"><span class="nav-number">2.7.</span> <span class="nav-text">7.  dataversion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-aclVersion"><span class="nav-number">2.8.</span> <span class="nav-text">8.  aclVersion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-ephemeralOwner"><span class="nav-number">2.9.</span> <span class="nav-text">9.  ephemeralOwner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-dataLength"><span class="nav-number">2.10.</span> <span class="nav-text">10.  dataLength</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-numChildren"><span class="nav-number">2.11.</span> <span class="nav-text">11.  numChildren</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End"><span class="nav-number">3.</span> <span class="nav-text">End~</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -419,20 +452,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
