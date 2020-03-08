@@ -1,86 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>IDEA打包Maven项目</title>
-    <url>/2020/03/08/IDEA%E6%89%93%E5%8C%85Maven%E9%A1%B9%E7%9B%AE/</url>
-    <content><![CDATA[<hr>
-<a id="more"></a>
-
-<hr>
-<h2 id="1-在pom-xml文件中添加配置"><a href="#1-在pom-xml文件中添加配置" class="headerlink" title="1. 在pom.xml文件中添加配置"></a>1. 在pom.xml文件中添加配置</h2><figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;!--编译打包插件--&gt;</span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">        	&lt;!--配置Maven项目compiler插件--&gt;</span><br><span class="line">        	&lt;!--此工具不会打包依赖--&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</span><br><span class="line">                &lt;version&gt;2.3.2&lt;/version&gt;</span><br><span class="line">                &lt;configuration&gt;</span><br><span class="line">                    &lt;source&gt;1.8&lt;/source&gt;</span><br><span class="line">                    &lt;target&gt;1.8&lt;/target&gt;</span><br><span class="line">                &lt;/configuration&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">            </span><br><span class="line">            &lt;!--配置Maven项目assembly插件--&gt;</span><br><span class="line">            &lt;!--此工具会将全部依赖打包--&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;</span><br><span class="line">                &lt;configuration&gt;</span><br><span class="line">                    &lt;descriptorRefs&gt;</span><br><span class="line">                        &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</span><br><span class="line">                    &lt;/descriptorRefs&gt;</span><br><span class="line">                    &lt;archive&gt;</span><br><span class="line">                        &lt;manifest&gt;</span><br><span class="line">                        	&lt;!--&gt;此处设置成主类的类全名&lt;--&gt;</span><br><span class="line">                            &lt;mainClass&gt;com.TomAndersen.AppMain&lt;/mainClass&gt;</span><br><span class="line">                        &lt;/manifest&gt;</span><br><span class="line">                    &lt;/archive&gt;</span><br><span class="line">                &lt;/configuration&gt;</span><br><span class="line">                &lt;executions&gt;</span><br><span class="line">                    &lt;execution&gt;</span><br><span class="line">                        &lt;id&gt;make-assembly&lt;/id&gt;</span><br><span class="line">                        &lt;phase&gt;package&lt;/phase&gt;</span><br><span class="line">                        &lt;goals&gt;</span><br><span class="line">                            &lt;goal&gt;single&lt;/goal&gt;</span><br><span class="line">                        &lt;/goals&gt;</span><br><span class="line">                    &lt;/execution&gt;</span><br><span class="line">                &lt;/executions&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="2-使用Maven项目工具打包程序"><a href="#2-使用Maven项目工具打包程序" class="headerlink" title="2. 使用Maven项目工具打包程序"></a>2. 使用Maven项目工具打包程序</h2><ul>
-<li><p><strong>使用Maven—Lifecycle—package组件</strong></p>
-<p>  <img src="https://img-blog.csdnimg.cn/20200210105333758.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="使用package组件"></p>
-</li>
-<li><p><strong>控制台输出</strong><br><img src="https://img-blog.csdnimg.cn/20200210105102266.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="控制台输出"></p>
-</li>
-</ul>
-<hr>
-<h2 id="3-生成jar包"><a href="#3-生成jar包" class="headerlink" title="3. 生成jar包"></a>3. 生成jar包</h2><ul>
-<li><strong>打包成功之后会在<code>src</code>同级目录下的<code>target</code>文件夹中生成带依赖和不带依赖的jar包，包名前缀与<code>artifactId</code>相同</strong><br><img src="https://img-blog.csdnimg.cn/20200210105816470.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="生成两个jar包"></li>
-<li><strong>注意 1：如果使用不带依赖的jar包程序，则程序执行时依赖于本地的运行环境</strong></li>
-<li><strong>注意 2：如果使用带依赖的jar包程序，则程序执行时不依赖本地的运行环境，而只依赖于开发环境</strong></li>
-</ul>
-<hr>
-<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
-      <categories>
-        <category>IDEA</category>
-      </categories>
-      <tags>
-        <tag>IDEA</tag>
-        <tag>Java</tag>
-        <tag>Maven</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>IDEA打包普通Java项目（Maven通用）</title>
-    <url>/2020/03/08/IDEA%E6%89%93%E5%8C%85%E6%99%AE%E9%80%9AJava%E9%A1%B9%E7%9B%AE%EF%BC%88Maven%E9%80%9A%E7%94%A8%EF%BC%89/</url>
-    <content><![CDATA[<hr>
-<a id="more"></a>
-
-<hr>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
-<li><strong>此方式通过在当前Project下创建Artifact来实现项目打包</strong></li>
-<li><strong>对于普通Java项目，此方式为通用的Java项目打包方式</strong></li>
-<li><strong>对于Maven项目，和使用maven-compiler-plugin和maven-assembly-plugin等插件打包相比，优点：可以手动控制打包内容，缺点：当项目有新的依赖添加时也需要手动将依赖加入Artifact中或者新建Artifact并自动导入依赖</strong></li>
-</ul>
-<hr>
-<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><h3 id="1）打开Project-Structure"><a href="#1）打开Project-Structure" class="headerlink" title="1）打开Project Structure"></a>1）打开Project Structure</h3><p><strong>通过File-Project Structure，或者通过工具栏直接打开，或者使用快捷键Ctrl+Alt+Shift+S，都可以</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20200308103538209.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="打开Project Structure"></p>
-<h3 id="2）创建Artifact"><a href="#2）创建Artifact" class="headerlink" title="2）创建Artifact"></a>2）创建Artifact</h3><h4 id="a）打包项目依赖"><a href="#a）打包项目依赖" class="headerlink" title="a）打包项目依赖"></a>a）打包项目依赖</h4><p><strong>在Project Settings中找到Artifact，点击加号“+”添加Artifact，依次选择JAR——From modules with dependencies…</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20200308103632494.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="创建Artifact"></p>
-<p><strong>选择需要打包的Module，并设置Main Class，其余选项默认即可。注意：如果只是作为工具包使用或者包中有多个启动类就不要设置Main Class，在使用jar包时，通过设置-cp（同-classpath参数），然后附上全类名FQCN指定启动类即可</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20200308103701739.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="创建Artifact"></p>
-<h4 id="b）不打包项目依赖"><a href="#b）不打包项目依赖" class="headerlink" title="b）不打包项目依赖"></a>b）不打包项目依赖</h4><p><strong>在Project Settings中找到Artifact，点击加号“+”添加Artifact，依次选择JAR——Empty</strong><br><img src="https://img-blog.csdnimg.cn/2020030810372987.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="创建Artifact"></p>
-<p><strong>可以自定义设置Artifact名字、jar包输出路径、jar包名称。然后创建MANIFEST.MF文件，可以通过此文件指明主类</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20200308103748452.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="创建Artifact"></p>
-<p><strong>将工程编译输出文件添加至Artifact中，按需指定jar包主类全类名</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20200308103846873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="添加文件"></p>
-<p><strong>按需提取工程使用的依赖到Artifact中，用于之后打包</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20200308103911438.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="添加依赖"></p>
-<p><strong>点击Apply保存Artifact</strong></p>
-<h3 id="3）打包项目"><a href="#3）打包项目" class="headerlink" title="3）打包项目"></a>3）打包项目</h3><p><strong>依次点击Build——Build Artifact</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20200308103925767.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="Build Artifact"><br><img src="https://img-blog.csdnimg.cn/20200308103956393.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="Build Artifact"></p>
-<p><strong>Build完成之后会在之前设定的输出路径下生成jar包</strong></p>
-<hr>
-<h3 id="4）运行jar包"><a href="#4）运行jar包" class="headerlink" title="4）运行jar包"></a>4）运行jar包</h3><h4 id="a）已设置主类"><a href="#a）已设置主类" class="headerlink" title="a）已设置主类"></a>a）已设置主类</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">java -jar JavaStudyProject.jar</span><br></pre></td></tr></table></figure>
-
-<h4 id="b）未设置主类"><a href="#b）未设置主类" class="headerlink" title="b）未设置主类"></a>b）未设置主类</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">java -cp JavaStudyProject.jar TestCode.HelloWorld</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
-      <categories>
-        <category>IDEA</category>
-      </categories>
-      <tags>
-        <tag>IDEA</tag>
-        <tag>Java</tag>
-        <tag>Maven</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hexo之NexT主题中设置加载进度条</title>
     <url>/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%8A%A0%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1/</url>
     <content><![CDATA[<hr>
@@ -125,8 +45,8 @@
         <category>个人博客搭建</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
         <tag>Blog</tag>
+        <tag>Hexo</tag>
         <tag>NexT</tag>
       </tags>
   </entry>
@@ -157,8 +77,8 @@
         <category>个人博客搭建</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
         <tag>Blog</tag>
+        <tag>Hexo</tag>
         <tag>NexT</tag>
       </tags>
   </entry>
@@ -199,8 +119,8 @@
         <category>个人博客搭建</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
         <tag>Blog</tag>
+        <tag>Hexo</tag>
         <tag>NexT</tag>
       </tags>
   </entry>
@@ -530,8 +450,8 @@
         <category>个人博客搭建</category>
       </categories>
       <tags>
-        <tag>Blog</tag>
         <tag>GitHub</tag>
+        <tag>Blog</tag>
       </tags>
   </entry>
   <entry>
@@ -1739,9 +1659,89 @@
         <category>个人博客搭建</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
         <tag>Blog</tag>
+        <tag>Hexo</tag>
         <tag>Github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IDEA打包普通Java项目（Maven通用）</title>
+    <url>/2020/02/10/IDEA%E6%89%93%E5%8C%85%E6%99%AE%E9%80%9AJava%E9%A1%B9%E7%9B%AE%EF%BC%88Maven%E9%80%9A%E7%94%A8%EF%BC%89/</url>
+    <content><![CDATA[<hr>
+<a id="more"></a>
+
+<hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li><strong>此方式通过在当前Project下创建Artifact来实现项目打包</strong></li>
+<li><strong>对于普通Java项目，此方式为通用的Java项目打包方式</strong></li>
+<li><strong>对于Maven项目，和使用maven-compiler-plugin和maven-assembly-plugin等插件打包相比，优点：可以手动控制打包内容，缺点：当项目有新的依赖添加时也需要手动将依赖加入Artifact中或者新建Artifact并自动导入依赖</strong></li>
+</ul>
+<hr>
+<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><h3 id="1）打开Project-Structure"><a href="#1）打开Project-Structure" class="headerlink" title="1）打开Project Structure"></a>1）打开Project Structure</h3><p><strong>通过File-Project Structure，或者通过工具栏直接打开，或者使用快捷键Ctrl+Alt+Shift+S，都可以</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200308103538209.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="打开Project Structure"></p>
+<h3 id="2）创建Artifact"><a href="#2）创建Artifact" class="headerlink" title="2）创建Artifact"></a>2）创建Artifact</h3><h4 id="a）打包项目依赖"><a href="#a）打包项目依赖" class="headerlink" title="a）打包项目依赖"></a>a）打包项目依赖</h4><p><strong>在Project Settings中找到Artifact，点击加号“+”添加Artifact，依次选择JAR——From modules with dependencies…</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200308103632494.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="创建Artifact"></p>
+<p><strong>选择需要打包的Module，并设置Main Class，其余选项默认即可。注意：如果只是作为工具包使用或者包中有多个启动类就不要设置Main Class，在使用jar包时，通过设置-cp（同-classpath参数），然后附上全类名FQCN指定启动类即可</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200308103701739.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="创建Artifact"></p>
+<h4 id="b）不打包项目依赖"><a href="#b）不打包项目依赖" class="headerlink" title="b）不打包项目依赖"></a>b）不打包项目依赖</h4><p><strong>在Project Settings中找到Artifact，点击加号“+”添加Artifact，依次选择JAR——Empty</strong><br><img src="https://img-blog.csdnimg.cn/2020030810372987.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="创建Artifact"></p>
+<p><strong>可以自定义设置Artifact名字、jar包输出路径、jar包名称。然后创建MANIFEST.MF文件，可以通过此文件指明主类</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200308103748452.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="创建Artifact"></p>
+<p><strong>将工程编译输出文件添加至Artifact中，按需指定jar包主类全类名</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200308103846873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="添加文件"></p>
+<p><strong>按需提取工程使用的依赖到Artifact中，用于之后打包</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200308103911438.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="添加依赖"></p>
+<p><strong>点击Apply保存Artifact</strong></p>
+<h3 id="3）打包项目"><a href="#3）打包项目" class="headerlink" title="3）打包项目"></a>3）打包项目</h3><p><strong>依次点击Build——Build Artifact</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200308103925767.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="Build Artifact"><br><img src="https://img-blog.csdnimg.cn/20200308103956393.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="Build Artifact"></p>
+<p><strong>Build完成之后会在之前设定的输出路径下生成jar包</strong></p>
+<hr>
+<h3 id="4）运行jar包"><a href="#4）运行jar包" class="headerlink" title="4）运行jar包"></a>4）运行jar包</h3><h4 id="a）已设置主类"><a href="#a）已设置主类" class="headerlink" title="a）已设置主类"></a>a）已设置主类</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">java -jar JavaStudyProject.jar</span><br></pre></td></tr></table></figure>
+
+<h4 id="b）未设置主类"><a href="#b）未设置主类" class="headerlink" title="b）未设置主类"></a>b）未设置主类</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">java -cp JavaStudyProject.jar TestCode.HelloWorld</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
+      <categories>
+        <category>IDEA</category>
+      </categories>
+      <tags>
+        <tag>IDEA</tag>
+        <tag>Java</tag>
+        <tag>Maven</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IDEA打包Maven项目</title>
+    <url>/2020/02/10/IDEA%E6%89%93%E5%8C%85Maven%E9%A1%B9%E7%9B%AE/</url>
+    <content><![CDATA[<hr>
+<a id="more"></a>
+
+<hr>
+<h2 id="1-在pom-xml文件中添加配置"><a href="#1-在pom-xml文件中添加配置" class="headerlink" title="1. 在pom.xml文件中添加配置"></a>1. 在pom.xml文件中添加配置</h2><figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;!--编译打包插件--&gt;</span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">        	&lt;!--配置Maven项目compiler插件--&gt;</span><br><span class="line">        	&lt;!--此工具不会打包依赖--&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</span><br><span class="line">                &lt;version&gt;2.3.2&lt;/version&gt;</span><br><span class="line">                &lt;configuration&gt;</span><br><span class="line">                    &lt;source&gt;1.8&lt;/source&gt;</span><br><span class="line">                    &lt;target&gt;1.8&lt;/target&gt;</span><br><span class="line">                &lt;/configuration&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">            </span><br><span class="line">            &lt;!--配置Maven项目assembly插件--&gt;</span><br><span class="line">            &lt;!--此工具会将全部依赖打包--&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;</span><br><span class="line">                &lt;configuration&gt;</span><br><span class="line">                    &lt;descriptorRefs&gt;</span><br><span class="line">                        &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</span><br><span class="line">                    &lt;/descriptorRefs&gt;</span><br><span class="line">                    &lt;archive&gt;</span><br><span class="line">                        &lt;manifest&gt;</span><br><span class="line">                        	&lt;!--&gt;此处设置成主类的类全名&lt;--&gt;</span><br><span class="line">                            &lt;mainClass&gt;com.TomAndersen.AppMain&lt;/mainClass&gt;</span><br><span class="line">                        &lt;/manifest&gt;</span><br><span class="line">                    &lt;/archive&gt;</span><br><span class="line">                &lt;/configuration&gt;</span><br><span class="line">                &lt;executions&gt;</span><br><span class="line">                    &lt;execution&gt;</span><br><span class="line">                        &lt;id&gt;make-assembly&lt;/id&gt;</span><br><span class="line">                        &lt;phase&gt;package&lt;/phase&gt;</span><br><span class="line">                        &lt;goals&gt;</span><br><span class="line">                            &lt;goal&gt;single&lt;/goal&gt;</span><br><span class="line">                        &lt;/goals&gt;</span><br><span class="line">                    &lt;/execution&gt;</span><br><span class="line">                &lt;/executions&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-使用Maven项目工具打包程序"><a href="#2-使用Maven项目工具打包程序" class="headerlink" title="2. 使用Maven项目工具打包程序"></a>2. 使用Maven项目工具打包程序</h2><ul>
+<li><p><strong>使用Maven—Lifecycle—package组件</strong></p>
+<p>  <img src="https://img-blog.csdnimg.cn/20200210105333758.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="使用package组件"></p>
+</li>
+<li><p><strong>控制台输出</strong><br><img src="https://img-blog.csdnimg.cn/20200210105102266.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="控制台输出"></p>
+</li>
+</ul>
+<hr>
+<h2 id="3-生成jar包"><a href="#3-生成jar包" class="headerlink" title="3. 生成jar包"></a>3. 生成jar包</h2><ul>
+<li><strong>打包成功之后会在<code>src</code>同级目录下的<code>target</code>文件夹中生成带依赖和不带依赖的jar包，包名前缀与<code>artifactId</code>相同</strong><br><img src="https://img-blog.csdnimg.cn/20200210105816470.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="生成两个jar包"></li>
+<li><strong>注意 1：如果使用不带依赖的jar包程序，则程序执行时依赖于本地的运行环境</strong></li>
+<li><strong>注意 2：如果使用带依赖的jar包程序，则程序执行时不依赖本地的运行环境，而只依赖于开发环境</strong></li>
+</ul>
+<hr>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
+      <categories>
+        <category>IDEA</category>
+      </categories>
+      <tags>
+        <tag>IDEA</tag>
+        <tag>Java</tag>
+        <tag>Maven</tag>
       </tags>
   </entry>
   <entry>
