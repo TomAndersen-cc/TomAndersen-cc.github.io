@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://tomandersen-cc.github.io/2020/02/09/Linux%E4%BD%BF%E7%94%A8ntp%E5%B7%A5%E5%85%B7%E5%AE%9E%E7%8E%B0%E9%9B%86%E7%BE%A4%E4%B8%BB%E6%9C%BA%E9%97%B4%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5/</loc>
+    
+    <lastmod>2020-03-09T01:07:08.945Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://tomandersen-cc.github.io/2019/04/21/%E4%B8%80%E7%A7%8D%E4%B8%8B%E8%BD%BDNvidia%E6%97%A7%E7%89%88%E6%9C%AC%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%88%E5%9C%A8%E7%9F%A5%E9%81%93%E7%89%88%E6%9C%AC%E5%8F%B7%E7%9A%84%E5%89%8D%E6%8F%90%E4%B8%8B%EF%BC%89/</loc>
+    
+    <lastmod>2020-03-09T00:22:59.887Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://tomandersen-cc.github.io/2020/02/20/Zookeeper%E4%B8%ADstat%E7%BB%93%E6%9E%84%E4%BD%93%E5%8F%82%E6%95%B0%E4%BB%8B%E7%BB%8D/</loc>
     
     <lastmod>2020-03-08T14:05:50.492Z</lastmod>
@@ -93,13 +107,6 @@
   </url>
   
   <url>
-    <loc>https://tomandersen-cc.github.io/2019/04/21/%E4%B8%80%E7%A7%8D%E4%B8%8B%E8%BD%BDNvidia%E6%97%A7%E7%89%88%E6%9C%AC%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%88%E5%9C%A8%E7%9F%A5%E9%81%93%E7%89%88%E6%9C%AC%E5%8F%B7%E7%9A%84%E5%89%8D%E6%8F%90%E4%B8%8B%EF%BC%89/</loc>
-    
-    <lastmod>2020-03-08T13:43:07.839Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://tomandersen-cc.github.io/2020/03/05/Flume%E4%B9%8BHDFS-Sink%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/</loc>
     
     <lastmod>2020-03-08T13:41:28.431Z</lastmod>
@@ -180,13 +187,6 @@
     <loc>https://tomandersen-cc.github.io/2020/02/26/Shell%E4%B8%AD%E9%80%BB%E8%BE%91%E4%B8%8E-%E4%B8%8E%E9%80%BB%E8%BE%91%E6%88%96-%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
     
     <lastmod>2020-03-06T12:22:06.748Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://tomandersen-cc.github.io/2020/02/09/Linux%E4%BD%BF%E7%94%A8ntp%E5%B7%A5%E5%85%B7%E5%AE%9E%E7%8E%B0%E9%9B%86%E7%BE%A4%E4%B8%BB%E6%9C%BA%E9%97%B4%E6%97%B6%E9%97%B4%E5%90%8C%E6%AD%A5/</loc>
-    
-    <lastmod>2020-03-06T12:21:39.037Z</lastmod>
     
   </url>
   
