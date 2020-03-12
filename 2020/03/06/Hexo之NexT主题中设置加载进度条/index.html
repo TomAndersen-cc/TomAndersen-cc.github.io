@@ -24,13 +24,15 @@
     var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":20,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="前言 Hexo版本：4.2.0 NexT版本：7.7.1 GitHub：theme-next-pace 各种进度条样式参考：Hexo博客NexT主题美化之顶部加载进度条">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hexo之NexT主题中设置加载进度条">
 <meta property="og:url" content="https://tomandersen-cc.github.io/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%8A%A0%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1/index.html">
 <meta property="og:site_name" content="Eden">
+<meta property="og:description" content="前言 Hexo版本：4.2.0 NexT版本：7.7.1 GitHub：theme-next-pace 各种进度条样式参考：Hexo博客NexT主题美化之顶部加载进度条">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-03-06T04:14:35.000Z">
-<meta property="article:modified_time" content="2020-03-06T11:58:52.899Z">
+<meta property="article:modified_time" content="2020-03-12T04:19:16.746Z">
 <meta property="article:author" content="Tom Andersen">
 <meta property="article:tag" content="Blog">
 <meta property="article:tag" content="Hexo">
@@ -217,10 +219,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-03-06 12:14:35 / Modified: 19:58:52" itemprop="dateCreated datePublished" datetime="2020-03-06T12:14:35+08:00">2020-03-06</time>
+              <time title="Created: 2020-03-06 12:14:35" itemprop="dateCreated datePublished" datetime="2020-03-06T12:14:35+08:00">2020-03-06</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-03-12 12:19:16" itemprop="dateModified" datetime="2020-03-12T12:19:16+08:00">2020-03-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -280,8 +288,6 @@
 
       
         <hr>
-<a id="more"></a>
-
 <hr>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
 <li><strong>Hexo版本</strong>：4.2.0</li>
@@ -290,6 +296,8 @@
 <li><strong>各种进度条样式参考</strong>：<a href="https://blog.pangao.vip/Hexo博客NexT主题美化之顶部加载进度条/" target="_blank" rel="noopener">Hexo博客NexT主题美化之顶部加载进度条</a></li>
 </ul>
 <hr>
+<a id="more"></a>
+
 <h2 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h2><h3 id="1）进入NexT主题文件夹"><a href="#1）进入NexT主题文件夹" class="headerlink" title="1）进入NexT主题文件夹"></a>1）进入NexT主题文件夹</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> themes/next/</span><br><span class="line">$ ls</span><br><span class="line">_config.yml  docs/        languages/  LICENSE.md    README.md  <span class="built_in">source</span>/</span><br><span class="line">crowdin.yml  gulpfile.js  layout/     package.json  scripts/</span><br></pre></td></tr></table></figure>
 
 
@@ -468,6 +476,9 @@
       <span class="links-of-author-item">
         <a href="https://me.csdn.net/TomAndersen" title="CSDN → https:&#x2F;&#x2F;me.csdn.net&#x2F;TomAndersen" rel="noopener" target="_blank"><i class="fa fa-fw fa-link"></i>CSDN</a>
       </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
   </div>
 
 

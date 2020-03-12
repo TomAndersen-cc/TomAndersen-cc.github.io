@@ -24,13 +24,15 @@
     var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":20,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="前言 Hexo版本：4.2.0 NexT版本：7.7.1 symbols_count_time能够统计页面或者站点的单词以及阅读所需时间 自NexT 6.0发行版之后第三方插件hexo-wordcount就被symbols_count_time取缔了，相比之下symbols_count_time没有额外的依赖，性能更加强大 GitHub：symbols_count_time">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hexo之NexT主题中设置symbols_count_time统计单词">
 <meta property="og:url" content="https://tomandersen-cc.github.io/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AEsymbols-count-time%E7%BB%9F%E8%AE%A1%E5%8D%95%E8%AF%8D/index.html">
 <meta property="og:site_name" content="Eden">
+<meta property="og:description" content="前言 Hexo版本：4.2.0 NexT版本：7.7.1 symbols_count_time能够统计页面或者站点的单词以及阅读所需时间 自NexT 6.0发行版之后第三方插件hexo-wordcount就被symbols_count_time取缔了，相比之下symbols_count_time没有额外的依赖，性能更加强大 GitHub：symbols_count_time">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-03-06T02:47:55.000Z">
-<meta property="article:modified_time" content="2020-03-06T11:59:49.997Z">
+<meta property="article:modified_time" content="2020-03-12T04:19:58.303Z">
 <meta property="article:author" content="Tom Andersen">
 <meta property="article:tag" content="Blog">
 <meta property="article:tag" content="Hexo">
@@ -217,10 +219,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-03-06 10:47:55 / Modified: 19:59:49" itemprop="dateCreated datePublished" datetime="2020-03-06T10:47:55+08:00">2020-03-06</time>
+              <time title="Created: 2020-03-06 10:47:55" itemprop="dateCreated datePublished" datetime="2020-03-06T10:47:55+08:00">2020-03-06</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-03-12 12:19:58" itemprop="dateModified" datetime="2020-03-12T12:19:58+08:00">2020-03-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -280,8 +288,6 @@
 
       
         <hr>
-<a id="more"></a>
-
 <hr>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
 <li><strong>Hexo版本</strong>：4.2.0</li>
@@ -290,6 +296,8 @@
 <li>自NexT 6.0发行版之后第三方插件<strong>hexo-wordcount</strong>就被<strong>symbols_count_time</strong>取缔了，相比之下<strong>symbols_count_time</strong>没有额外的依赖，性能更加强大</li>
 <li><strong>GitHub</strong>：<a href="https://github.com/theme-next/hexo-symbols-count-time" target="_blank" rel="noopener">symbols_count_time</a></li>
 </ul>
+<a id="more"></a>
+
 <hr>
 <h2 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h2><h3 id="1）安装symbols-count-time插件"><a href="#1）安装symbols-count-time插件" class="headerlink" title="1）安装symbols_count_time插件"></a>1）安装symbols_count_time插件</h3><p><strong>在Hexo的根目录下安装symbols_count_time</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-symbols-count-time</span><br></pre></td></tr></table></figure>
@@ -463,6 +471,9 @@
       <span class="links-of-author-item">
         <a href="https://me.csdn.net/TomAndersen" title="CSDN → https:&#x2F;&#x2F;me.csdn.net&#x2F;TomAndersen" rel="noopener" target="_blank"><i class="fa fa-fw fa-link"></i>CSDN</a>
       </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
   </div>
 
 
