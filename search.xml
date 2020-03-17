@@ -1,6 +1,323 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Kafka之获取指定Topic-Partition的Leader</title>
+    <url>/2020/03/17/Kafka%E4%B9%8B%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9ATopic-Partition%E7%9A%84Leader/</url>
+    <content><![CDATA[<hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li>kafka版本：2.11-2.1.1</li>
+<li>基于Kafka Java API</li>
+<li>主要是通过封装<code>Consumer.partitionsFor</code>方法实现此功能</li>
+</ul>
+<a id="more"></a>
+
+<hr>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * 用于寻找指定Brokers-Topic-Partition对应的Leader.</span></span><br><span class="line"><span class="comment">     * 主要是封装了&#123;<span class="doctag">@link</span> KafkaConsumer#partitionsFor&#125;方法.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> brokers   指定的Kafka集群,格式为&lt;"host","port"&gt;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> topic     指定的Topic</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> partition 指定的Partition ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> Node &#123;<span class="doctag">@link</span> Node&#125;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span> 2020/3/17</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">findLeader</span><span class="params">(Map&lt;String, Integer&gt; brokers, String topic, <span class="keyword">int</span> partition)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 1.通过接收到的配置信息创建KafkaConsumer实例</span></span><br><span class="line">        Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">        <span class="keyword">for</span> (String broker : brokers.keySet()) &#123;</span><br><span class="line">            props.put(<span class="string">"bootstrap.servers"</span>,</span><br><span class="line">                    broker + <span class="string">":"</span> + brokers.getOrDefault(broker, <span class="number">9092</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 指定Consumer所属的ConsumerGroup</span></span><br><span class="line">        props.put(<span class="string">"group.id"</span>, <span class="string">"test"</span>);</span><br><span class="line">        <span class="comment">// 设置手动提交Offset,由于只是获取部分数据所以不需要自动提交Offset</span></span><br><span class="line">        props.put(<span class="string">"enable.auto.commit"</span>, <span class="string">"false"</span>);</span><br><span class="line">        <span class="comment">// 设置键值对&lt;K,V&gt;反序列化器,使用String对象反序列化器</span></span><br><span class="line">        props.put(<span class="string">"key.deserializer"</span>, <span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">        props.put(<span class="string">"value.deserializer"</span>, <span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2.定义KafkaConsumer实例,采用try&#123;&#125;catch&#123;&#125;finally&#123;&#125;的方式获取资源</span></span><br><span class="line">        KafkaConsumer&lt;String, String&gt; kafkaConsumer = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 3.创建KafkaConsumer实例</span></span><br><span class="line">            kafkaConsumer = <span class="keyword">new</span> KafkaConsumer&lt;&gt;(props);</span><br><span class="line">            <span class="comment">// 4.通过KafkaConsumer实例获取指定Topic对应的Partition信息</span></span><br><span class="line">            List&lt;PartitionInfo&gt; partitionInfos = kafkaConsumer.partitionsFor(topic);</span><br><span class="line">            <span class="comment">// 5.遍历返回的指定Topic的所有Partition信息</span></span><br><span class="line">            <span class="keyword">for</span> (PartitionInfo partitionInfo : partitionInfos) &#123;</span><br><span class="line">                <span class="comment">// 若当前Partition是指定的Partition,则保存此Partition的Replication并将其Leader返回</span></span><br><span class="line">                <span class="keyword">if</span> (partitionInfo.partition() == partition) &#123;</span><br><span class="line">                    <span class="comment">/*// 保存指定Partition的所有副本</span></span><br><span class="line"><span class="comment">                    replications = partitionInfo.replicas();*/</span></span><br><span class="line">                    <span class="comment">// 6.返回指定的TopicPartition对应的Leader</span></span><br><span class="line">                    <span class="keyword">return</span> partitionInfo.leader();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (kafkaConsumer != <span class="keyword">null</span>) kafkaConsumer.close();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果没有找到Leader则返回null</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
+      <categories>
+        <category>Kafka</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Kafka</tag>
+        <tag>Practice</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kafka之获取指定Topic-Partition的lastOffset</title>
+    <url>/2020/03/17/Kafka%E4%B9%8B%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9ATopic-Partition%E7%9A%84lastOffset/</url>
+    <content><![CDATA[<hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li>kafka版本：2.11-2.1.1</li>
+<li>基于Kafka Java API</li>
+<li>主要是通过封装<code>Conusmer.endOffsets</code>方法实现此功能</li>
+</ul>
+<a id="more"></a>
+
+<hr>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;根据指定的Topic-Partition获取对应的endOffset.</span></span><br><span class="line"><span class="comment">     * 主要是封装了KafkaConsumer的&#123;<span class="doctag">@link</span> KafkaConsumer#endOffsets&#125;方法.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;endOffsets Javadoc:</span></span><br><span class="line"><span class="comment">     * Get the end offsets for the given partitions. In the default &#123;<span class="doctag">@code</span> read_uncommitted&#125; isolation level, the end</span></span><br><span class="line"><span class="comment">     * offset is the high watermark (that is, the offset of the last successfully replicated message plus one). For</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@code</span> read_committed&#125; consumers, the end offset is the last stable offset (LSO), which is the minimum of</span></span><br><span class="line"><span class="comment">     * the high watermark and the smallest offset of any open transaction. Finally, if the partition has never been</span></span><br><span class="line"><span class="comment">     * written to, the end offset is 0.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> brokers   指定的Kafka集群</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> topic     指定的Topic</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> partition 指定的Partition ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> TopicPartition对应最新消息的Offset</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span> 2020/3/17</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> KafkaConsumer#endOffsets</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">getLastOffset</span><span class="params">(Map&lt;String, Integer&gt; brokers, String topic, <span class="keyword">int</span> partition)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 1.配置Consumer</span></span><br><span class="line">        <span class="comment">// 通过接收到的配置信息创建KafkaConsumer实例</span></span><br><span class="line">        Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">        <span class="keyword">for</span> (String broker : brokers.keySet()) &#123;</span><br><span class="line">            props.put(<span class="string">"bootstrap.servers"</span>,</span><br><span class="line">                    broker + <span class="string">":"</span> + brokers.getOrDefault(broker, <span class="number">9092</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 指定Consumer所属的ConsumerGroup</span></span><br><span class="line">        props.put(<span class="string">"group.id"</span>, <span class="string">"test"</span>);</span><br><span class="line">        <span class="comment">// 设置手动提交Offset,由于只是获取部分数据所以不需要自动提交Offset</span></span><br><span class="line">        props.put(<span class="string">"enable.auto.commit"</span>, <span class="string">"false"</span>);</span><br><span class="line">        <span class="comment">// 设置键值对&lt;K,V&gt;反序列化器,直接使用String对象反序列化器</span></span><br><span class="line">        props.put(<span class="string">"key.deserializer"</span>, <span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">        props.put(<span class="string">"value.deserializer"</span>, <span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2.定义消费者KafkaConsumer对象</span></span><br><span class="line">        KafkaConsumer&lt;String, String&gt; kafkaConsumer = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// 3.创建TopicPartition实例</span></span><br><span class="line">        TopicPartition topicPartition = <span class="keyword">new</span> TopicPartition(topic, partition);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 4.创建kafkaTopic实例</span></span><br><span class="line">            kafkaConsumer = <span class="keyword">new</span> KafkaConsumer&lt;&gt;(props);</span><br><span class="line">            <span class="comment">// 5.通过Consumer.endOffsets(Collections&lt;TopicPartition&gt;)方法获取</span></span><br><span class="line">            <span class="comment">// 指定TopicPartition对应的lastOffset</span></span><br><span class="line">            Map offsets = kafkaConsumer.endOffsets(</span><br><span class="line">                    Collections.singletonList(topicPartition));</span><br><span class="line">            <span class="comment">// 6.返回对应Partition的Offset,如果不存在则直接返回0</span></span><br><span class="line">            <span class="keyword">return</span> (Long) offsets.getOrDefault(topicPartition, <span class="number">0</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (kafkaConsumer != <span class="keyword">null</span>) kafkaConsumer.close();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 获取lastOffset失败则返回-1</span></span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
+      <categories>
+        <category>Kafka</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Kafka</tag>
+        <tag>Practice</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kafka之读取指定Topic-Partition-Offset之后的消息</title>
+    <url>/2020/03/17/Kafka%E4%B9%8B%E8%AF%BB%E5%8F%96%E6%8C%87%E5%AE%9ATopic-Partition-Offset%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B6%88%E6%81%AF/</url>
+    <content><![CDATA[<hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li>kafka版本：2.11-2.1.1</li>
+<li>基于Kafka Java API</li>
+<li>主要是通过封装<code>Conusmer.assign</code>和<code>Consumer.seek</code>方法实现此功能。前者的作用是将指定Topic-Partition分配给对应的Consumer，后者的作用是将Consumer在指定的Topic-Partition中的Offset置于指定位置</li>
+</ul>
+<a id="more"></a>
+
+<hr>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;主要用于从指定的Topic-Partition-Offset读取指定数量的消息.</span></span><br><span class="line"><span class="comment">     * 主要是用于获取部分数据,而不是持续消费数据.主要是封装了&#123;<span class="doctag">@link</span> KafkaConsumer#assign&#125;</span></span><br><span class="line"><span class="comment">     * 和&#123;<span class="doctag">@link</span> KafkaConsumer#seek&#125;方法.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> brokers     指定的Kafka集群</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> topic       指定消费的Topic</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> partition   指定消费的Partition ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> beginOffset 指定开始消费的Offset</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeInMills 指定消费的时长</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> maxReads    指定消费的最大消息数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span> 2020/3/17</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;ConsumerRecord&gt; <span class="title">getRecordsFrom</span><span class="params">(Map&lt;String, Integer&gt; brokers, String topic, <span class="keyword">int</span> partition, <span class="keyword">long</span> beginOffset, <span class="keyword">long</span> timeInMills, <span class="keyword">long</span> maxReads)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 1.通过接收到的配置信息创建KafkaConsumer实例</span></span><br><span class="line">        Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">        <span class="keyword">for</span> (String broker : brokers.keySet()) &#123;</span><br><span class="line">            props.put(<span class="string">"bootstrap.servers"</span>,</span><br><span class="line">                    broker + <span class="string">":"</span> + brokers.getOrDefault(broker, <span class="number">9092</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 设置手动提交Offset,由于只是获取部分数据所以不需要自动提交Offset</span></span><br><span class="line">        props.put(<span class="string">"enable.auto.commit"</span>, <span class="string">"false"</span>);</span><br><span class="line">        <span class="comment">// 设置键值对&lt;K,V&gt;反序列化器,因为都是String类型,所以使用String对象反序列化器</span></span><br><span class="line">        props.put(<span class="string">"key.deserializer"</span>, <span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">        props.put(<span class="string">"value.deserializer"</span>, <span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2.定义KafkaConsumer对象,以及创建用于返回的ConsumerRecord集合</span></span><br><span class="line">        KafkaConsumer&lt;Object, Object&gt; kafkaConsumer = <span class="keyword">null</span>;</span><br><span class="line">        List&lt;ConsumerRecord&gt; recordList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 3.创建KafkaConsumer实例</span></span><br><span class="line">            kafkaConsumer = <span class="keyword">new</span> KafkaConsumer&lt;&gt;(props);</span><br><span class="line">            <span class="comment">// 4.创建TopicPartition实例</span></span><br><span class="line">            TopicPartition topicPartition = <span class="keyword">new</span> TopicPartition(topic, partition);</span><br><span class="line">            <span class="comment">// 5.给Consumer指定消费的Topic和Partition(十分重要)</span></span><br><span class="line">            <span class="comment">// 如果无对应topic或者partition,则会抛出异常IllegalArgumentException</span></span><br><span class="line">            <span class="comment">// 如果此consumer之前已经有过订阅行为且未解除之前所有的订阅,则会抛出异常IllegalStateException</span></span><br><span class="line">            kafkaConsumer.assign(Collections.singletonList(topicPartition));</span><br><span class="line">            <span class="comment">// 6.覆盖原始的Consumer-Topic-Partition对应的Offset,将其设置为指定Offset值</span></span><br><span class="line">            kafkaConsumer.seek(topicPartition, beginOffset);</span><br><span class="line">            <span class="comment">// 7.获取消息</span></span><br><span class="line">            ConsumerRecords&lt;Object, Object&gt; consumerRecords =</span><br><span class="line">                    kafkaConsumer.poll(Duration.ofMillis(timeInMills));</span><br><span class="line">            <span class="comment">// 8.处理消息</span></span><br><span class="line">            <span class="comment">// 将Consumer获取到的消息保存在集合中准备返回</span></span><br><span class="line">            <span class="keyword">for</span> (ConsumerRecord record : consumerRecords) &#123;</span><br><span class="line">                <span class="comment">// 如果已经读完最多消息限制则直接跳出循环</span></span><br><span class="line">                <span class="keyword">if</span> (recordList.size() == maxReads) <span class="keyword">break</span>;</span><br><span class="line">                <span class="comment">// 如果还需要读取则继续读取</span></span><br><span class="line">                recordList.add(record);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">// 9.释放资源</span></span><br><span class="line">            <span class="keyword">if</span> (kafkaConsumer != <span class="keyword">null</span>) kafkaConsumer.close();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> recordList;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
+      <categories>
+        <category>Kafka</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Kafka</tag>
+        <tag>Practice</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SSH连接服务器时出现Permission denied (publickey,gssapi-keyex,gssapi-with-mic)</title>
+    <url>/2020/03/15/SSH%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%97%B6%E5%87%BA%E7%8E%B0Permission%20denied%20(publickey,gssapi-keyex,gssapi-with-mic)/</url>
+    <content><![CDATA[<hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>SSH工具连接服务器的身份验证方式有两种，一种是基于口令的身份验证，一种是基于密钥的身份认证。当你直接使用SSH工具连接服务器时，SSH首先会在<code>~/.ssh/</code>路径下按照默认的密钥（私钥）文件名（如id_rsa）查找对应的密钥并尝试使用本地的私钥去配对服务器端的公钥，如果配对成功则不需要进行密码验证（这也是通常实现SSH免密登录的原理），如果配对失败则尝试使用密码验证的方式进行身份验证。但是如果ssh配置文件中关闭了密码验证，那么当密钥无法配对成功时，就会报如题的错误。同样的如果在没有开启密码验证的时候，尝试使用<code>ssh-copy-id</code>，也会报此错误。</p>
+<a id="more"></a>
+
+<hr>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="1）使用对应私钥连接服务端"><a href="#1）使用对应私钥连接服务端" class="headerlink" title="1）使用对应私钥连接服务端"></a>1）使用对应私钥连接服务端</h3><p><strong>命令格式如下：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh &lt;remote_username&gt;@&lt;remote_ip&gt; -i &lt;your_local_private_key&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh admin@114.67.40.28 -i /home/tom/id_rsa</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：如果是在Windows平台下使用Git Bash，则默认密钥（私钥）一般存放在<code>C:\Users\&lt;your_account&gt;\.ssh</code>目录下。如果没有对应私钥是没有办法连接到远端的。</strong></p>
+<h3 id="2）修改SSH配置文件"><a href="#2）修改SSH配置文件" class="headerlink" title="2）修改SSH配置文件"></a>2）修改SSH配置文件</h3><p><strong>修改/etc/ssh/sshd_config：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+
+<p><strong>将PasswordAuthentication设置成为yes（一般在文件的末尾几行）：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#	X11Forwarding no</span></span><br><span class="line"><span class="comment">#	AllowTcpForwarding no</span></span><br><span class="line"><span class="comment">#	PermitTTY no</span></span><br><span class="line"><span class="comment">#	ForceCommand cvs server</span></span><br><span class="line">UseDNS no</span><br><span class="line">AddressFamily inet</span><br><span class="line">PermitRootLogin yes</span><br><span class="line">SyslogFacility AUTHPRIV</span><br><span class="line"><span class="comment">#PasswordAuthentication no</span></span><br><span class="line">PasswordAuthentication yes</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：不是修改<code>/etc/ssh/ssh_config</code>文件</strong></p>
+<h3 id="3）使用密码登录"><a href="#3）使用密码登录" class="headerlink" title="3）使用密码登录"></a>3）使用密码登录</h3><p><strong>修改配置之后就可以正常使用密码的方式进行身份验证登录服务器了</strong></p>
+<hr>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Shell</tag>
+        <tag>ssh</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Shell之使用ssh工具在远端执行多条命令</title>
+    <url>/2020/03/15/Shell%E4%B9%8B%E4%BD%BF%E7%94%A8ssh%E5%B7%A5%E5%85%B7%E5%9C%A8%E8%BF%9C%E7%AB%AF%E6%89%A7%E8%A1%8C%E5%A4%9A%E6%9D%A1%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li><p><strong>①多行命令使用双引号或者首尾定界符来囊括，当使用双引号囊括时，若其中同时也使用了双引号就需要使用转义字符对远程执行命令中的引号进行转义。所以如果远程命令本身包含双引号，建议还是使用首尾定界符，首尾定界符是一个自定义的字符串，可以自定义内容，并且命令结尾处的首尾定界符需要放置于当前行行首</strong></p>
+</li>
+<li><p><strong>②如果远程执行命令中的美元符号<code>$</code>读取的是远程终端的变量，而非当前终端的变量就需要增加转义字符来将此美元符号转义，即定义为读取远程终端中设置的变量</strong></p>
+</li>
+</ul>
+<a id="more"></a>
+
+<hr>
+<h2 id="脚本示例"><a href="#脚本示例" class="headerlink" title="脚本示例"></a>脚本示例</h2><h3 id="示例1：使用双引号"><a href="#示例1：使用双引号" class="headerlink" title="示例1：使用双引号"></a>示例1：使用双引号</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 此脚本用于测试ssh工具远程执行多条命令方式</span></span><br><span class="line"><span class="comment"># 使用的前提是已经设置密钥对并以默认私钥文件名存放在默认路径~/.ssh/下(即ssh免密登录)</span></span><br><span class="line"><span class="comment"># 或者使用-i参数手动指定私钥位置</span></span><br><span class="line"></span><br><span class="line">host=192.168.126.101</span><br><span class="line"></span><br><span class="line">ssh tomandersen@<span class="variable">$host</span> <span class="string">"</span></span><br><span class="line"><span class="string">source /etc/profile</span></span><br><span class="line"><span class="string">echo \$JAVA_HOME</span></span><br><span class="line"><span class="string">echo 'this is a test!'</span></span><br><span class="line"><span class="string">"</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：每行结尾不加分号<code>;</code>，若远程执行的多行命令中存在使用<code>双引号&quot;&quot;</code>或者<code>美元符号$</code>的情况，需要使用<code>转义字符\</code>进行转义，前者是因为双引号在本示例中是作为首位定界符只能出现在命令头尾，后者是因为不给美元符号附上转义字符时是默认读取本地变量。同理也可以使用单引号</strong></p>
+<hr>
+<h3 id="示例2：使用首尾定界符"><a href="#示例2：使用首尾定界符" class="headerlink" title="示例2：使用首尾定界符"></a>示例2：使用首尾定界符</h3><p><strong>首尾定界符是用于圈定命令的字符串，字符串内容可以自己定义，如常用的EOF，甚至命名为TEST都行。配合使用输入从定向&lt;&lt;，能够将其圈定的内容作为命令参数输入</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 此脚本用于测试ssh工具远程执行多条命令方式</span></span><br><span class="line"><span class="comment"># 使用的前提是已经设置密钥对并以默认私钥文件名存放在默认路径~/.ssh/下(即ssh免密登录)</span></span><br><span class="line"><span class="comment"># 或者使用-i参数手动指定私钥位置</span></span><br><span class="line"></span><br><span class="line">host=192.168.126.101</span><br><span class="line"></span><br><span class="line">ssh tomandersen@<span class="variable">$host</span> &lt;&lt; EOF</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"><span class="built_in">echo</span> \<span class="variable">$JAVA_HOME</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'this is a test!'</span></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：首尾定界符的结尾符号需要写在行首，否则会报错</strong></p>
+<hr>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Shell</tag>
+        <tag>ssh</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kafka之入门级安装部署</title>
+    <url>/2020/03/15/Kafka%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/</url>
+    <content><![CDATA[<hr>
+<h2 id="1-下载Kafka安装包"><a href="#1-下载Kafka安装包" class="headerlink" title="1. 下载Kafka安装包"></a>1. 下载Kafka安装包</h2><p><a href="http://archive.apache.org/dist/" target="_blank" rel="noopener">Apache所有项目历史版本镜像地址</a></p>
+<p><a href="http://archive.apache.org/dist/kafka/" target="_blank" rel="noopener">Apache Kafka下载地址</a></p>
+<a id="more"></a>
+
+<hr>
+<h2 id="2-解压到指定路径下"><a href="#2-解压到指定路径下" class="headerlink" title="2. 解压到指定路径下"></a>2. 解压到指定路径下</h2><p><strong>本次安装的Kafka为2.1.1版本，注意：压缩包前面的版本号为Scala版本号，而后面的才是Kafka版本号</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xzvf kafka_2.11-2.1.1.tgz -C /opt/module/</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-配置环境变量"><a href="#3-配置环境变量" class="headerlink" title="3. 配置环境变量"></a>3. 配置环境变量</h2><p><strong>通过修改<code>/etc/profile</code>文件设置KAFKA_HOME环境变量，并将bin目录增加到PATH环境变量中</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><strong>添加以下内容</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Set $KAFKA_HOME</span></span><br><span class="line"><span class="built_in">export</span> KAFKA_HOME=/opt/module/kafka_2.11-2.1.1</span><br><span class="line"><span class="comment"># Add $KAFKA_HOME/bin to PATH</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$KAFKA_HOME</span>/bin</span><br></pre></td></tr></table></figure>
+
+<p><strong>重新加载profile文件，验证环境变量</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$KAFKA_HOME</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-修改配置文件config-server-properties"><a href="#4-修改配置文件config-server-properties" class="headerlink" title="4. 修改配置文件config/server.properties"></a>4. 修改配置文件<code>config/server.properties</code></h2><h3 id="1）设置Broker-ID"><a href="#1）设置Broker-ID" class="headerlink" title="1）设置Broker ID"></a>1）设置Broker ID</h3><p><strong>Kafka集群中每个主机即Broker的ID必须不同</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># The id of the broker. This must be set to a unique integer for each broker.</span></span><br><span class="line">broker.id=0</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2）设置Kafka日志以及数据存放路径"><a href="#2）设置Kafka日志以及数据存放路径" class="headerlink" title="2）设置Kafka日志以及数据存放路径"></a>2）设置Kafka日志以及数据存放路径</h3><p><strong>此路径设置的日志和数据的共同存储路径，即各种Partition的数据也存储在此路径下</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">log.dirs=/opt/module/kafka_2.11-2.1.1/logs</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3）开启管理工具的删除Topic功能"><a href="#3）开启管理工具的删除Topic功能" class="headerlink" title="3）开启管理工具的删除Topic功能"></a>3）开启管理工具的删除Topic功能</h3><p><strong>如果不开启开启此功能，那么使用命令行删除Topic时只会是标记删除，实际上并未删除，当再次创建同名Topic时就会报错无法创建</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">delete.topic.enable=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4）配置Zookeeper集群"><a href="#4）配置Zookeeper集群" class="headerlink" title="4）配置Zookeeper集群"></a>4）配置Zookeeper集群</h3><p><strong>Zookeeper服务器集群的客户端端口要与Zookeeper中配置的端口一致</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">zookeeper.connect=zkServer1:2181,zkServer2.2181,zkServer3.2181</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5）具体配置"><a href="#5）具体配置" class="headerlink" title="5）具体配置"></a>5）具体配置</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#broker的全局唯一编号，不能重复</span></span><br><span class="line">broker.id=1</span><br><span class="line"><span class="comment">#删除topic功能使能</span></span><br><span class="line">delete.topic.enable=<span class="literal">true</span></span><br><span class="line"><span class="comment">#处理网络请求的线程数量</span></span><br><span class="line">num.network.threads=3</span><br><span class="line"><span class="comment">#用来处理磁盘IO的现成数量</span></span><br><span class="line">num.io.threads=8</span><br><span class="line"><span class="comment">#发送套接字的缓冲区大小</span></span><br><span class="line">socket.send.buffer.bytes=102400</span><br><span class="line"><span class="comment">#接收套接字的缓冲区大小</span></span><br><span class="line">socket.receive.buffer.bytes=102400</span><br><span class="line"><span class="comment">#请求套接字的缓冲区大小</span></span><br><span class="line">socket.request.max.bytes=104857600</span><br><span class="line"><span class="comment">#kafka运行日志存放的路径	</span></span><br><span class="line">log.dirs=/opt/module/kafka_2.11-2.1.1/logs</span><br><span class="line"><span class="comment">#topic在当前broker上的分区个数</span></span><br><span class="line">num.partitions=1</span><br><span class="line"><span class="comment">#用来恢复和清理data下数据的线程数量</span></span><br><span class="line">num.recovery.threads.per.data.dir=1</span><br><span class="line"><span class="comment">#segment文件保留的最长时间，超时将被删除</span></span><br><span class="line">log.retention.hours=168</span><br><span class="line"><span class="comment">#log segment滚动条件:文件大小</span></span><br><span class="line">log.segment.bytes=1073741824</span><br><span class="line"><span class="comment">#周期性检查log segment文件是否可以删除</span></span><br><span class="line">log.retention.check.interval.ms=300000</span><br><span class="line"><span class="comment">#配置连接Zookeeper集群地址</span></span><br><span class="line">zookeeper.connect=hadoop102:2181,hadoop103:2181,hadoop104:2181</span><br><span class="line"><span class="comment">#zookeeper连接认定超时时间</span></span><br><span class="line">zookeeper.connection.timeout.ms=6000</span><br><span class="line"><span class="comment">#设置rebalance的延迟时间</span></span><br><span class="line">group.initial.rebalance.delay.ms=0</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="6）测试"><a href="#6）测试" class="headerlink" title="6）测试"></a>6）测试</h3><p><strong>启动当前主机Kafka</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-server-start.sh config/server.properties</span><br></pre></td></tr></table></figure>
+
+<p><strong>关闭当前主机Kafka</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-server-stop.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="7）将Kafka分发给其他主机并修改对应的Broker-ID即可"><a href="#7）将Kafka分发给其他主机并修改对应的Broker-ID即可" class="headerlink" title="7）将Kafka分发给其他主机并修改对应的Broker ID即可"></a>7）将Kafka分发给其他主机并修改对应的Broker ID即可</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">scp -r /opt/module/kafka_2.11-2.1.1 hadoop102:/opt/module/</span><br><span class="line">scp -r /opt/module/kafka_2.11-2.1.1 hadoop103:/opt/module/</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="8）编写脚本控制Kafka集群"><a href="#8）编写脚本控制Kafka集群" class="headerlink" title="8）编写脚本控制Kafka集群"></a>8）编写脚本控制Kafka集群</h3><p><strong>编写Kafka群起脚本，通过脚本控制Kafka集群。此处提供脚本模板，仅供参考，具体使用之前记得更改Kafka安装路径，以及实现主机间ssh免密登录或者更改ssh命令指定每次连接时使用的私钥</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 此脚本用于启动/停止Kafka集群</span></span><br><span class="line"><span class="comment"># 输入的参数只能为start/stop</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断参数个数</span></span><br><span class="line"><span class="keyword">if</span> ((<span class="variable">$#</span> &gt; 1)); <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Wrongs parameters!"</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前时间(相对时间)</span></span><br><span class="line">start_time=$(date +%s)</span><br><span class="line"><span class="comment"># 获取操作方式</span></span><br><span class="line">operation=<span class="variable">$1</span></span><br><span class="line"><span class="comment"># 设置Kafka集群</span></span><br><span class="line">cluster=<span class="variable">$&#123;KAFKA_CLUSTER:-"hadoop101 hadoop102 hadoop103"&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对kafka集群进行对应的操作</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$operation</span>"</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"----------Starting kafka cluster----------"</span></span><br><span class="line">    <span class="keyword">for</span> host <span class="keyword">in</span> <span class="variable">$cluster</span>; <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"----------Starting kafka in [<span class="variable">$host</span>]----------"</span></span><br><span class="line">        ssh <span class="variable">$host</span> <span class="string">"source /etc/profile;</span></span><br><span class="line"><span class="string">        KAFKA_HOME=\$&#123;KAFKA_HOME:-'/opt/module/kafka_2.11-2.1.1'&#125;;</span></span><br><span class="line"><span class="string">        cd \$KAFKA_HOME;</span></span><br><span class="line"><span class="string">        nohup ./bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;</span></span><br><span class="line"><span class="string">        "</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">    ;;</span><br><span class="line">stop)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"----------Stopping kafka cluster----------"</span></span><br><span class="line">    <span class="keyword">for</span> host <span class="keyword">in</span> <span class="variable">$cluster</span>; <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"----------Starting kafka in [<span class="variable">$host</span>]----------"</span></span><br><span class="line">        ssh <span class="variable">$host</span> <span class="string">"source /etc/profile;</span></span><br><span class="line"><span class="string">        KAFKA_HOME=\$&#123;KAFKA_HOME:-'/opt/module/kafka_2.11-2.1.1'&#125;;</span></span><br><span class="line"><span class="string">        cd \$KAFKA_HOME;</span></span><br><span class="line"><span class="string">        ./bin/kafka-server-stop.sh</span></span><br><span class="line"><span class="string">        "</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">    ;;</span><br><span class="line">*)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Worong Parameter!"</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line">    ;;</span><br><span class="line"><span class="keyword">esac</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取结束时间</span></span><br><span class="line">end_time=$(date +%s)</span><br><span class="line">execution_time=$((<span class="variable">$&#123;end_time&#125;</span> - <span class="variable">$&#123;start_time&#125;</span>))</span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\n----------<span class="variable">$operation</span> kafka in [<span class="variable">$cluster</span>] takes <span class="variable">$&#123;execution_time&#125;</span> seconds----------\n"</span></span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
+      <categories>
+        <category>Kafka</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Kafka</tag>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kafka之命令行的基本操作</title>
+    <url>/2020/03/15/Kafka%E4%B9%8B%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li>kafka版本：2.11-2.1.1</li>
+</ul>
+<a id="more"></a>
+
+<hr>
+<h2 id="1-启动-关闭Kafka"><a href="#1-启动-关闭Kafka" class="headerlink" title="1. 启动/关闭Kafka"></a>1. 启动/关闭Kafka</h2><p><strong>注意：在启动Kafka进程之前记得先启动Zookeeper集群</strong></p>
+<p><strong>启动当前主机Kafka进程</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-server-start.sh config/server.properties</span><br></pre></td></tr></table></figure>
+
+<p><strong>可以使用<code>-daemon</code>参数，表示以守护线程的方式启动，日志不打印到控制台</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-server-start.sh -daemon config/server.properties</span><br></pre></td></tr></table></figure>
+
+<p><strong>关闭当前主机Kafka进程</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-server-stop.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-查看所有Topic信息"><a href="#2-查看所有Topic信息" class="headerlink" title="2. 查看所有Topic信息"></a>2. 查看所有Topic信息</h2><p><strong>需要指定Zookeeper集群和其提供的客户端端口号。如果想尝试使用多个Zookeeper服务器，各个服务器之间使用逗号隔开</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-topics.sh --zookeeper zkServer1:2181,zkServer2:2181 --list</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-创建Topic"><a href="#3-创建Topic" class="headerlink" title="3. 创建Topic"></a>3. 创建Topic</h2><p><strong>向Zookeeper服务器集群注册Topic</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-topics.sh --zookeeper zkServer1:2181 --create --replication-factor 3 --partitions 1 --topic first</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：自Kafka 2.2.x及之后都是向Kafka集群注册Topic，而不是直接向Zookeeper注册Tpoic，所以命令行有所不同，将Zookeeper集群改成指定Kafka集群及其客户端端口</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 3 --partitions 1 --topic first</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="4-删除Topic"><a href="#4-删除Topic" class="headerlink" title="4. 删除Topic"></a>4. 删除Topic</h2><p><strong>需要server.properties中设置<code>delete.topic.enable=true</code>，否则只是标记删除而实际未删除，会导致再次创建同名Topic时失败</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-topics.sh --zookeeper zkServer1:2181 --delete --topic first</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="5-生产消息"><a href="#5-生产消息" class="headerlink" title="5. 生产消息"></a>5. 生产消息</h2><p><strong>启动生产者进程</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-console-producer.sh --broker-list localhost:9092 --topic first</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6-消费消息"><a href="#6-消费消息" class="headerlink" title="6. 消费消息"></a>6. 消费消息</h2><p><strong>启动消费者进程，实时消费Topic中的最新消息</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic first</span><br></pre></td></tr></table></figure>
+
+<p><strong>加上<code>from-beginning</code>则是将Topic中已保存的历史消息全部取出</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic first</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意1：如果使用了多个Partition，取出的消息只能保证单个Partition中的消息有序，多个Partition之间消息是不保证有序的</strong></p>
+<p><strong>注意2：在Kafka 0.8.1及之前，Consumer消费分区消息的offset偏移量也通过Zookeeper来保存，在此版本之后就不建议或者禁止使用zk来保存offset。在Kafka 0.8.2及之后，Kafka通过建立一个Internal Topic即内部Topic来保存Consumer Offset信息（topic名为_consumer_offset），同样存储在log.dirs路径下。因此Kafka 0.8.2及之后是通过指定Kafka集群来消费消息，而Kafka 0.8.1及之前是通过指定Zookeeper集群来消费消息</strong></p>
+<h2 id="7-查看指定Topic具体信息"><a href="#7-查看指定Topic具体信息" class="headerlink" title="7. 查看指定Topic具体信息"></a>7. 查看指定Topic具体信息</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/kafka-topics.sh --zookeeper zkServer1:2181 --describe --topic first</span><br></pre></td></tr></table></figure>
+
+<p><strong>其中<code>ISR</code>表示已经和Partition Leader实现同步的Partition副本（in-sync replication）</strong></p>
+<hr>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
+      <categories>
+        <category>Kafka</category>
+      </categories>
+      <tags>
+        <tag>Kafka</tag>
+        <tag>Shell</tag>
+        <tag>Practice</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo之NexT主题设置背景图片</title>
+    <url>/2020/03/15/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E8%AE%BE%E7%BD%AE%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li><strong>Hexo版本</strong>：4.2.0</li>
+<li><strong>NexT版本</strong>：7.7.1</li>
+<li><strong>GitHub</strong>：<a href="https://github.com/theme-next/theme-next-pace" target="_blank" rel="noopener">theme-next-pace</a></li>
+</ul>
+<a id="more"></a>
+
+<hr>
+<h2 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h2><h3 id="1）修改NexT配置文件"><a href="#1）修改NexT配置文件" class="headerlink" title="1）修改NexT配置文件"></a>1）修改NexT配置文件</h3><p>在NexT的配置文件中的<code>custom_file_path</code>参数下设置CSS样式文件<code>style.styl</code>的存储路径，我们可以在此文件中自定义使用自己的各种样式，此路径必须在Hexo根目录source文件夹下，建议设置成默认路径<code>source/_data/style.styl</code>，然后在对应路径下创建对应的<code>style.styl</code>文件。</p>
+<h3 id="2）配置style-styl文件"><a href="#2）配置style-styl文件" class="headerlink" title="2）配置style.styl文件"></a>2）配置style.styl文件</h3><p><strong>此脚本内容遵循CSS语法，以下是配置示例：</strong></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">// Custom styles.</span><br><span class="line">// 整体背景设置</span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line"> 	background:url(/images/adrian-Xft-JdC-Jbc-unsplash.jpg);// 设定背景图片,images同处于source文件夹下</span><br><span class="line"> 	background-repeat: no-repeat;// 设定背景图片非重复填充</span><br><span class="line">    background-attachment:fixed;// 设置背景图片不随页面滚动</span><br><span class="line">    background-position:50% 50%;// 设置背景图片位置</span><br><span class="line">	background-size: cover// 设置保持图像的纵横比并将图像缩放成将完全覆盖背景定位区域的最小大小</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 页面头样式属性</span><br><span class="line"><span class="selector-class">.header-inner</span> &#123;</span><br><span class="line">  // 也可以同时定义背景色</span><br><span class="line">  // background: #ddd </span><br><span class="line">  // 透明度</span><br><span class="line">  // opacity: 0.8;</span><br><span class="line">&#125;</span><br><span class="line">// sidebar侧边工具栏样式属性</span><br><span class="line"><span class="selector-class">.sidebar</span>&#123;</span><br><span class="line">    // 动画过渡时间</span><br><span class="line">	<span class="selector-tag">transition-duration</span>: 0<span class="selector-class">.4s</span>;</span><br><span class="line">    // 透明度</span><br><span class="line">	<span class="selector-tag">opacity</span>: 0<span class="selector-class">.8</span></span><br><span class="line">&#125;</span><br><span class="line">// 标题样式</span><br><span class="line"><span class="selector-class">.posts-expand</span> <span class="selector-class">.post-title-link</span> &#123;</span><br><span class="line">	// 设置字体颜色</span><br><span class="line">	<span class="selector-tag">color</span>: <span class="selector-id">#222</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 文章版块样式</span><br><span class="line"><span class="selector-class">.post-block</span> &#123;</span><br><span class="line">    //background: var(--content-bg-color);</span><br><span class="line">	<span class="selector-tag">background</span>: <span class="selector-id">#fff</span></span><br><span class="line">    <span class="selector-tag">border-radius</span>: <span class="selector-tag">initial</span>;</span><br><span class="line">    <span class="selector-tag">box-shadow</span>: 0 2<span class="selector-tag">px</span> 2<span class="selector-tag">px</span> 0 <span class="selector-tag">rgba</span>(0,0,0,0<span class="selector-class">.12</span>), 0 3<span class="selector-tag">px</span> 1<span class="selector-tag">px</span> <span class="selector-tag">-2px</span> <span class="selector-tag">rgba</span>(0,0,0,0<span class="selector-class">.06</span>), 0 1<span class="selector-tag">px</span> 5<span class="selector-tag">px</span> 0 <span class="selector-tag">rgba</span>(0,0,0,0<span class="selector-class">.12</span>);</span><br><span class="line">    <span class="selector-tag">padding</span>: 40<span class="selector-tag">px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3）重新生成Hexo博客"><a href="#3）重新生成Hexo博客" class="headerlink" title="3）重新生成Hexo博客"></a>3）重新生成Hexo博客</h3><p><strong>重新生成Hexo博客，并验证配置结果</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4）More"><a href="#4）More" class="headerlink" title="4）More"></a>4）More</h3><p><strong>类似的，我们也可以通过浏览器的F12进入开发者模式并使用鼠标点击来获取CSS样式名，并在此文件中设置对应的样式属性来实现各种自定义修改的CSS样式</strong></p>
+<hr>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>]]></content>
+      <categories>
+        <category>个人博客搭建</category>
+      </categories>
+      <tags>
+        <tag>Blog</tag>
+        <tag>Hexo</tag>
+        <tag>NexT</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo之NexT主题中设置加载进度条</title>
     <url>/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%8A%A0%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1/</url>
     <content><![CDATA[<hr>
@@ -958,8 +1275,8 @@
       <tags>
         <tag>CentOS7</tag>
         <tag>大数据</tag>
-        <tag>Zookeeper</tag>
         <tag>ssh</tag>
+        <tag>Zookeeper</tag>
       </tags>
   </entry>
   <entry>

@@ -1299,7 +1299,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #c8ff88;
+  background: #6b2805;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2773,7 +2773,7 @@ body {
 }
 .main-inner {
   margin: 0 auto;
-  width: fit-content;
+  width: 1000px;
 }
 .post-block {
   background: #fff;
@@ -2781,6 +2781,9 @@ body {
   padding: 40px 30px 20px 30px;
   box-shadow: 0 0 40px rgba(0,0,0,0.12);
   margin: 0 auto;
+}
+.pagination {
+  text-align: right;
 }
 .post-button .btn {
   border-color: #222;

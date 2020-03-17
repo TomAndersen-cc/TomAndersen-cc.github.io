@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/black/pace-theme-loading-bar.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":20,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1. 下载Kafka安装包Apache所有项目历史版本镜像地址 Apache Kafka下载地址">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka之入门级安装部署">
+<meta property="og:url" content="https://tomandersen-cc.github.io/2020/03/15/Kafka%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Eden">
+<meta property="og:description" content="1. 下载Kafka安装包Apache所有项目历史版本镜像地址 Apache Kafka下载地址">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-15T00:01:13.000Z">
+<meta property="article:modified_time" content="2020-03-17T13:55:42.028Z">
+<meta property="article:author" content="Tom Andersen">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Kafka">
+<meta property="article:tag" content="Shell">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tomandersen-cc.github.io/2020/03/15/Kafka%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Kafka之入门级安装部署 | Eden</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a068b18edc2d52225241d153c78d9954";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Eden" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Eden</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/TomAndersen-cc/TomAndersen-cc.github.io" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tomandersen-cc.github.io/2020/03/15/Kafka%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/skull.JPG">
+      <meta itemprop="name" content="Tom Andersen">
+      <meta itemprop="description" content="Stay hungry.Stay foolish.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eden">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          Kafka之入门级安装部署
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-15 08:01:13" itemprop="dateCreated datePublished" datetime="2020-03-15T08:01:13+08:00">2020-03-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-03-17 21:55:42" itemprop="dateModified" datetime="2020-03-17T21:55:42+08:00">2020-03-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kafka/" itemprop="url" rel="index">
+                    <span itemprop="name">Kafka</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/03/15/Kafka%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/" class="post-meta-item leancloud_visitors" data-flag-title="Kafka之入门级安装部署" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/03/15/Kafka%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/15/Kafka%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>3.2k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>3 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h2 id="1-下载Kafka安装包"><a href="#1-下载Kafka安装包" class="headerlink" title="1. 下载Kafka安装包"></a>1. 下载Kafka安装包</h2><p><a href="http://archive.apache.org/dist/" target="_blank" rel="noopener">Apache所有项目历史版本镜像地址</a></p>
+<p><a href="http://archive.apache.org/dist/kafka/" target="_blank" rel="noopener">Apache Kafka下载地址</a></p>
+<a id="more"></a>
+
+<hr>
+<h2 id="2-解压到指定路径下"><a href="#2-解压到指定路径下" class="headerlink" title="2. 解压到指定路径下"></a>2. 解压到指定路径下</h2><p><strong>本次安装的Kafka为2.1.1版本，注意：压缩包前面的版本号为Scala版本号，而后面的才是Kafka版本号</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf kafka_2.11-2.1.1.tgz -C /opt/module/</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-配置环境变量"><a href="#3-配置环境变量" class="headerlink" title="3. 配置环境变量"></a>3. 配置环境变量</h2><p><strong>通过修改<code>/etc/profile</code>文件设置KAFKA_HOME环境变量，并将bin目录增加到PATH环境变量中</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><strong>添加以下内容</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Set $KAFKA_HOME</span></span><br><span class="line"><span class="built_in">export</span> KAFKA_HOME=/opt/module/kafka_2.11-2.1.1</span><br><span class="line"><span class="comment"># Add $KAFKA_HOME/bin to PATH</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$KAFKA_HOME</span>/bin</span><br></pre></td></tr></table></figure>
+
+<p><strong>重新加载profile文件，验证环境变量</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$KAFKA_HOME</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-修改配置文件config-server-properties"><a href="#4-修改配置文件config-server-properties" class="headerlink" title="4. 修改配置文件config/server.properties"></a>4. 修改配置文件<code>config/server.properties</code></h2><h3 id="1）设置Broker-ID"><a href="#1）设置Broker-ID" class="headerlink" title="1）设置Broker ID"></a>1）设置Broker ID</h3><p><strong>Kafka集群中每个主机即Broker的ID必须不同</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The id of the broker. This must be set to a unique integer for each broker.</span></span><br><span class="line">broker.id=0</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2）设置Kafka日志以及数据存放路径"><a href="#2）设置Kafka日志以及数据存放路径" class="headerlink" title="2）设置Kafka日志以及数据存放路径"></a>2）设置Kafka日志以及数据存放路径</h3><p><strong>此路径设置的日志和数据的共同存储路径，即各种Partition的数据也存储在此路径下</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log.dirs=/opt/module/kafka_2.11-2.1.1/logs</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3）开启管理工具的删除Topic功能"><a href="#3）开启管理工具的删除Topic功能" class="headerlink" title="3）开启管理工具的删除Topic功能"></a>3）开启管理工具的删除Topic功能</h3><p><strong>如果不开启开启此功能，那么使用命令行删除Topic时只会是标记删除，实际上并未删除，当再次创建同名Topic时就会报错无法创建</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete.topic.enable=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4）配置Zookeeper集群"><a href="#4）配置Zookeeper集群" class="headerlink" title="4）配置Zookeeper集群"></a>4）配置Zookeeper集群</h3><p><strong>Zookeeper服务器集群的客户端端口要与Zookeeper中配置的端口一致</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zookeeper.connect=zkServer1:2181,zkServer2.2181,zkServer3.2181</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5）具体配置"><a href="#5）具体配置" class="headerlink" title="5）具体配置"></a>5）具体配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#broker的全局唯一编号，不能重复</span></span><br><span class="line">broker.id=1</span><br><span class="line"><span class="comment">#删除topic功能使能</span></span><br><span class="line">delete.topic.enable=<span class="literal">true</span></span><br><span class="line"><span class="comment">#处理网络请求的线程数量</span></span><br><span class="line">num.network.threads=3</span><br><span class="line"><span class="comment">#用来处理磁盘IO的现成数量</span></span><br><span class="line">num.io.threads=8</span><br><span class="line"><span class="comment">#发送套接字的缓冲区大小</span></span><br><span class="line">socket.send.buffer.bytes=102400</span><br><span class="line"><span class="comment">#接收套接字的缓冲区大小</span></span><br><span class="line">socket.receive.buffer.bytes=102400</span><br><span class="line"><span class="comment">#请求套接字的缓冲区大小</span></span><br><span class="line">socket.request.max.bytes=104857600</span><br><span class="line"><span class="comment">#kafka运行日志存放的路径	</span></span><br><span class="line">log.dirs=/opt/module/kafka_2.11-2.1.1/logs</span><br><span class="line"><span class="comment">#topic在当前broker上的分区个数</span></span><br><span class="line">num.partitions=1</span><br><span class="line"><span class="comment">#用来恢复和清理data下数据的线程数量</span></span><br><span class="line">num.recovery.threads.per.data.dir=1</span><br><span class="line"><span class="comment">#segment文件保留的最长时间，超时将被删除</span></span><br><span class="line">log.retention.hours=168</span><br><span class="line"><span class="comment">#log segment滚动条件:文件大小</span></span><br><span class="line">log.segment.bytes=1073741824</span><br><span class="line"><span class="comment">#周期性检查log segment文件是否可以删除</span></span><br><span class="line">log.retention.check.interval.ms=300000</span><br><span class="line"><span class="comment">#配置连接Zookeeper集群地址</span></span><br><span class="line">zookeeper.connect=hadoop102:2181,hadoop103:2181,hadoop104:2181</span><br><span class="line"><span class="comment">#zookeeper连接认定超时时间</span></span><br><span class="line">zookeeper.connection.timeout.ms=6000</span><br><span class="line"><span class="comment">#设置rebalance的延迟时间</span></span><br><span class="line">group.initial.rebalance.delay.ms=0</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="6）测试"><a href="#6）测试" class="headerlink" title="6）测试"></a>6）测试</h3><p><strong>启动当前主机Kafka</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-server-start.sh config/server.properties</span><br></pre></td></tr></table></figure>
+
+<p><strong>关闭当前主机Kafka</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-server-stop.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="7）将Kafka分发给其他主机并修改对应的Broker-ID即可"><a href="#7）将Kafka分发给其他主机并修改对应的Broker-ID即可" class="headerlink" title="7）将Kafka分发给其他主机并修改对应的Broker ID即可"></a>7）将Kafka分发给其他主机并修改对应的Broker ID即可</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r /opt/module/kafka_2.11-2.1.1 hadoop102:/opt/module/</span><br><span class="line">scp -r /opt/module/kafka_2.11-2.1.1 hadoop103:/opt/module/</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="8）编写脚本控制Kafka集群"><a href="#8）编写脚本控制Kafka集群" class="headerlink" title="8）编写脚本控制Kafka集群"></a>8）编写脚本控制Kafka集群</h3><p><strong>编写Kafka群起脚本，通过脚本控制Kafka集群。此处提供脚本模板，仅供参考，具体使用之前记得更改Kafka安装路径，以及实现主机间ssh免密登录或者更改ssh命令指定每次连接时使用的私钥</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 此脚本用于启动/停止Kafka集群</span></span><br><span class="line"><span class="comment"># 输入的参数只能为start/stop</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断参数个数</span></span><br><span class="line"><span class="keyword">if</span> ((<span class="variable">$#</span> &gt; 1)); <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Wrongs parameters!"</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前时间(相对时间)</span></span><br><span class="line">start_time=$(date +%s)</span><br><span class="line"><span class="comment"># 获取操作方式</span></span><br><span class="line">operation=<span class="variable">$1</span></span><br><span class="line"><span class="comment"># 设置Kafka集群</span></span><br><span class="line">cluster=<span class="variable">$&#123;KAFKA_CLUSTER:-"hadoop101 hadoop102 hadoop103"&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对kafka集群进行对应的操作</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$operation</span>"</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"----------Starting kafka cluster----------"</span></span><br><span class="line">    <span class="keyword">for</span> host <span class="keyword">in</span> <span class="variable">$cluster</span>; <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"----------Starting kafka in [<span class="variable">$host</span>]----------"</span></span><br><span class="line">        ssh <span class="variable">$host</span> <span class="string">"source /etc/profile;</span></span><br><span class="line"><span class="string">        KAFKA_HOME=\$&#123;KAFKA_HOME:-'/opt/module/kafka_2.11-2.1.1'&#125;;</span></span><br><span class="line"><span class="string">        cd \$KAFKA_HOME;</span></span><br><span class="line"><span class="string">        nohup ./bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;</span></span><br><span class="line"><span class="string">        "</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">    ;;</span><br><span class="line">stop)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"----------Stopping kafka cluster----------"</span></span><br><span class="line">    <span class="keyword">for</span> host <span class="keyword">in</span> <span class="variable">$cluster</span>; <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"----------Starting kafka in [<span class="variable">$host</span>]----------"</span></span><br><span class="line">        ssh <span class="variable">$host</span> <span class="string">"source /etc/profile;</span></span><br><span class="line"><span class="string">        KAFKA_HOME=\$&#123;KAFKA_HOME:-'/opt/module/kafka_2.11-2.1.1'&#125;;</span></span><br><span class="line"><span class="string">        cd \$KAFKA_HOME;</span></span><br><span class="line"><span class="string">        ./bin/kafka-server-stop.sh</span></span><br><span class="line"><span class="string">        "</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">    ;;</span><br><span class="line">*)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Worong Parameter!"</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line">    ;;</span><br><span class="line"><span class="keyword">esac</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取结束时间</span></span><br><span class="line">end_time=$(date +%s)</span><br><span class="line">execution_time=$((<span class="variable">$&#123;end_time&#125;</span> - <span class="variable">$&#123;start_time&#125;</span>))</span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\n----------<span class="variable">$operation</span> kafka in [<span class="variable">$cluster</span>] takes <span class="variable">$&#123;execution_time&#125;</span> seconds----------\n"</span></span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>感谢老板赏赐的辣条和阔落( ^ω^ )</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChatAppreciation_1.jpg" alt="Tom Andersen WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+  <div class="followme">
+    
+
+    <div class="social-list">
+
+            <div class="social-item">
+              <a target="_blank" class="social-link" href="/atom.xml">
+                <span class="icon">
+                  <i class="fa fa-rss"></i>
+                </span>
+
+                <span class="label">RSS</span>
+              </a>
+            </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+              <a href="/tags/Kafka/" rel="tag"><i class="fa fa-tag"></i> Kafka</a>
+              <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/15/Shell%E4%B9%8B%E4%BD%BF%E7%94%A8ssh%E5%B7%A5%E5%85%B7%E5%9C%A8%E8%BF%9C%E7%AB%AF%E6%89%A7%E8%A1%8C%E5%A4%9A%E6%9D%A1%E5%91%BD%E4%BB%A4/" rel="prev" title="Shell之使用ssh工具在远端执行多条命令">
+      <i class="fa fa-chevron-left"></i> Shell之使用ssh工具在远端执行多条命令
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/15/Kafka%E4%B9%8B%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="next" title="Kafka之命令行的基本操作">
+      Kafka之命令行的基本操作 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-下载Kafka安装包"><span class="nav-text">1. 下载Kafka安装包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-解压到指定路径下"><span class="nav-text">2. 解压到指定路径下</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-配置环境变量"><span class="nav-text">3. 配置环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-修改配置文件config-server-properties"><span class="nav-text">4. 修改配置文件config&#x2F;server.properties</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1）设置Broker-ID"><span class="nav-text">1）设置Broker ID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2）设置Kafka日志以及数据存放路径"><span class="nav-text">2）设置Kafka日志以及数据存放路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3）开启管理工具的删除Topic功能"><span class="nav-text">3）开启管理工具的删除Topic功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4）配置Zookeeper集群"><span class="nav-text">4）配置Zookeeper集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5）具体配置"><span class="nav-text">5）具体配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6）测试"><span class="nav-text">6）测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7）将Kafka分发给其他主机并修改对应的Broker-ID即可"><span class="nav-text">7）将Kafka分发给其他主机并修改对应的Broker ID即可</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8）编写脚本控制Kafka集群"><span class="nav-text">8）编写脚本控制Kafka集群</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End"><span class="nav-text">End~</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tom Andersen"
+      src="/images/skull.JPG">
+  <p class="site-author-name" itemprop="name">Tom Andersen</p>
+  <div class="site-description" itemprop="description">Stay hungry.Stay foolish.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/TomAndersen-cc/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;TomAndersen-cc&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1040994898@qq.com" title="E-Mail → mailto:1040994898@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.weibo.com/u/3985451521" title="Weibo → https:&#x2F;&#x2F;www.weibo.com&#x2F;u&#x2F;3985451521" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://me.csdn.net/TomAndersen" title="CSDN → https:&#x2F;&#x2F;me.csdn.net&#x2F;TomAndersen" rel="noopener" target="_blank"><i class="fa fa-fw fa-link"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	  
+	  	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">鄂ICP备20003533号-1 </a>
+      <img src="/images/备案图标.png" style="display: inline-block;">
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tom Andersen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-nest@1/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'N6boUhPERzIoLzE9QxXhsmTm-gzGzoHsz',
+      appKey     : 'KktFymvrpTqP9uvFXf7eyWEq',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
