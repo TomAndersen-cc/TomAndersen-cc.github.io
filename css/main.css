@@ -1299,7 +1299,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #6b2805;
+  background: #47e59f;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2831,8 +2831,24 @@ body {
 .reward-container {
   font-family: fantasy;
 }
+#qr img {
+  width: 160px;
+  transition-duration: 0.5s;
+}
+#qr img:hover {
+  transform: rotate(180deg);
+}
+p {
+  margin: 20px 0 0 0;
+}
 .followme {
   height: 100px;
+}
+.v .vwrap {
+  background: #fff;
+  border-radius: 10px;
+  padding: 40px 30px 20px 30px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.12);
 }
 /*更好的侧边滚动条*/
 ::-webkit-scrollbar {
