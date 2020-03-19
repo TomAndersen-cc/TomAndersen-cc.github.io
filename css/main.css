@@ -1299,7 +1299,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #63ffff;
+  background: #14aaff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2841,6 +2841,10 @@ body {
   color: #222;
   background: #fff;
 }
+/* // 文章版块 */
+/* .posts-expand{ */
+/* margin-top: 10px; */
+/* } */
 .posts-expand .post-title-link {
   color: #222;
 }
@@ -2914,7 +2918,72 @@ p {
 /*background: url(../images/scrollbar_arrow.png) no-repeat 0 0;*/
 /*可以添加滚动条样式*/
 }
-/* .site-subtitle{ */
-/* height: 100vh; */
-/* display:block; */
-/* } */
+.content {
+  padding-top: 5%;
+}
+.typewriter-container {
+  display: flex;
+  align-items: center;
+}
+.typewriter {
+  display: block;
+  width: 100%;
+  top: 500px;
+  display: inline-block;
+  text-align: center;
+/* 因为页面上方有菜单栏,所以除了按列之外还需要上移一些 */
+  margin-bottom: 30%;
+}
+.typewriter-content {
+  cursor: pointer;
+  display: inline-block;
+}
+/* 如果光标没出现，而是出现在下一行，那么就是盒子是块级标签，必须得转换成行内标签 */
+h1 {
+  display: inline;
+  font-size: 3rem !important;
+}
+/* 想让的光标闪动的话，复制下面的代码 */
+.typed-cursor {
+  opacity: 1;
+  font-size: 3rem !important;
+  animation: typedjsBlink 1s infinite;
+  -webkit-animation: typedjsBlink 1s infinite;
+}
+@-webkit-keyframes typedjsBlink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.typed-fade-out {
+  opacity: 0;
+  transition: opacity 0.25s;
+  -webkit-animation: 0;
+  animation: 0;
+}
+@-moz-keyframes typedjsBlink {
+  50% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes typedjsBlink {
+  50% {
+    opacity: 0;
+  }
+}
+@-o-keyframes typedjsBlink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes typedjsBlink {
+  50% {
+    opacity: 0;
+  }
+}

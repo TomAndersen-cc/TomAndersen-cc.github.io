@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Eden</title>
   
-  
+  <subtitle>Get busy living, or get busy dying</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://tomandersen-cc.github.io/"/>

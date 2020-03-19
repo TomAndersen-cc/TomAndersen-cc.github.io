@@ -16,8 +16,6 @@
 
 
 <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/black/pace-theme-loading-bar.css">
-  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
@@ -106,6 +104,7 @@
     </div>
 	
 	
+	
   </div>
 
   <div class="site-nav-toggle">
@@ -191,6 +190,52 @@
           <div class="content">
             
 
+  
+  <div class="typewriter-container" style="height: 100vh;">
+	<div class="typewriter">
+		<!-- <div class="typewriter-content"></div> -->
+		<!-- <div id="typewriter-content"></div> -->
+		<span class="typewriter-content" id="typewriterContent"></span>
+		<!-- <h1>This is a test subtitle.</h1> -->
+	</div>
+</div>
+
+
+<!-- 要先引入jquery插件才能使用$(document).ready方法 -->
+<!-- <script src="//wow.techbrood.com/libs/jquery/jquery.min.js"></script> -->
+<script type="text/javascript" src="jquery.min.js"></script>
+<script>
+	$(document).ready(function (){
+		$(".typewriter-content").click(function (){
+			$('html, body').animate({
+				scrollTop: $(".posts-expand").offset().top
+			}, 500);
+		});
+	});
+</script>
+
+<!-- 引入typed插件 -->
+<!-- <script type="text/javascript" src="https://cdn.bootcss.com/typed.js/2.0.5/typed.js"></script> -->
+<script type="text/javascript" src="typed.js"></script>
+<script>
+   var boxObj = document.getElementById('typewriterContent');
+   var typed = new Typed(boxObj,{
+      // 注意：输出的可以是标签,将标签当节点运行.比如下面的h1
+	  // 这是一个字符串数组,可以填充多个值,使用引号修饰,使用逗号分割
+      strings: [' ','<h1>Get busy living, or get busy dying<h1>'],
+	  // 速度值越小打字速度越快
+      typeSpeed:80,
+	  // 用于在在输出字符结尾闪烁的符号
+	  cursorChar: '_'
+   });
+   // 设置页面加载完成时再开始打字
+   typed.stop();
+    $(document).ready(function () {
+      typed.start();
+    });
+</script>
+
+  
   <div class="posts-expand">
         
   
