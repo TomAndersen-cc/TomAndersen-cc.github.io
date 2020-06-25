@@ -30,7 +30,7 @@
 <meta property="og:description" content="前言Kafka官方在安装包的bin目录下提供了kafka-producer-perf-test.sh和kafka-consumer-perf-test.sh两个压力测试脚本，分别用于测试生产者和消费者的性能。通过Kafka压力测试脚本，能够得知Kafka集群的性能瓶颈所在（CPU&#x2F;内存&#x2F;网络带宽）等，在通常情况下Kafka集群的性能瓶颈是网络带宽">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-03-23T07:21:37.000Z">
-<meta property="article:modified_time" content="2020-03-23T07:31:08.254Z">
+<meta property="article:modified_time" content="2020-04-18T07:55:36.546Z">
 <meta property="article:author" content="Tom Andersen">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="Kafka">
@@ -222,10 +222,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-03-23 15:21:37 / Modified: 15:31:08" itemprop="dateCreated datePublished" datetime="2020-03-23T15:21:37+08:00">2020-03-23</time>
+              <time title="Created: 2020-03-23 15:21:37" itemprop="dateCreated datePublished" datetime="2020-03-23T15:21:37+08:00">2020-03-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-04-18 15:55:36" itemprop="dateModified" datetime="2020-04-18T15:55:36+08:00">2020-04-18</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -295,15 +301,15 @@
 
 <h3 id="测试结果解析："><a href="#测试结果解析：" class="headerlink" title="测试结果解析："></a>测试结果解析：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">5000 records sent, 999.4 records/sec (0.10 MB/sec), 1.9 ms avg latency, 254.0 max latency.</span><br></pre></td></tr></table></figure>
 
-<p>一共写入10w条消息，每秒向Kafka写入了<strong>0.10MB</strong>的数据，平均是<strong>1000条消息/秒</strong>，每次写入的<strong>平均延迟为0.8毫秒</strong>，<strong>最大的延迟为254毫秒</strong></p>
+<p><strong>发送记录数</strong>5000条，<strong>每秒发送记录数</strong>999.4条，<strong>每秒发送数据量</strong>0.1MB，<strong>平均每条记录延迟</strong>1.9ms，<strong>最大延迟</strong>254.0ms</p>
 <h2 id="2）Kafka-Consumer压力测试"><a href="#2）Kafka-Consumer压力测试" class="headerlink" title="2）Kafka Consumer压力测试"></a>2）Kafka Consumer压力测试</h2><h3 id="测试命令：-1"><a href="#测试命令：-1" class="headerlink" title="测试命令："></a>测试命令：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-consumer-perf-test.sh --zookeeper zkServer1:2181 --topic <span class="built_in">test</span> --fetch-size 10000 --messages 10000000 --threads 1</span><br></pre></td></tr></table></figure>
 
 <h3 id="参数说明：-1"><a href="#参数说明：-1" class="headerlink" title="参数说明："></a>参数说明：</h3><p><code>zookeeper</code>指定zookeeper集群，<code>topic</code>指定消费的topic，<code>fetch-size</code>指定每次取出的数据大小（单位为Byte）<code>messages</code>总共消费的消息个数</p>
 <h3 id="测试结果示例：-1"><a href="#测试结果示例：-1" class="headerlink" title="测试结果示例："></a>测试结果示例：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start.time, end.time, data.consumed.in.MB, MB.sec, data.consumed.in.nMsg, nMsg.sec</span><br><span class="line">2019-02-19 20:29:07:566, 2019-02-19 20:29:12:170, 9.5368, 2.0714, 100010, 21722.4153</span><br></pre></td></tr></table></figure>
 
-<h3 id="测试结果解析：-1"><a href="#测试结果解析：-1" class="headerlink" title="测试结果解析："></a>测试结果解析：</h3><p><strong>开始测试时间，测试结束数据，最大吞吐率</strong>9.5368MB/s，平均每秒消费<strong>2.0714MB/s，最大每秒消费</strong>100010条，平均每秒消费<strong>21722.4153条</strong></p>
-<h2 id="3）Kafka集群集群数量计算"><a href="#3）Kafka集群集群数量计算" class="headerlink" title="3）Kafka集群集群数量计算"></a>3）Kafka集群集群数量计算</h2><h3 id="经验公式："><a href="#经验公式：" class="headerlink" title="经验公式："></a>经验公式：</h3><p><strong>Kafka机器数量（经验公式）=2*（峰值生产速度*副本数/100）+1</strong></p>
-<h3 id="计算方式："><a href="#计算方式：" class="headerlink" title="计算方式："></a>计算方式：</h3><p>先要预估一天大概产生多少数据，然后用Kafka自带的生产压测（只测试Kafka的写入速度，保证数据不积压），计算出峰值生产速度。再根据设定的副本数，就能预估出需要部署Kafka的数量。</p>
+<h3 id="测试结果解析：-1"><a href="#测试结果解析：-1" class="headerlink" title="测试结果解析："></a>测试结果解析：</h3><p><strong>本次消费开始时间，本次消费结束时间，消费数据量</strong>9.5368MB，<strong>平均每秒吞吐</strong>2.0714MB/s，<strong>消费记录数</strong>100010条，<strong>平均每秒消费</strong>21722.4153条</p>
+<h2 id="3）Kafka集群集群数量计算（仅供参考）"><a href="#3）Kafka集群集群数量计算（仅供参考）" class="headerlink" title="3）Kafka集群集群数量计算（仅供参考）"></a>3）Kafka集群集群数量计算（仅供参考）</h2><h3 id="经验公式："><a href="#经验公式：" class="headerlink" title="经验公式："></a>经验公式：</h3><p><strong>Kafka集群主机数=2*（峰值生产速度*副本数/单机写入速度/10）+1</strong></p>
+<h3 id="计算方式："><a href="#计算方式：" class="headerlink" title="计算方式："></a>计算方式：</h3><p>先要预估一天内数据生产速率的峰值，然后用Kafka自带的生产压测（只测试Kafka的写入速度，保证数据不积压）求得Kafka单机的写入速度，再根据设定的副本数，就能预估出需要部署Kafka的数量。</p>
 <h3 id="计算示例："><a href="#计算示例：" class="headerlink" title="计算示例："></a>计算示例：</h3><p>比如我们采用压力测试测出写入的速度是10M/s一台，峰值的业务数据的生产速度是50M/s，副本数为2，则计算过程为：机器数量=2*（50*2/100）+ 1=3台</p>
 <hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>
@@ -316,7 +322,7 @@
   <div class="popular-posts-header">Related Posts</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\23\Kafka之Kafka Streams使用练习\" rel="bookmark">Kafka之Kafka Streams使用练习</a></div>
+      <div class="popular-posts-title"><a href="\2020\04\23\Kafka之Kafka Streams使用练习\" rel="bookmark">Kafka之Kafka Streams使用练习</a></div>
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="\2020\03\15\Kafka之入门级安装部署\" rel="bookmark">Kafka之入门级安装部署</a></div>
@@ -381,7 +387,7 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/23/Kafka%E4%B9%8BKafka%20Streams%E4%BD%BF%E7%94%A8%E7%BB%83%E4%B9%A0/" rel="prev" title="Kafka之Kafka Streams使用练习">
+    <a href="/2020/04/23/Kafka%E4%B9%8BKafka%20Streams%E4%BD%BF%E7%94%A8%E7%BB%83%E4%B9%A0/" rel="prev" title="Kafka之Kafka Streams使用练习">
       <i class="fa fa-chevron-left"></i> Kafka之Kafka Streams使用练习
     </a></div>
       <div class="post-nav-item">
@@ -448,7 +454,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1）Kafka-Producer压力测试"><span class="nav-text">1）Kafka Producer压力测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试命令："><span class="nav-text">测试命令：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数说明："><span class="nav-text">参数说明：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果示例："><span class="nav-text">测试结果示例：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果解析："><span class="nav-text">测试结果解析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2）Kafka-Consumer压力测试"><span class="nav-text">2）Kafka Consumer压力测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试命令：-1"><span class="nav-text">测试命令：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数说明：-1"><span class="nav-text">参数说明：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果示例：-1"><span class="nav-text">测试结果示例：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果解析：-1"><span class="nav-text">测试结果解析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3）Kafka集群集群数量计算"><span class="nav-text">3）Kafka集群集群数量计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#经验公式："><span class="nav-text">经验公式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算方式："><span class="nav-text">计算方式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算示例："><span class="nav-text">计算示例：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End"><span class="nav-text">End~</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1）Kafka-Producer压力测试"><span class="nav-text">1）Kafka Producer压力测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试命令："><span class="nav-text">测试命令：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数说明："><span class="nav-text">参数说明：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果示例："><span class="nav-text">测试结果示例：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果解析："><span class="nav-text">测试结果解析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2）Kafka-Consumer压力测试"><span class="nav-text">2）Kafka Consumer压力测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试命令：-1"><span class="nav-text">测试命令：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数说明：-1"><span class="nav-text">参数说明：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果示例：-1"><span class="nav-text">测试结果示例：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果解析：-1"><span class="nav-text">测试结果解析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3）Kafka集群集群数量计算（仅供参考）"><span class="nav-text">3）Kafka集群集群数量计算（仅供参考）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#经验公式："><span class="nav-text">经验公式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算方式："><span class="nav-text">计算方式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算示例："><span class="nav-text">计算示例：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End"><span class="nav-text">End~</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -477,7 +483,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-count">35</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
