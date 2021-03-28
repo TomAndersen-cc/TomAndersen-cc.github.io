@@ -1,311 +1,251 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.2.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-cat-180x180.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-cat-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-cat-16x16.png">
-  <link rel="mask-icon" href="/images/logo-cat.svg" color="#222">
-  <meta http-equiv="Cache-Control" content="no-transform">
-  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="
+前言Kafka官方在安装包的bin目录下提供了kafka-producer-perf-test.sh和kafka-consumer-perf-test.sh两个压力测试脚本，分别用于测试生产者和消费者的性能。通过Kafka压力测试脚本，能够得知Kafka集群的性能瓶颈所在（CPU/内存/网络带宽）等，在通常情况下Kafka集群的性能瓶颈是网络带宽">
+  <meta name="author" content="Tom Andersen">
+  <meta name="keywords" content="">
+  
+  <title>Kafka之集群压力测试 - Eden</title>
 
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":20,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
-  </script>
-
-  <meta name="description" content="前言Kafka官方在安装包的bin目录下提供了kafka-producer-perf-test.sh和kafka-consumer-perf-test.sh两个压力测试脚本，分别用于测试生产者和消费者的性能。通过Kafka压力测试脚本，能够得知Kafka集群的性能瓶颈所在（CPU&#x2F;内存&#x2F;网络带宽）等，在通常情况下Kafka集群的性能瓶颈是网络带宽">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Kafka之集群压力测试">
-<meta property="og:url" content="https://tomandersen-cc.github.io/2020/03/23/Kafka%E4%B9%8B%E9%9B%86%E7%BE%A4%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/index.html">
-<meta property="og:site_name" content="Eden">
-<meta property="og:description" content="前言Kafka官方在安装包的bin目录下提供了kafka-producer-perf-test.sh和kafka-consumer-perf-test.sh两个压力测试脚本，分别用于测试生产者和消费者的性能。通过Kafka压力测试脚本，能够得知Kafka集群的性能瓶颈所在（CPU&#x2F;内存&#x2F;网络带宽）等，在通常情况下Kafka集群的性能瓶颈是网络带宽">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-03-23T07:21:37.000Z">
-<meta property="article:modified_time" content="2020-04-18T07:55:36.546Z">
-<meta property="article:author" content="Tom Andersen">
-<meta property="article:tag" content="Linux">
-<meta property="article:tag" content="Kafka">
-<meta property="article:tag" content="Shell">
-<meta name="twitter:card" content="summary">
-
-<link rel="canonical" href="https://tomandersen-cc.github.io/2020/03/23/Kafka%E4%B9%8B%E9%9B%86%E7%BE%A4%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true
-  };
-</script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
-  <title>Kafka之集群压力测试 | Eden</title>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
   
 
 
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?a068b18edc2d52225241d153c78d9954";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","version":"1.8.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-<link rel="alternate" href="/atom.xml" title="Eden" type="application/atom+xml">
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Eden" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
 
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Eden</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-	
-	
-	
   </div>
-
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
-
-  </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
-        </a>
-      </li>
-  </ul>
-
 </nav>
-  <div class="site-search">
-    <div class="popup search-popup">
-    <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocorrect="off" autocapitalize="off"
-           placeholder="Searching..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div id="search-result"></div>
 
-</div>
-<div class="search-pop-overlay"></div>
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Kafka之集群压力测试">
+              
+            </span>
 
-  </div>
-</div>
-    </header>
-	
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
-
-  <a href="https://github.com/TomAndersen-cc/TomAndersen-cc.github.io" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
-
-	
-	
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content">
             
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-23 15:21" pubdate>
+        2020年3月23日 下午
+      </time>
+    </span>
+  
+</div>
 
-  <div class="posts-expand">
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      709 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
       
+      
+      9
+       分钟
+    </span>
+  
+
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="https://tomandersen-cc.github.io/2020/03/23/Kafka%E4%B9%8B%E9%9B%86%E7%BE%A4%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/">
+</div>
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/skull.JPG">
-      <meta itemprop="name" content="Tom Andersen">
-      <meta itemprop="description" content="Stay hungry.Stay foolish.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Eden">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          Kafka之集群压力测试
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-03-23 15:21:37" itemprop="dateCreated datePublished" datetime="2020-03-23T15:21:37+08:00">2020-03-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-04-18 15:55:36" itemprop="dateModified" datetime="2020-04-18T15:55:36+08:00">2020-04-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kafka/" itemprop="url" rel="index">
-                    <span itemprop="name">Kafka</span>
-                  </a>
-                </span>
-            </span>
+            
+          </div>
 
           
-            <span id="/2020/03/23/Kafka%E4%B9%8B%E9%9B%86%E7%BE%A4%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/" class="post-meta-item leancloud_visitors" data-flag-title="Kafka之集群压力测试" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2020/03/23/Kafka%E4%B9%8B%E9%9B%86%E7%BE%A4%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/23/Kafka%E4%B9%8B%E9%9B%86%E7%BE%A4%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>1.7k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>2 mins.</span>
-            </span>
-
         </div>
-      </header>
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
       
-        <hr>
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Kafka之集群压力测试</h1>
+            
+            <div class="markdown-body">
+              <hr>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Kafka官方在安装包的bin目录下提供了<code>kafka-producer-perf-test.sh</code>和<code>kafka-consumer-perf-test.sh</code>两个压力测试脚本，分别用于测试生产者和消费者的性能。通过Kafka压力测试脚本，能够得知Kafka集群的性能瓶颈所在（CPU/内存/网络带宽）等，在通常情况下Kafka集群的性能瓶颈是网络带宽</p>
 <a id="more"></a>
 
-<h2 id="1）Kafka-Producer压力测试"><a href="#1）Kafka-Producer压力测试" class="headerlink" title="1）Kafka Producer压力测试"></a>1）Kafka Producer压力测试</h2><h3 id="测试命令："><a href="#测试命令：" class="headerlink" title="测试命令："></a>测试命令：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-producer-perf-test.sh  --topic <span class="built_in">test</span> --record-size 100 --num-records 100000 --throughput 1000 --producer-props bootstrap.servers=hadoop101:9092,hadoop102:9092,hadoop103:9092</span><br></pre></td></tr></table></figure>
+<h2 id="1）Kafka-Producer压力测试"><a href="#1）Kafka-Producer压力测试" class="headerlink" title="1）Kafka Producer压力测试"></a>1）Kafka Producer压力测试</h2><h3 id="测试命令："><a href="#测试命令：" class="headerlink" title="测试命令："></a>测试命令：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">bin/kafka-producer-perf-test.sh  --topic <span class="hljs-built_in">test</span> --record-size 100 --num-records 100000 --throughput 1000 --producer-props bootstrap.servers=hadoop101:9092,hadoop102:9092,hadoop103:9092<br></code></pre></td></tr></table></figure>
 
 <h3 id="参数说明："><a href="#参数说明：" class="headerlink" title="参数说明："></a>参数说明：</h3><p><code>topic</code>指定消息存放的topic，<code>record-size</code>是一条信息有多大（单位是Byte），<code>num-records</code>是总共发送多少条信息，<code>throughput</code>是每秒多少条信息</p>
-<h3 id="测试结果示例："><a href="#测试结果示例：" class="headerlink" title="测试结果示例："></a>测试结果示例：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">5000 records sent, 999.4 records/sec (0.10 MB/sec), 1.9 ms avg latency, 254.0 max latency.</span><br><span class="line">5002 records sent, 1000.4 records/sec (0.10 MB/sec), 0.7 ms avg latency, 12.0 max latency.</span><br><span class="line">5001 records sent, 1000.0 records/sec (0.10 MB/sec), 0.8 ms avg latency, 4.0 max latency.</span><br><span class="line">5000 records sent, 1000.0 records/sec (0.10 MB/sec), 0.7 ms avg latency, 3.0 max latency.</span><br><span class="line">5000 records sent, 1000.0 records/sec (0.10 MB/sec), 0.8 ms avg latency, 5.0 max latency.</span><br></pre></td></tr></table></figure>
+<h3 id="测试结果示例："><a href="#测试结果示例：" class="headerlink" title="测试结果示例："></a>测试结果示例：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">5000 records sent, 999.4 records/sec (0.10 MB/sec), 1.9 ms avg latency, 254.0 max latency.<br>5002 records sent, 1000.4 records/sec (0.10 MB/sec), 0.7 ms avg latency, 12.0 max latency.<br>5001 records sent, 1000.0 records/sec (0.10 MB/sec), 0.8 ms avg latency, 4.0 max latency.<br>5000 records sent, 1000.0 records/sec (0.10 MB/sec), 0.7 ms avg latency, 3.0 max latency.<br>5000 records sent, 1000.0 records/sec (0.10 MB/sec), 0.8 ms avg latency, 5.0 max latency.<br></code></pre></td></tr></table></figure>
 
-<h3 id="测试结果解析："><a href="#测试结果解析：" class="headerlink" title="测试结果解析："></a>测试结果解析：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">5000 records sent, 999.4 records/sec (0.10 MB/sec), 1.9 ms avg latency, 254.0 max latency.</span><br></pre></td></tr></table></figure>
+<h3 id="测试结果解析："><a href="#测试结果解析：" class="headerlink" title="测试结果解析："></a>测试结果解析：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">5000 records sent, 999.4 records/sec (0.10 MB/sec), 1.9 ms avg latency, 254.0 max latency.<br></code></pre></td></tr></table></figure>
 
 <p><strong>发送记录数</strong>5000条，<strong>每秒发送记录数</strong>999.4条，<strong>每秒发送数据量</strong>0.1MB，<strong>平均每条记录延迟</strong>1.9ms，<strong>最大延迟</strong>254.0ms</p>
-<h2 id="2）Kafka-Consumer压力测试"><a href="#2）Kafka-Consumer压力测试" class="headerlink" title="2）Kafka Consumer压力测试"></a>2）Kafka Consumer压力测试</h2><h3 id="测试命令：-1"><a href="#测试命令：-1" class="headerlink" title="测试命令："></a>测试命令：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-consumer-perf-test.sh --zookeeper zkServer1:2181 --topic <span class="built_in">test</span> --fetch-size 10000 --messages 10000000 --threads 1</span><br></pre></td></tr></table></figure>
+<h2 id="2）Kafka-Consumer压力测试"><a href="#2）Kafka-Consumer压力测试" class="headerlink" title="2）Kafka Consumer压力测试"></a>2）Kafka Consumer压力测试</h2><h3 id="测试命令：-1"><a href="#测试命令：-1" class="headerlink" title="测试命令："></a>测试命令：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">bin/kafka-consumer-perf-test.sh --zookeeper zkServer1:2181 --topic <span class="hljs-built_in">test</span> --fetch-size 10000 --messages 10000000 --threads 1<br></code></pre></td></tr></table></figure>
 
 <h3 id="参数说明：-1"><a href="#参数说明：-1" class="headerlink" title="参数说明："></a>参数说明：</h3><p><code>zookeeper</code>指定zookeeper集群，<code>topic</code>指定消费的topic，<code>fetch-size</code>指定每次取出的数据大小（单位为Byte）<code>messages</code>总共消费的消息个数</p>
-<h3 id="测试结果示例：-1"><a href="#测试结果示例：-1" class="headerlink" title="测试结果示例："></a>测试结果示例：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start.time, end.time, data.consumed.in.MB, MB.sec, data.consumed.in.nMsg, nMsg.sec</span><br><span class="line">2019-02-19 20:29:07:566, 2019-02-19 20:29:12:170, 9.5368, 2.0714, 100010, 21722.4153</span><br></pre></td></tr></table></figure>
+<h3 id="测试结果示例：-1"><a href="#测试结果示例：-1" class="headerlink" title="测试结果示例："></a>测试结果示例：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">start.time, end.time, data.consumed.in.MB, MB.sec, data.consumed.in.nMsg, nMsg.sec<br>2019-02-19 20:29:07:566, 2019-02-19 20:29:12:170, 9.5368, 2.0714, 100010, 21722.4153<br></code></pre></td></tr></table></figure>
 
 <h3 id="测试结果解析：-1"><a href="#测试结果解析：-1" class="headerlink" title="测试结果解析："></a>测试结果解析：</h3><p><strong>本次消费开始时间，本次消费结束时间，消费数据量</strong>9.5368MB，<strong>平均每秒吞吐</strong>2.0714MB/s，<strong>消费记录数</strong>100010条，<strong>平均每秒消费</strong>21722.4153条</p>
 <h2 id="3）Kafka集群集群数量计算（仅供参考）"><a href="#3）Kafka集群集群数量计算（仅供参考）" class="headerlink" title="3）Kafka集群集群数量计算（仅供参考）"></a>3）Kafka集群集群数量计算（仅供参考）</h2><h3 id="经验公式："><a href="#经验公式：" class="headerlink" title="经验公式："></a>经验公式：</h3><p><strong>Kafka集群主机数=2*（峰值生产速度*副本数/单机写入速度/10）+1</strong></p>
@@ -313,319 +253,226 @@
 <h3 id="计算示例："><a href="#计算示例：" class="headerlink" title="计算示例："></a>计算示例：</h3><p>比如我们采用压力测试测出写入的速度是10M/s一台，峰值的业务数据的生产速度是50M/s，副本数为2，则计算过程为：机器数量=2*（50*2/100）+ 1=3台</p>
 <hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>
-    </div>
-
-    
-    
-    
-      
-  <div class="popular-posts-header">Related Posts</div>
-  <ul class="popular-posts">
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\04\23\Kafka之Kafka Streams使用练习\" rel="bookmark">Kafka之Kafka Streams使用练习</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\15\Kafka之入门级安装部署\" rel="bookmark">Kafka之入门级安装部署</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\02\27\Shell中冒号的特殊用法\" rel="bookmark">Shell中冒号的特殊用法</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\02\17\Shell中四种执行脚本方式的对比\" rel="bookmark">Shell中四种执行脚本方式的对比</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\02\17\Shell中特殊参数变量和特殊状态变量汇总\" rel="bookmark">Shell中特殊参数变量和特殊状态变量汇总</a></div>
-    </li>
-  </ul>
-
-        <div class="reward-container">
-  <div>感谢老板赏赐的辣条和阔落( ^ω^ )</div>
-  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
-    Donate
-  </button>
-  <div id="qr" style="display: none;">
-      
-      <div style="display: inline-block;">
-        <img src="/images/WeChatAppreciation_1.jpg" alt="Tom Andersen WeChat Pay">
-        <p>WeChat Pay</p>
-      </div>
-
-  </div>
-</div>
-
-        
-
-  <div class="followme">
-    
-
-    <div class="social-list">
-
-            <div class="social-item">
-              <a target="_blank" class="social-link" href="/atom.xml">
-                <span class="icon">
-                  <i class="fa fa-rss"></i>
-                </span>
-
-                <span class="label">RSS</span>
-              </a>
             </div>
-    </div>
-  </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Kafka/">Kafka</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Kafka/">Kafka</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Shell/">Shell</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/04/23/Kafka%E4%B9%8BKafka%20Streams%E4%BD%BF%E7%94%A8%E7%BB%83%E4%B9%A0/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Kafka之Kafka Streams使用练习</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/23/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%87%BB%E6%8C%89%E9%92%AE%E6%BB%9A%E5%8A%A8%E5%88%B0%E6%8C%87%E5%AE%9A%E4%BD%8D%E7%BD%AE/">
+                        <span class="hidden-mobile">Hexo之NexT主题实现点击按钮滚动到指定位置</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
 
-
-      <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
-              <a href="/tags/Kafka/" rel="tag"><i class="fa fa-tag"></i> Kafka</a>
-              <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2020/04/23/Kafka%E4%B9%8BKafka%20Streams%E4%BD%BF%E7%94%A8%E7%BB%83%E4%B9%A0/" rel="prev" title="Kafka之Kafka Streams使用练习">
-      <i class="fa fa-chevron-left"></i> Kafka之Kafka Streams使用练习
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/03/23/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%87%BB%E6%8C%89%E9%92%AE%E6%BB%9A%E5%8A%A8%E5%88%B0%E6%8C%87%E5%AE%9A%E4%BD%8D%E7%BD%AE/" rel="next" title="Hexo之NexT主题实现点击按钮滚动到指定位置">
-      Hexo之NexT主题实现点击按钮滚动到指定位置 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-  </div>
-
-
-          </div>
-          
-    <div class="comments" id="valine-comments"></div>
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let activeClass = CONFIG.comments.activeClass;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
+            
+          </article>
         </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1）Kafka-Producer压力测试"><span class="nav-text">1）Kafka Producer压力测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试命令："><span class="nav-text">测试命令：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数说明："><span class="nav-text">参数说明：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果示例："><span class="nav-text">测试结果示例：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果解析："><span class="nav-text">测试结果解析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2）Kafka-Consumer压力测试"><span class="nav-text">2）Kafka Consumer压力测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试命令：-1"><span class="nav-text">测试命令：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数说明：-1"><span class="nav-text">参数说明：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果示例：-1"><span class="nav-text">测试结果示例：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果解析：-1"><span class="nav-text">测试结果解析：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3）Kafka集群集群数量计算（仅供参考）"><span class="nav-text">3）Kafka集群集群数量计算（仅供参考）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#经验公式："><span class="nav-text">经验公式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算方式："><span class="nav-text">计算方式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算示例："><span class="nav-text">计算示例：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End"><span class="nav-text">End~</span></a></li></ol></div>
       </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Tom Andersen"
-      src="/images/skull.JPG">
-  <p class="site-author-name" itemprop="name">Tom Andersen</p>
-  <div class="site-description" itemprop="description">Stay hungry.Stay foolish.</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">53</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">11</span>
-        <span class="site-state-item-name">categories</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">35</span>
-        <span class="site-state-item-name">tags</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/TomAndersen-cc/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;TomAndersen-cc&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:1040994898@qq.com" title="E-Mail → mailto:1040994898@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://www.weibo.com/u/3985451521" title="Weibo → https:&#x2F;&#x2F;www.weibo.com&#x2F;u&#x2F;3985451521" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://me.csdn.net/TomAndersen" title="CSDN → https:&#x2F;&#x2F;me.csdn.net&#x2F;TomAndersen" rel="noopener" target="_blank"><i class="fa fa-fw fa-link"></i>CSDN</a>
-      </span>
-  </div>
-
-
-
-      </div>
-	  
-	  	  
-
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">鄂ICP备20003533号-1 </a>
-      <img src="/images/备案图标.png" style="display: inline-block;"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42112702000056" rel="noopener" target="_blank">42112702000056 </a>
-  </div>
-
-<div class="copyright">
-  
-  &copy; 2019 – 
-  <span itemprop="copyrightYear">2020</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Tom Andersen</span>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.1
-  </div>
-
-        
-
-
-
-
-
-
-
 
       </div>
-    </footer>
+    
   </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
 
   
-  
-  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-nest@1/canvas-nest.min.js"></script>
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/muse.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-<script src="/js/bookmark.js"></script>
-
-
-
 
   
+</footer>
 
 
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
 
 
   
-<script src="/js/local-search.js"></script>
-
-
-
-
-
-
-
-
-
-
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
   
 
-  
 
 
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'N6boUhPERzIoLzE9QxXhsmTm-gzGzoHsz',
-      appKey     : 'KktFymvrpTqP9uvFXf7eyWEq',
-      placeholder: "Just go",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : true,
-      lang       : 'zh-cn' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : false,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
 
 </body>
 </html>

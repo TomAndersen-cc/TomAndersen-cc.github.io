@@ -1,298 +1,235 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.2.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-cat-180x180.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-cat-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-cat-16x16.png">
-  <link rel="mask-icon" href="/images/logo-cat.svg" color="#222">
-  <meta http-equiv="Cache-Control" content="no-transform">
-  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Tom Andersen">
+  <meta name="keywords" content="">
+  
+  <title>Flume之HDFS-Sink使用案例 - Eden</title>
 
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":20,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
-  </script>
-
-  <meta property="og:type" content="article">
-<meta property="og:title" content="Flume之HDFS-Sink使用案例">
-<meta property="og:url" content="https://tomandersen-cc.github.io/2020/03/05/Flume%E4%B9%8BHDFS-Sink%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/index.html">
-<meta property="og:site_name" content="Eden">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200305113842376.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200305113859854.png">
-<meta property="article:published_time" content="2020-03-05T03:39:58.000Z">
-<meta property="article:modified_time" content="2020-03-08T13:41:28.431Z">
-<meta property="article:author" content="Tom Andersen">
-<meta property="article:tag" content="Linux">
-<meta property="article:tag" content="Flume">
-<meta property="article:tag" content="大数据">
-<meta property="article:tag" content="HDFS">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200305113842376.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-
-<link rel="canonical" href="https://tomandersen-cc.github.io/2020/03/05/Flume%E4%B9%8BHDFS-Sink%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true
-  };
-</script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
-  <title>Flume之HDFS-Sink使用案例 | Eden</title>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
   
 
 
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?a068b18edc2d52225241d153c78d9954";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","version":"1.8.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-<link rel="alternate" href="/atom.xml" title="Eden" type="application/atom+xml">
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Eden" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
 
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Eden</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-	
-	
-	
   </div>
-
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
-
-  </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
-        </a>
-      </li>
-  </ul>
-
 </nav>
-  <div class="site-search">
-    <div class="popup search-popup">
-    <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocorrect="off" autocapitalize="off"
-           placeholder="Searching..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div id="search-result"></div>
 
-</div>
-<div class="search-pop-overlay"></div>
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Flume之HDFS-Sink使用案例">
+              
+            </span>
 
-  </div>
-</div>
-    </header>
-	
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
-
-  <a href="https://github.com/TomAndersen-cc/TomAndersen-cc.github.io" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
-
-	
-	
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content">
             
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-05 11:39" pubdate>
+        2020年3月5日 中午
+      </time>
+    </span>
+  
+</div>
 
-  <div class="posts-expand">
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      970 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
       
+      
+      12
+       分钟
+    </span>
+  
+
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="https://tomandersen-cc.github.io/2020/03/05/Flume%E4%B9%8BHDFS-Sink%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/">
+</div>
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/skull.JPG">
-      <meta itemprop="name" content="Tom Andersen">
-      <meta itemprop="description" content="Stay hungry.Stay foolish.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Eden">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          Flume之HDFS-Sink使用案例
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-03-05 11:39:58" itemprop="dateCreated datePublished" datetime="2020-03-05T11:39:58+08:00">2020-03-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-08 21:41:28" itemprop="dateModified" datetime="2020-03-08T21:41:28+08:00">2020-03-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Flume/" itemprop="url" rel="index">
-                    <span itemprop="name">Flume</span>
-                  </a>
-                </span>
-            </span>
+            
+          </div>
 
           
-            <span id="/2020/03/05/Flume%E4%B9%8BHDFS-Sink%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Flume之HDFS-Sink使用案例" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2020/03/05/Flume%E4%B9%8BHDFS-Sink%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/05/Flume%E4%B9%8BHDFS-Sink%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>2.9k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>3 mins.</span>
-            </span>
-
         </div>
-      </header>
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
       
-        <hr>
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Flume之HDFS-Sink使用案例</h1>
+            
+            <div class="markdown-body">
+              <hr>
 <a id="more"></a>
 
 <hr>
@@ -304,340 +241,248 @@
 <li>Flume agent配置：Netcat TCP Source、Memory Channel、HDFS Sink</li>
 </ul>
 <hr>
-<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><h3 id="a-拷贝Hadoop相关jar包至flume-lib-路径下"><a href="#a-拷贝Hadoop相关jar包至flume-lib-路径下" class="headerlink" title="a) 拷贝Hadoop相关jar包至flume/lib/路径下"></a>a) 拷贝Hadoop相关jar包至<code>flume/lib/</code>路径下</h3><h4 id="在hadoop-2-7-7-share-路径下找到以下对应jar包，并将其拷贝至flume-lib-路径下。Flume启动时，会将此路径添加至ClassPath"><a href="#在hadoop-2-7-7-share-路径下找到以下对应jar包，并将其拷贝至flume-lib-路径下。Flume启动时，会将此路径添加至ClassPath" class="headerlink" title="在hadoop-2.7.7/share/路径下找到以下对应jar包，并将其拷贝至flume/lib/路径下。Flume启动时，会将此路径添加至ClassPath"></a>在<code>hadoop-2.7.7/share/</code>路径下找到以下对应jar包，并将其拷贝至<code>flume/lib/</code>路径下。Flume启动时，会将此路径添加至ClassPath</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">commons-configuration-1.6.jar</span><br><span class="line">commons-io-2.4.jar</span><br><span class="line">hadoop-auth-2.7.7.jar</span><br><span class="line">hadoop-common-2.7.7.jar</span><br><span class="line">hadoop-hdfs-2.7.7.jar</span><br><span class="line">htrace-core-3.1.0-incubating.jar</span><br></pre></td></tr></table></figure>
+<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><h3 id="a-拷贝Hadoop相关jar包至flume-lib-路径下"><a href="#a-拷贝Hadoop相关jar包至flume-lib-路径下" class="headerlink" title="a) 拷贝Hadoop相关jar包至flume/lib/路径下"></a>a) 拷贝Hadoop相关jar包至<code>flume/lib/</code>路径下</h3><h4 id="在hadoop-2-7-7-share-路径下找到以下对应jar包，并将其拷贝至flume-lib-路径下。Flume启动时，会将此路径添加至ClassPath"><a href="#在hadoop-2-7-7-share-路径下找到以下对应jar包，并将其拷贝至flume-lib-路径下。Flume启动时，会将此路径添加至ClassPath" class="headerlink" title="在hadoop-2.7.7/share/路径下找到以下对应jar包，并将其拷贝至flume/lib/路径下。Flume启动时，会将此路径添加至ClassPath"></a>在<code>hadoop-2.7.7/share/</code>路径下找到以下对应jar包，并将其拷贝至<code>flume/lib/</code>路径下。Flume启动时，会将此路径添加至ClassPath</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">commons-configuration-1.6.jar<br>commons-io-2.4.jar<br>hadoop-auth-2.7.7.jar<br>hadoop-common-2.7.7.jar<br>hadoop-hdfs-2.7.7.jar<br>htrace-core-3.1.0-incubating.jar<br></code></pre></td></tr></table></figure>
 
 
 
-<h3 id="b-根据使用场景配置properties文件"><a href="#b-根据使用场景配置properties文件" class="headerlink" title="b) 根据使用场景配置properties文件"></a>b) 根据使用场景配置properties文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用于从netcat指定端口收集数据最终输出到HDFS中</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Agent</span></span><br><span class="line">a1.sources = r1</span><br><span class="line">a1.sinks = k1</span><br><span class="line">a1.channels = c1</span><br><span class="line"></span><br><span class="line"><span class="comment"># Sources</span></span><br><span class="line"><span class="comment"># a1.sources.r1</span></span><br><span class="line"><span class="comment"># 配置source类型/绑定主机ip/端口号</span></span><br><span class="line">a1.sources.r1.type = netcat</span><br><span class="line">a1.sources.r1.bind = 0.0.0.0</span><br><span class="line">a1.sources.r1.port = 44444</span><br><span class="line"></span><br><span class="line"><span class="comment"># Sinks</span></span><br><span class="line"><span class="comment"># a1.sinks.k1</span></span><br><span class="line">a1.sinks.k1.type = hdfs</span><br><span class="line"><span class="comment"># 设置hdfs文件路径,同时并设置了按照日期创建文件夹</span></span><br><span class="line">a1.sinks.k1.hdfs.path = /flume/logs/%Y-%m-%d/%H-%M-%S</span><br><span class="line"><span class="comment"># 设置flume创建的hdfs文件前缀</span></span><br><span class="line">a1.sinks.k1.hdfs.filePrefix = logs_%Y-%m-%d</span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下三组参数的配置用于控制flume在hdfs中生成文件的滚动方式</span></span><br><span class="line"><span class="comment"># 满足以下三者中任何一个条件都会新生成hdfs文件</span></span><br><span class="line"><span class="comment"># 设置文件滚动的时间间隔,单位(second),置0表示关闭</span></span><br><span class="line">a1.sinks.k1.hdfs.rollInterval = 10</span><br><span class="line"><span class="comment"># 设置文件滚动的最大size阈值,由于是hdfs sink故最好设置成Block Size的倍数</span></span><br><span class="line"><span class="comment"># 本次实验的hadoop版本为2.7.7(2.7.3之后默认Block Size为128MB,之前为64MB)</span></span><br><span class="line"><span class="comment"># 单位(bytes),置0表示关闭</span></span><br><span class="line">a1.sinks.k1.hdfs.rollSize = 134217700</span><br><span class="line"><span class="comment"># 设置滚动文件存储的最大Event个数</span></span><br><span class="line"><span class="comment"># 此参数一般设置为0,即关闭,除非有严格生产需求并且知道Event大小能够自主控制</span></span><br><span class="line">a1.sinks.k1.hdfs.rollCount = 0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置flume每批次刷到hdfs中的Event个数(超过一定时长也会进行刷新,并非要等满一批次)</span></span><br><span class="line">a1.sinks.k1.hdfs.batchSize = 100</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置hdfs文件格式,目前只支持(SequenceFile/DataStream/CompressedStream)</span></span><br><span class="line"><span class="comment"># CompressedStream类型需要配合hdfs.codeC参数来指定具体的压缩方式</span></span><br><span class="line"><span class="comment"># SequenceFile表示按照HDFS序列文件SequenceFile的方式进行压缩</span></span><br><span class="line"><span class="comment"># DataStream则表示不进行压缩</span></span><br><span class="line">a1.sinks.k1.hdfs.fileType = DataStream</span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下三组参数的配置配合转义序列(如%y %m %d %H %M %S等)能够自定义时间轮转最小刻度</span></span><br><span class="line"><span class="comment"># 设置hdfs时间向下取整</span></span><br><span class="line"><span class="comment"># 设置向下取整之后文件夹将按照一定时间大小的刻度进行创建文件夹</span></span><br><span class="line"><span class="comment"># 否则都是按照之前设置每分钟进行文件夹的创建</span></span><br><span class="line">a1.sinks.k1.hdfs.round = <span class="literal">true</span></span><br><span class="line"><span class="comment"># 设置hdfs时间向下取整的最小单元倍数</span></span><br><span class="line">a1.sinks.k1.hdfs.roundValue = 30</span><br><span class="line"><span class="comment"># 设置hdfs时间向下取整的最小单位</span></span><br><span class="line">a1.sinks.k1.hdfs.roundUnit = second</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设定是否使用本地时间戳,默认为false(即使用Event的Header中的时间戳)</span></span><br><span class="line"><span class="comment"># 本次实验中Event的Header为空,需要使用本地时间戳</span></span><br><span class="line">a1.sinks.k1.hdfs.useLocalTimeStamp = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Channels</span></span><br><span class="line"><span class="comment"># 定义a2的channerls.c1的类型为memory,即使用内存作为缓存/最多缓存的Event个数/单次传输的Event个数</span></span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line">a1.channels.c1.capacity = 1000</span><br><span class="line">a1.channels.c1.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Bind</span></span><br><span class="line"><span class="comment"># 注意:source可以绑定多个channel,但是sink只能绑定单个channel</span></span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line">a1.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
+<h3 id="b-根据使用场景配置properties文件"><a href="#b-根据使用场景配置properties文件" class="headerlink" title="b) 根据使用场景配置properties文件"></a>b) 根据使用场景配置properties文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 用于从netcat指定端口收集数据最终输出到HDFS中</span><br><br><span class="hljs-comment"># Agent</span><br>a1.sources = r1<br>a1.sinks = k1<br>a1.channels = c1<br><br><span class="hljs-comment"># Sources</span><br><span class="hljs-comment"># a1.sources.r1</span><br><span class="hljs-comment"># 配置source类型/绑定主机ip/端口号</span><br>a1.sources.r1.type = netcat<br>a1.sources.r1.bind = 0.0.0.0<br>a1.sources.r1.port = 44444<br><br><span class="hljs-comment"># Sinks</span><br><span class="hljs-comment"># a1.sinks.k1</span><br>a1.sinks.k1.type = hdfs<br><span class="hljs-comment"># 设置hdfs文件路径,同时并设置了按照日期创建文件夹</span><br>a1.sinks.k1.hdfs.path = /flume/logs/%Y-%m-%d/%H-%M-%S<br><span class="hljs-comment"># 设置flume创建的hdfs文件前缀</span><br>a1.sinks.k1.hdfs.filePrefix = logs_%Y-%m-%d<br><br><span class="hljs-comment"># 以下三组参数的配置用于控制flume在hdfs中生成文件的滚动方式</span><br><span class="hljs-comment"># 满足以下三者中任何一个条件都会新生成hdfs文件</span><br><span class="hljs-comment"># 设置文件滚动的时间间隔,单位(second),置0表示关闭</span><br>a1.sinks.k1.hdfs.rollInterval = 10<br><span class="hljs-comment"># 设置文件滚动的最大size阈值,由于是hdfs sink故最好设置成Block Size的倍数</span><br><span class="hljs-comment"># 本次实验的hadoop版本为2.7.7(2.7.3之后默认Block Size为128MB,之前为64MB)</span><br><span class="hljs-comment"># 单位(bytes),置0表示关闭</span><br>a1.sinks.k1.hdfs.rollSize = 134217700<br><span class="hljs-comment"># 设置滚动文件存储的最大Event个数</span><br><span class="hljs-comment"># 此参数一般设置为0,即关闭,除非有严格生产需求并且知道Event大小能够自主控制</span><br>a1.sinks.k1.hdfs.rollCount = 0<br><br><span class="hljs-comment"># 设置flume每批次刷到hdfs中的Event个数(超过一定时长也会进行刷新,并非要等满一批次)</span><br>a1.sinks.k1.hdfs.batchSize = 100<br><br><span class="hljs-comment"># 设置hdfs文件格式,目前只支持(SequenceFile/DataStream/CompressedStream)</span><br><span class="hljs-comment"># CompressedStream类型需要配合hdfs.codeC参数来指定具体的压缩方式</span><br><span class="hljs-comment"># SequenceFile表示按照HDFS序列文件SequenceFile的方式进行压缩</span><br><span class="hljs-comment"># DataStream则表示不进行压缩</span><br>a1.sinks.k1.hdfs.fileType = DataStream<br><br><span class="hljs-comment"># 以下三组参数的配置配合转义序列(如%y %m %d %H %M %S等)能够自定义时间轮转最小刻度</span><br><span class="hljs-comment"># 设置hdfs时间向下取整</span><br><span class="hljs-comment"># 设置向下取整之后文件夹将按照一定时间大小的刻度进行创建文件夹</span><br><span class="hljs-comment"># 否则都是按照之前设置每分钟进行文件夹的创建</span><br>a1.sinks.k1.hdfs.round = <span class="hljs-literal">true</span><br><span class="hljs-comment"># 设置hdfs时间向下取整的最小单元倍数</span><br>a1.sinks.k1.hdfs.roundValue = 30<br><span class="hljs-comment"># 设置hdfs时间向下取整的最小单位</span><br>a1.sinks.k1.hdfs.roundUnit = second<br><br><span class="hljs-comment"># 设定是否使用本地时间戳,默认为false(即使用Event的Header中的时间戳)</span><br><span class="hljs-comment"># 本次实验中Event的Header为空,需要使用本地时间戳</span><br>a1.sinks.k1.hdfs.useLocalTimeStamp = <span class="hljs-literal">true</span><br><br><br><span class="hljs-comment"># Channels</span><br><span class="hljs-comment"># 定义a2的channerls.c1的类型为memory,即使用内存作为缓存/最多缓存的Event个数/单次传输的Event个数</span><br>a1.channels.c1.type = memory<br>a1.channels.c1.capacity = 1000<br>a1.channels.c1.transactionCapacity = 100<br><br><br><span class="hljs-comment"># Bind</span><br><span class="hljs-comment"># 注意:source可以绑定多个channel,但是sink只能绑定单个channel</span><br>a1.sources.r1.channels = c1<br>a1.sinks.k1.channel = c1<br></code></pre></td></tr></table></figure>
 
 
 
-<h3 id="c-使用此配置文件启动agent"><a href="#c-使用此配置文件启动agent" class="headerlink" title="c) 使用此配置文件启动agent"></a>c) 使用此配置文件启动agent</h3><h4 id="启动脚本前保证HDFS集群正常运行"><a href="#启动脚本前保证HDFS集群正常运行" class="headerlink" title="启动脚本前保证HDFS集群正常运行"></a>启动脚本前保证HDFS集群正常运行</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[tomandersen@hadoop101 flume-1.8.0]$ call-cluster.sh jps</span><br><span class="line">----------hadoop103----------</span><br><span class="line">18272 Jps</span><br><span class="line">17794 DataNode</span><br><span class="line">17987 NodeManager</span><br><span class="line">18105 JobHistoryServer</span><br><span class="line">17868 SecondaryNameNode</span><br><span class="line">----------hadoop102----------</span><br><span class="line">17826 DataNode</span><br><span class="line">18457 Jps</span><br><span class="line">17950 ResourceManager</span><br><span class="line">18079 NodeManager</span><br><span class="line">----------hadoop101----------</span><br><span class="line">10321 DataNode</span><br><span class="line">10785 Jps</span><br><span class="line">10619 NodeManager</span><br><span class="line">10205 NameNode</span><br><span class="line"></span><br><span class="line">----------execute <span class="string">"jps"</span> <span class="keyword">in</span> cluster takes 6 seconds----------</span><br><span class="line"></span><br><span class="line">[tomandersen@hadoop101 flume-1.8.0]$</span><br></pre></td></tr></table></figure>
+<h3 id="c-使用此配置文件启动agent"><a href="#c-使用此配置文件启动agent" class="headerlink" title="c) 使用此配置文件启动agent"></a>c) 使用此配置文件启动agent</h3><h4 id="启动脚本前保证HDFS集群正常运行"><a href="#启动脚本前保证HDFS集群正常运行" class="headerlink" title="启动脚本前保证HDFS集群正常运行"></a>启动脚本前保证HDFS集群正常运行</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash">[tomandersen@hadoop101 flume-1.8.0]$ call-cluster.sh jps<br>----------hadoop103----------<br>18272 Jps<br>17794 DataNode<br>17987 NodeManager<br>18105 JobHistoryServer<br>17868 SecondaryNameNode<br>----------hadoop102----------<br>17826 DataNode<br>18457 Jps<br>17950 ResourceManager<br>18079 NodeManager<br>----------hadoop101----------<br>10321 DataNode<br>10785 Jps<br>10619 NodeManager<br>10205 NameNode<br><br>----------execute <span class="hljs-string">"jps"</span> <span class="hljs-keyword">in</span> cluster takes 6 seconds----------<br><br>[tomandersen@hadoop101 flume-1.8.0]$<br></code></pre></td></tr></table></figure>
 
-<h4 id="在Flume安装路径下通过bin-flume-ng脚本启动agent"><a href="#在Flume安装路径下通过bin-flume-ng脚本启动agent" class="headerlink" title="在Flume安装路径下通过bin/flume-ng脚本启动agent"></a>在Flume安装路径下通过<code>bin/flume-ng</code>脚本启动agent</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/flume-ng agent -n a1 -c conf/ -f job/netcat-memory-hdfs.properties</span><br></pre></td></tr></table></figure>
+<h4 id="在Flume安装路径下通过bin-flume-ng脚本启动agent"><a href="#在Flume安装路径下通过bin-flume-ng脚本启动agent" class="headerlink" title="在Flume安装路径下通过bin/flume-ng脚本启动agent"></a>在Flume安装路径下通过<code>bin/flume-ng</code>脚本启动agent</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">./bin/flume-ng agent -n a1 -c conf/ -f job/netcat-memory-hdfs.properties<br></code></pre></td></tr></table></figure>
 
 
 
-<h3 id="d-发送测试数据并检查HDFS中是否成功上传对应数据"><a href="#d-发送测试数据并检查HDFS中是否成功上传对应数据" class="headerlink" title="d) 发送测试数据并检查HDFS中是否成功上传对应数据"></a>d) 发送测试数据并检查HDFS中是否成功上传对应数据</h3><h4 id="发送测试数据"><a href="#发送测试数据" class="headerlink" title="发送测试数据"></a>发送测试数据</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[tomandersen@hadoop101 ~]$ <span class="built_in">echo</span> Hello World! | nc localhost 44444</span><br><span class="line">OK</span><br><span class="line">[tomandersen@hadoop101 ~]$ </span><br><span class="line">[tomandersen@hadoop101 ~]$</span><br></pre></td></tr></table></figure>
+<h3 id="d-发送测试数据并检查HDFS中是否成功上传对应数据"><a href="#d-发送测试数据并检查HDFS中是否成功上传对应数据" class="headerlink" title="d) 发送测试数据并检查HDFS中是否成功上传对应数据"></a>d) 发送测试数据并检查HDFS中是否成功上传对应数据</h3><h4 id="发送测试数据"><a href="#发送测试数据" class="headerlink" title="发送测试数据"></a>发送测试数据</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">[tomandersen@hadoop101 ~]$ <span class="hljs-built_in">echo</span> Hello World! | nc localhost 44444<br>OK<br>[tomandersen@hadoop101 ~]$ <br>[tomandersen@hadoop101 ~]$<br></code></pre></td></tr></table></figure>
 
-<h4 id="进入NameNode-Web-UI页面查看HDFS文件"><a href="#进入NameNode-Web-UI页面查看HDFS文件" class="headerlink" title="进入NameNode Web UI页面查看HDFS文件"></a>进入NameNode Web UI页面查看HDFS文件</h4><p><img src="https://img-blog.csdnimg.cn/20200305113842376.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="查看HDFS文件"></p>
-<h4 id="下载并查看查看HDFS文件内容"><a href="#下载并查看查看HDFS文件内容" class="headerlink" title="下载并查看查看HDFS文件内容"></a>下载并查看查看HDFS文件内容</h4><p><img src="https://img-blog.csdnimg.cn/20200305113859854.png" alt="查看HDFS文件"></p>
+<h4 id="进入NameNode-Web-UI页面查看HDFS文件"><a href="#进入NameNode-Web-UI页面查看HDFS文件" class="headerlink" title="进入NameNode Web UI页面查看HDFS文件"></a>进入NameNode Web UI页面查看HDFS文件</h4><p><img src="https://img-blog.csdnimg.cn/20200305113842376.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="查看HDFS文件"></p>
+<h4 id="下载并查看查看HDFS文件内容"><a href="#下载并查看查看HDFS文件内容" class="headerlink" title="下载并查看查看HDFS文件内容"></a>下载并查看查看HDFS文件内容</h4><p><img src="https://img-blog.csdnimg.cn/20200305113859854.png" srcset="/img/loading.gif" lazyload alt="查看HDFS文件"></p>
 <hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>
-    </div>
-
-    
-    
-    
-      
-  <div class="popular-posts-header">Related Posts</div>
-  <ul class="popular-posts">
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\05\Flume之Multiplexing-Channel-Selector使用示例\" rel="bookmark">Flume之Multiplexing Channel Selector使用示例</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\05\Flume之使用Failover-Sink-Processor实现sink故障转移\" rel="bookmark">Flume之使用Failover Sink Processor实现sink故障转移</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\05\Flume之使用Loadbalancing-Sink-Processor实现sink负载均衡\" rel="bookmark">Flume之使用Loadbalancing Sink Processor实现sink负载均衡</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\05\Flume之入门级安装部署\" rel="bookmark">Flume之入门级安装部署</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\05\Flume之实现和使用自定义Interceptor\" rel="bookmark">Flume之实现和使用自定义Interceptor</a></div>
-    </li>
-  </ul>
-
-        <div class="reward-container">
-  <div>感谢老板赏赐的辣条和阔落( ^ω^ )</div>
-  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
-    Donate
-  </button>
-  <div id="qr" style="display: none;">
-      
-      <div style="display: inline-block;">
-        <img src="/images/WeChatAppreciation_1.jpg" alt="Tom Andersen WeChat Pay">
-        <p>WeChat Pay</p>
-      </div>
-
-  </div>
-</div>
-
-        
-
-  <div class="followme">
-    
-
-    <div class="social-list">
-
-            <div class="social-item">
-              <a target="_blank" class="social-link" href="/atom.xml">
-                <span class="icon">
-                  <i class="fa fa-rss"></i>
-                </span>
-
-                <span class="label">RSS</span>
-              </a>
             </div>
-    </div>
-  </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Flume/">Flume</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Flume/">Flume</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                      <a class="hover-with-bg" href="/tags/HDFS/">HDFS</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/03/05/Maven%E4%B9%8B%E5%AD%90%E6%A8%A1%E5%9D%97pom-xml%E7%BB%A7%E6%89%BF%E7%88%B6%E6%A8%A1%E5%9D%97pom-xml%E9%85%8D%E7%BD%AE/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Maven之子模块pom.xml继承父模块pom.xml配置</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/05/Flume%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+                        <span class="hidden-mobile">Flume之入门级安装部署</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
 
-
-      <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
-              <a href="/tags/Flume/" rel="tag"><i class="fa fa-tag"></i> Flume</a>
-              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 大数据</a>
-              <a href="/tags/HDFS/" rel="tag"><i class="fa fa-tag"></i> HDFS</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2020/03/05/Maven%E4%B9%8B%E5%AD%90%E6%A8%A1%E5%9D%97pom-xml%E7%BB%A7%E6%89%BF%E7%88%B6%E6%A8%A1%E5%9D%97pom-xml%E9%85%8D%E7%BD%AE/" rel="prev" title="Maven之子模块pom.xml继承父模块pom.xml配置">
-      <i class="fa fa-chevron-left"></i> Maven之子模块pom.xml继承父模块pom.xml配置
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/03/05/Flume%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/" rel="next" title="Flume之入门级安装部署">
-      Flume之入门级安装部署 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-  </div>
-
-
-          </div>
-          
-    <div class="comments" id="valine-comments"></div>
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let activeClass = CONFIG.comments.activeClass;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
+            
+          </article>
         </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体步骤"><span class="nav-text">具体步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-拷贝Hadoop相关jar包至flume-lib-路径下"><span class="nav-text">a) 拷贝Hadoop相关jar包至flume&#x2F;lib&#x2F;路径下</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#在hadoop-2-7-7-share-路径下找到以下对应jar包，并将其拷贝至flume-lib-路径下。Flume启动时，会将此路径添加至ClassPath"><span class="nav-text">在hadoop-2.7.7&#x2F;share&#x2F;路径下找到以下对应jar包，并将其拷贝至flume&#x2F;lib&#x2F;路径下。Flume启动时，会将此路径添加至ClassPath</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-根据使用场景配置properties文件"><span class="nav-text">b) 根据使用场景配置properties文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-使用此配置文件启动agent"><span class="nav-text">c) 使用此配置文件启动agent</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#启动脚本前保证HDFS集群正常运行"><span class="nav-text">启动脚本前保证HDFS集群正常运行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在Flume安装路径下通过bin-flume-ng脚本启动agent"><span class="nav-text">在Flume安装路径下通过bin&#x2F;flume-ng脚本启动agent</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-发送测试数据并检查HDFS中是否成功上传对应数据"><span class="nav-text">d) 发送测试数据并检查HDFS中是否成功上传对应数据</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#发送测试数据"><span class="nav-text">发送测试数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进入NameNode-Web-UI页面查看HDFS文件"><span class="nav-text">进入NameNode Web UI页面查看HDFS文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#下载并查看查看HDFS文件内容"><span class="nav-text">下载并查看查看HDFS文件内容</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End"><span class="nav-text">End~</span></a></li></ol></div>
       </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Tom Andersen"
-      src="/images/skull.JPG">
-  <p class="site-author-name" itemprop="name">Tom Andersen</p>
-  <div class="site-description" itemprop="description">Stay hungry.Stay foolish.</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">53</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">11</span>
-        <span class="site-state-item-name">categories</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">35</span>
-        <span class="site-state-item-name">tags</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/TomAndersen-cc/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;TomAndersen-cc&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:1040994898@qq.com" title="E-Mail → mailto:1040994898@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://www.weibo.com/u/3985451521" title="Weibo → https:&#x2F;&#x2F;www.weibo.com&#x2F;u&#x2F;3985451521" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://me.csdn.net/TomAndersen" title="CSDN → https:&#x2F;&#x2F;me.csdn.net&#x2F;TomAndersen" rel="noopener" target="_blank"><i class="fa fa-fw fa-link"></i>CSDN</a>
-      </span>
-  </div>
-
-
-
-      </div>
-	  
-	  	  
-
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">鄂ICP备20003533号-1 </a>
-      <img src="/images/备案图标.png" style="display: inline-block;"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42112702000056" rel="noopener" target="_blank">42112702000056 </a>
-  </div>
-
-<div class="copyright">
-  
-  &copy; 2019 – 
-  <span itemprop="copyrightYear">2020</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Tom Andersen</span>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.1
-  </div>
-
-        
-
-
-
-
-
-
-
 
       </div>
-    </footer>
+    
   </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
 
   
-  
-  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-nest@1/canvas-nest.min.js"></script>
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/muse.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-<script src="/js/bookmark.js"></script>
-
-
-
 
   
+</footer>
 
 
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
 
 
   
-<script src="/js/local-search.js"></script>
-
-
-
-
-
-
-
-
-
-
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
   
 
-  
 
 
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'N6boUhPERzIoLzE9QxXhsmTm-gzGzoHsz',
-      appKey     : 'KktFymvrpTqP9uvFXf7eyWEq',
-      placeholder: "Just go",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : true,
-      lang       : 'zh-cn' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : false,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
 
 </body>
 </html>

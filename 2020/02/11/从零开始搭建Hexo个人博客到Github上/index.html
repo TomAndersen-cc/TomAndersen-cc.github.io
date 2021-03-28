@@ -1,309 +1,235 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.2.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-cat-180x180.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-cat-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-cat-16x16.png">
-  <link rel="mask-icon" href="/images/logo-cat.svg" color="#222">
-  <meta http-equiv="Cache-Control" content="no-transform">
-  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Tom Andersen">
+  <meta name="keywords" content="">
+  
+  <title>从零开始搭建Hexo个人博客到Github上 - Eden</title>
 
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":20,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
-  </script>
-
-  <meta property="og:type" content="article">
-<meta property="og:title" content="从零开始搭建Hexo个人博客到Github上">
-<meta property="og:url" content="https://tomandersen-cc.github.io/2020/02/11/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAHexo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%88%B0Github%E4%B8%8A/index.html">
-<meta property="og:site_name" content="Eden">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211231905205.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211232042694.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211232138754.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211232255425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211232335197.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/2020021123241594.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211232436407.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211232455599.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211232517279.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/2020021123252556.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211232602295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211232614762.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211232745382.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200211232825846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-<meta property="article:published_time" content="2020-02-11T15:30:22.000Z">
-<meta property="article:modified_time" content="2020-03-06T10:20:52.846Z">
-<meta property="article:author" content="Tom Andersen">
-<meta property="article:tag" content="Blog">
-<meta property="article:tag" content="Hexo">
-<meta property="article:tag" content="Github">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200211231905205.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70">
-
-<link rel="canonical" href="https://tomandersen-cc.github.io/2020/02/11/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAHexo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%88%B0Github%E4%B8%8A/">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true
-  };
-</script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
-  <title>从零开始搭建Hexo个人博客到Github上 | Eden</title>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
   
 
 
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?a068b18edc2d52225241d153c78d9954";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","version":"1.8.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-<link rel="alternate" href="/atom.xml" title="Eden" type="application/atom+xml">
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Eden" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
 
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Eden</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-	
-	
-	
   </div>
-
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
-
-  </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
-        </a>
-      </li>
-  </ul>
-
 </nav>
-  <div class="site-search">
-    <div class="popup search-popup">
-    <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocorrect="off" autocapitalize="off"
-           placeholder="Searching..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div id="search-result"></div>
 
-</div>
-<div class="search-pop-overlay"></div>
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="从零开始搭建Hexo个人博客到Github上">
+              
+            </span>
 
-  </div>
-</div>
-    </header>
-	
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
-
-  <a href="https://github.com/TomAndersen-cc/TomAndersen-cc.github.io" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
-
-	
-	
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content">
             
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-02-11 23:30" pubdate>
+        2020年2月11日 晚上
+      </time>
+    </span>
+  
+</div>
 
-  <div class="posts-expand">
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.2k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
       
+      
+      13
+       分钟
+    </span>
+  
+
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="https://tomandersen-cc.github.io/2020/02/11/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAHexo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%88%B0Github%E4%B8%8A/">
+</div>
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/skull.JPG">
-      <meta itemprop="name" content="Tom Andersen">
-      <meta itemprop="description" content="Stay hungry.Stay foolish.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Eden">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          从零开始搭建Hexo个人博客到Github上
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-02-11 23:30:22" itemprop="dateCreated datePublished" datetime="2020-02-11T23:30:22+08:00">2020-02-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-06 18:20:52" itemprop="dateModified" datetime="2020-03-06T18:20:52+08:00">2020-03-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index">
-                    <span itemprop="name">个人博客搭建</span>
-                  </a>
-                </span>
-            </span>
+            
+          </div>
 
           
-            <span id="/2020/02/11/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAHexo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%88%B0Github%E4%B8%8A/" class="post-meta-item leancloud_visitors" data-flag-title="从零开始搭建Hexo个人博客到Github上" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2020/02/11/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAHexo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%88%B0Github%E4%B8%8A/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/02/11/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAHexo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%88%B0Github%E4%B8%8A/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>2.1k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>2 mins.</span>
-            </span>
-
         </div>
-      </header>
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
       
-        <hr>
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">从零开始搭建Hexo个人博客到Github上</h1>
+            
+            <div class="markdown-body">
+              <hr>
 <a id="more"></a>
 
 <hr>
@@ -315,70 +241,70 @@
 <hr>
 <h2 id="具体搭建步骤"><a href="#具体搭建步骤" class="headerlink" title="具体搭建步骤"></a>具体搭建步骤</h2><h3 id="1-下载Git"><a href="#1-下载Git" class="headerlink" title="1. 下载Git"></a>1. 下载Git</h3><ul>
 <li><p><strong>本次搭建博客，我们主要会用到git bash工具来执行Linux命令，使用cmd也行。前往Git官网下载Git工具，并在git bash中配置好git（设置全局用户名、全局邮箱等），如：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">"John Doe"</span></span><br><span class="line">git config --global user.email johndoe@example.com</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git config --global user.name <span class="hljs-string">"John Doe"</span><br>git config --global user.email johndoe@example.com<br></code></pre></td></tr></table></figure>
 </li>
 <li><p><strong>没有Github账号记得先申请一个，后续所有命令都在git bash中执行</strong></p>
 </li>
 </ul>
 <h3 id="2-下载node-js"><a href="#2-下载node-js" class="headerlink" title="2. 下载node.js"></a>2. 下载node.js</h3><ul>
-<li><p><strong>前往node.js官网下载LTS版本（长期支持版），直接安装即可，因为后续Hexo的安装要用到npm工具：</strong><br><img src="https://img-blog.csdnimg.cn/20200211231905205.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="下载node.js"></p>
+<li><p><strong>前往node.js官网下载LTS版本（长期支持版），直接安装即可，因为后续Hexo的安装要用到npm工具：</strong><br><img src="https://img-blog.csdnimg.cn/20200211231905205.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="下载node.js"></p>
 </li>
 <li><p><strong>下载完成之后直接安装，安装完成之后使用 <code>node -v</code> 和 <code>npm -v</code> 命令来检查是否安装成功：</strong></p>
-<p>  <img src="https://img-blog.csdnimg.cn/20200211232042694.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="检查node.js安装"></p>
+<p>  <img src="https://img-blog.csdnimg.cn/20200211232042694.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="检查node.js安装"></p>
 </li>
 </ul>
 <h3 id="3-下载npm淘宝镜像"><a href="#3-下载npm淘宝镜像" class="headerlink" title="3. 下载npm淘宝镜像"></a>3. 下载npm淘宝镜像</h3><ul>
 <li><p><strong>由于自带的npm工具下载hexo很慢（GFW牛逼~），所以先使用npm来下载cnpm工具，然后用cnpm下载hexo就会快得多：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install -g cnpm --registry=https://registry.npm.taobao.org<br></code></pre></td></tr></table></figure>
 </li>
-<li><p><strong>如果命令执行失败了就多试几次。安装完成后使用<code>cnpm -v</code>来测试是否安装成功：</strong><br><img src="https://img-blog.csdnimg.cn/20200211232138754.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="安装cnpm"></p>
+<li><p><strong>如果命令执行失败了就多试几次。安装完成后使用<code>cnpm -v</code>来测试是否安装成功：</strong><br><img src="https://img-blog.csdnimg.cn/20200211232138754.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="安装cnpm"></p>
 </li>
 </ul>
 <h3 id="4-下载hexo框架"><a href="#4-下载hexo框架" class="headerlink" title="4. 下载hexo框架"></a>4. 下载hexo框架</h3><ul>
 <li><p><strong>使用cnpm工具下载hexo：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cnpm install -g hexo-cli<br></code></pre></td></tr></table></figure>
 </li>
-<li><p><strong>使用 <code>hexo v</code> 命令来测试hexo是否安装成功：</strong><br><img src="https://img-blog.csdnimg.cn/20200211232255425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="安装hexo"></p>
+<li><p><strong>使用 <code>hexo v</code> 命令来测试hexo是否安装成功：</strong><br><img src="https://img-blog.csdnimg.cn/20200211232255425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="安装hexo"></p>
 </li>
 </ul>
 <h3 id="5-启动hexo"><a href="#5-启动hexo" class="headerlink" title="5. 启动hexo"></a>5. 启动hexo</h3><ul>
 <li><p><strong>先创建指定文件夹，用于hexo博客站点，本次我创建的文件夹名为<code>HexoBlogs</code>，之后的git bash命令都在此文件夹内执行：</strong></p>
-<p>  <img src="https://img-blog.csdnimg.cn/20200211232335197.png" alt="创建博客站点文件夹"></p>
+<p>  <img src="https://img-blog.csdnimg.cn/20200211232335197.png" srcset="/img/loading.gif" lazyload alt="创建博客站点文件夹"></p>
 </li>
 <li><p><strong>进入此文件夹，启动hexo框架之前先进行初始化：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo init<br></code></pre></td></tr></table></figure>
 </li>
 <li><p><strong>初始化完成之后会创建一个默认的hello-world博客和默认的landscape主题。然后我们生成博客对应的页面</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g <span class="comment"># 或者hexo generate</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo g <span class="hljs-comment"># 或者hexo generate</span><br></code></pre></td></tr></table></figure>
 </li>
 <li><p><strong>然后我们启动hexo服务（退出时命令行使用ctrl+c）</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s <span class="comment"># 或者hexo server</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo s <span class="hljs-comment"># 或者hexo server</span><br></code></pre></td></tr></table></figure>
 </li>
 <li><p><strong>前往<code>http://localhost:4000</code>页面查看本地博客页面是否生成成功：</strong></p>
 </li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/2020021123241594.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="localhost:4000"></p>
+<p><img src="https://img-blog.csdnimg.cn/2020021123241594.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="localhost:4000"></p>
 <h3 id="6-在Github上新建仓库"><a href="#6-在Github上新建仓库" class="headerlink" title="6. 在Github上新建仓库"></a>6. 在Github上新建仓库</h3><ul>
-<li><p><strong>新建仓库命名格式必须为<code>&lt;Owner&gt;.github.io</code>，即“用户名.github.io”的格式，如<code>tomandersen-cc.github.io</code>：</strong><br><img src="https://img-blog.csdnimg.cn/20200211232436407.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="新建仓库"></p>
+<li><p><strong>新建仓库命名格式必须为<code>&lt;Owner&gt;.github.io</code>，即“用户名.github.io”的格式，如<code>tomandersen-cc.github.io</code>：</strong><br><img src="https://img-blog.csdnimg.cn/20200211232436407.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="新建仓库"></p>
 </li>
-<li><p><strong>创建完成之后保留此页面：</strong><br><img src="https://img-blog.csdnimg.cn/20200211232455599.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="保留页面"></p>
+<li><p><strong>创建完成之后保留此页面：</strong><br><img src="https://img-blog.csdnimg.cn/20200211232455599.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="保留页面"></p>
 <h3 id="7-上传本地hexo博客框架"><a href="#7-上传本地hexo博客框架" class="headerlink" title="7. 上传本地hexo博客框架"></a>7. 上传本地hexo博客框架</h3></li>
 <li><p><strong>安装配置工具：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cnpm install --save hexo-deployer-git<br></code></pre></td></tr></table></figure>
 </li>
 <li><p><strong>修改hexo相关配置，在之前创建的文件夹中，修改配置文件<code>_config.yml</code>，在最后几行的<code>deploy</code>模块中设置对应的参数<code>type</code> 、<code>repo</code>和<code>branch</code>：</strong></p>
-<p>  <img src="https://img-blog.csdnimg.cn/20200211232517279.png" alt="配置参数"></p>
+<p>  <img src="https://img-blog.csdnimg.cn/20200211232517279.png" srcset="/img/loading.gif" lazyload alt="配置参数"></p>
 </li>
 <li><p><strong>其中参数<code>repo</code>的值即为之前创建仓库页面所显示的仓库地址，即：</strong></p>
-<p>  <img src="https://img-blog.csdnimg.cn/2020021123252556.png" alt="repo参数"></p>
+<p>  <img src="https://img-blog.csdnimg.cn/2020021123252556.png" srcset="/img/loading.gif" lazyload alt="repo参数"></p>
 </li>
 <li><p><strong>修改完成后，保存退出</strong></p>
 </li>
 <li><p><strong>然后重新生成博客页面并上传至Github，依次输入以下命令：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g <span class="comment"># 或者 hexo generate</span></span><br><span class="line">hexo d <span class="comment"># 或者 hexo deploy</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo clean<br>hexo g <span class="hljs-comment"># 或者 hexo generate</span><br>hexo d <span class="hljs-comment"># 或者 hexo deploy</span><br></code></pre></td></tr></table></figure>
 </li>
 <li><p><strong>通过之前设置的仓库名来访问上传的博客（之后仓库名不能更改）：</strong></p>
-<p>  <img src="https://img-blog.csdnimg.cn/20200211232602295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="访问博客"></p>
+<p>  <img src="https://img-blog.csdnimg.cn/20200211232602295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="访问博客"></p>
 </li>
 </ul>
 <ul>
@@ -386,10 +312,10 @@
 </ul>
 <hr>
 <h2 id="发布博客"><a href="#发布博客" class="headerlink" title="发布博客"></a>发布博客</h2><ul>
-<li><p><strong>使用<code>hexo n &lt;blogname&gt;</code>命令创建博客，如：<code>hexo n &quot;My first blog&quot;</code>：</strong><br><img src="https://img-blog.csdnimg.cn/20200211232614762.png" alt="创建博客"></p>
+<li><p><strong>使用<code>hexo n &lt;blogname&gt;</code>命令创建博客，如：<code>hexo n &quot;My first blog&quot;</code>：</strong><br><img src="https://img-blog.csdnimg.cn/20200211232614762.png" srcset="/img/loading.gif" lazyload alt="创建博客"></p>
 </li>
 <li><p><strong>会在hexo站点文件夹下的 <code>source/_posts/</code>路径下创建对应名的.md文档，使用Markdown语法编辑此文档，然后再次创建博客页面，上传到Github即可实现博客发布：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g <span class="comment"># 或者 hexo generate</span></span><br><span class="line">hexo d <span class="comment"># 或者 hexo deploy</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo clean<br>hexo g <span class="hljs-comment"># 或者 hexo generate</span><br>hexo d <span class="hljs-comment"># 或者 hexo deploy</span><br></code></pre></td></tr></table></figure>
 
 </li>
 </ul>
@@ -398,15 +324,15 @@
 <li><p><strong>去Github检索相关主题，当然也可以去官方主题市场进行下载，这里选择Github上的<a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank" rel="noopener"> material-indigo </a>主题作为例。</strong></p>
 </li>
 <li><p><strong>使用git bash执行<code>git clone</code>命令，将工程克隆到之前创建的博客文件夹下的<code>themes/indigo</code>路径下：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/yscoder/hexo-theme-indigo.git themes/indigo</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/yscoder/hexo-theme-indigo.git themes/indigo<br></code></pre></td></tr></table></figure>
 </li>
 <li><p><strong>若clone速度太慢可以尝试修改hosts文件或者其他方式，这里就不多赘述</strong></p>
 </li>
 </ul>
 <h3 id="2-配置主题"><a href="#2-配置主题" class="headerlink" title="2. 配置主题"></a>2. 配置主题</h3><ul>
-<li><p><strong>修改博客站点文件夹下的<code>_config.yml</code>文件，将其中的<code>theme</code>参数设置成新下载的主题名：</strong><br>  <img src="https://img-blog.csdnimg.cn/20200211232745382.png" alt="配置主题"></p>
+<li><p><strong>修改博客站点文件夹下的<code>_config.yml</code>文件，将其中的<code>theme</code>参数设置成新下载的主题名：</strong><br>  <img src="https://img-blog.csdnimg.cn/20200211232745382.png" srcset="/img/loading.gif" lazyload alt="配置主题"></p>
 </li>
-<li><p><strong>然后依旧是重新生成博客页面<code>hexo clean</code> <code>hexo g</code>，开启<code>hexo s</code>开启服务，在本地查看是否配置成功：</strong><br>  <img src="https://img-blog.csdnimg.cn/20200211232825846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" alt="本地配置检查"></p>
+<li><p><strong>然后依旧是重新生成博客页面<code>hexo clean</code> <code>hexo g</code>，开启<code>hexo s</code>开启服务，在本地查看是否配置成功：</strong><br>  <img src="https://img-blog.csdnimg.cn/20200211232825846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RvbUFuZGVyc2Vu,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="本地配置检查"></p>
 </li>
 <li><p><strong>最后便可以使用<code>hexo d</code>命令上传至Github，实现博客发布</strong></p>
 </li>
@@ -415,319 +341,226 @@
 </ul>
 <h2 id="PS：若生成的博客页面存在功能性故障，记得在浏览器浏览页面时按F12进入调试模式，便于定位故障原因"><a href="#PS：若生成的博客页面存在功能性故障，记得在浏览器浏览页面时按F12进入调试模式，便于定位故障原因" class="headerlink" title="PS：若生成的博客页面存在功能性故障，记得在浏览器浏览页面时按F12进入调试模式，便于定位故障原因"></a>PS：若生成的博客页面存在功能性故障，记得在浏览器浏览页面时按F12进入调试模式，便于定位故障原因</h2><hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>
-    </div>
-
-    
-    
-    
-      
-  <div class="popular-posts-header">Related Posts</div>
-  <ul class="popular-posts">
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\06\Hexo之NexT主题中设置canvas-nest特效\" rel="bookmark">Hexo之NexT主题中设置canvas-nest特效</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\06\Hexo之NexT主题中设置symbols-count-time统计单词\" rel="bookmark">Hexo之NexT主题中设置symbols_count_time统计单词</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\06\Hexo之NexT主题中设置加载进度条\" rel="bookmark">Hexo之NexT主题中设置加载进度条</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\15\Hexo之NexT主题设置背景图片\" rel="bookmark">Hexo之NexT主题设置背景图片</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\04\Github-Page绑定至个人域名\" rel="bookmark">GitHub Page绑定至个人域名</a></div>
-    </li>
-  </ul>
-
-        <div class="reward-container">
-  <div>感谢老板赏赐的辣条和阔落( ^ω^ )</div>
-  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
-    Donate
-  </button>
-  <div id="qr" style="display: none;">
-      
-      <div style="display: inline-block;">
-        <img src="/images/WeChatAppreciation_1.jpg" alt="Tom Andersen WeChat Pay">
-        <p>WeChat Pay</p>
-      </div>
-
-  </div>
-</div>
-
-        
-
-  <div class="followme">
-    
-
-    <div class="social-list">
-
-            <div class="social-item">
-              <a target="_blank" class="social-link" href="/atom.xml">
-                <span class="icon">
-                  <i class="fa fa-rss"></i>
-                </span>
-
-                <span class="label">RSS</span>
-              </a>
             </div>
-    </div>
-  </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">个人博客搭建</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Blog/">Blog</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Hexo/">Hexo</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Github/">Github</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/02/13/Java%E4%B9%8B%E4%BB%8E%E5%AD%97%E8%8A%82%E7%A0%81%E8%A7%92%E5%BA%A6%E8%A7%A3%E6%9E%90i++%E5%92%8C++i%E5%8E%9F%E7%90%86/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java之从字节码角度解析i++和++i原理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/02/10/IDEA%E6%89%93%E5%8C%85%E6%99%AE%E9%80%9AJava%E9%A1%B9%E7%9B%AE%EF%BC%88Maven%E9%80%9A%E7%94%A8%EF%BC%89/">
+                        <span class="hidden-mobile">IDEA打包普通Java项目（Maven通用）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
 
-
-      <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/Blog/" rel="tag"><i class="fa fa-tag"></i> Blog</a>
-              <a href="/tags/Hexo/" rel="tag"><i class="fa fa-tag"></i> Hexo</a>
-              <a href="/tags/Github/" rel="tag"><i class="fa fa-tag"></i> Github</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2020/02/13/Java%E4%B9%8B%E4%BB%8E%E5%AD%97%E8%8A%82%E7%A0%81%E8%A7%92%E5%BA%A6%E8%A7%A3%E6%9E%90i++%E5%92%8C++i%E5%8E%9F%E7%90%86/" rel="prev" title="Java之从字节码角度解析i++和++i原理">
-      <i class="fa fa-chevron-left"></i> Java之从字节码角度解析i++和++i原理
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/02/10/IDEA%E6%89%93%E5%8C%85%E6%99%AE%E9%80%9AJava%E9%A1%B9%E7%9B%AE%EF%BC%88Maven%E9%80%9A%E7%94%A8%EF%BC%89/" rel="next" title="IDEA打包普通Java项目（Maven通用）">
-      IDEA打包普通Java项目（Maven通用） <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-  </div>
-
-
-          </div>
-          
-    <div class="comments" id="valine-comments"></div>
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let activeClass = CONFIG.comments.activeClass;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
+            
+          </article>
         </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体搭建步骤"><span class="nav-text">具体搭建步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-下载Git"><span class="nav-text">1. 下载Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-下载node-js"><span class="nav-text">2. 下载node.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-下载npm淘宝镜像"><span class="nav-text">3. 下载npm淘宝镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-下载hexo框架"><span class="nav-text">4. 下载hexo框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-启动hexo"><span class="nav-text">5. 启动hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-在Github上新建仓库"><span class="nav-text">6. 在Github上新建仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-上传本地hexo博客框架"><span class="nav-text">7. 上传本地hexo博客框架</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布博客"><span class="nav-text">发布博客</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更换博客主题"><span class="nav-text">更换博客主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-下载主题"><span class="nav-text">1. 下载主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-配置主题"><span class="nav-text">2. 配置主题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PS：若生成的博客页面存在功能性故障，记得在浏览器浏览页面时按F12进入调试模式，便于定位故障原因"><span class="nav-text">PS：若生成的博客页面存在功能性故障，记得在浏览器浏览页面时按F12进入调试模式，便于定位故障原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End"><span class="nav-text">End~</span></a></li></ol></div>
       </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Tom Andersen"
-      src="/images/skull.JPG">
-  <p class="site-author-name" itemprop="name">Tom Andersen</p>
-  <div class="site-description" itemprop="description">Stay hungry.Stay foolish.</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">53</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">11</span>
-        <span class="site-state-item-name">categories</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">35</span>
-        <span class="site-state-item-name">tags</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/TomAndersen-cc/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;TomAndersen-cc&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:1040994898@qq.com" title="E-Mail → mailto:1040994898@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://www.weibo.com/u/3985451521" title="Weibo → https:&#x2F;&#x2F;www.weibo.com&#x2F;u&#x2F;3985451521" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://me.csdn.net/TomAndersen" title="CSDN → https:&#x2F;&#x2F;me.csdn.net&#x2F;TomAndersen" rel="noopener" target="_blank"><i class="fa fa-fw fa-link"></i>CSDN</a>
-      </span>
-  </div>
-
-
-
-      </div>
-	  
-	  	  
-
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">鄂ICP备20003533号-1 </a>
-      <img src="/images/备案图标.png" style="display: inline-block;"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42112702000056" rel="noopener" target="_blank">42112702000056 </a>
-  </div>
-
-<div class="copyright">
-  
-  &copy; 2019 – 
-  <span itemprop="copyrightYear">2020</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Tom Andersen</span>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.1
-  </div>
-
-        
-
-
-
-
-
-
-
 
       </div>
-    </footer>
+    
   </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
 
   
-  
-  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-nest@1/canvas-nest.min.js"></script>
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/muse.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-<script src="/js/bookmark.js"></script>
-
-
-
 
   
+</footer>
 
 
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
 
 
   
-<script src="/js/local-search.js"></script>
-
-
-
-
-
-
-
-
-
-
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
   
 
-  
 
 
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'N6boUhPERzIoLzE9QxXhsmTm-gzGzoHsz',
-      appKey     : 'KktFymvrpTqP9uvFXf7eyWEq',
-      placeholder: "Just go",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : true,
-      lang       : 'zh-cn' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : false,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
 
 </body>
 </html>

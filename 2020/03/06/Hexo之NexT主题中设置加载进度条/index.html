@@ -1,296 +1,243 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.2.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-cat-180x180.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-cat-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-cat-16x16.png">
-  <link rel="mask-icon" href="/images/logo-cat.svg" color="#222">
-  <meta http-equiv="Cache-Control" content="no-transform">
-  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="
 
-<link rel="stylesheet" href="/css/main.css">
+前言
+Hexo版本：4.2.0
+NexT版本：7.7.1
+GitHub：theme-next-pace
+各种进度条样式参考：Hexo博客NexT主题美化之顶部加载进度条
 
+">
+  <meta name="author" content="Tom Andersen">
+  <meta name="keywords" content="">
+  
+  <title>Hexo之NexT主题中设置加载进度条 - Eden</title>
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":20,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
-  </script>
-
-  <meta name="description" content="前言 Hexo版本：4.2.0 NexT版本：7.7.1 GitHub：theme-next-pace 各种进度条样式参考：Hexo博客NexT主题美化之顶部加载进度条">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Hexo之NexT主题中设置加载进度条">
-<meta property="og:url" content="https://tomandersen-cc.github.io/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%8A%A0%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1/index.html">
-<meta property="og:site_name" content="Eden">
-<meta property="og:description" content="前言 Hexo版本：4.2.0 NexT版本：7.7.1 GitHub：theme-next-pace 各种进度条样式参考：Hexo博客NexT主题美化之顶部加载进度条">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-03-06T04:14:35.000Z">
-<meta property="article:modified_time" content="2020-03-12T04:19:16.746Z">
-<meta property="article:author" content="Tom Andersen">
-<meta property="article:tag" content="Blog">
-<meta property="article:tag" content="Hexo">
-<meta property="article:tag" content="NexT">
-<meta name="twitter:card" content="summary">
-
-<link rel="canonical" href="https://tomandersen-cc.github.io/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%8A%A0%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1/">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true
-  };
-</script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
-  <title>Hexo之NexT主题中设置加载进度条 | Eden</title>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
   
 
 
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?a068b18edc2d52225241d153c78d9954";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","version":"1.8.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-<link rel="alternate" href="/atom.xml" title="Eden" type="application/atom+xml">
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Eden" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
 
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Eden</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-	
-	
-	
   </div>
-
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
-
-  </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
-        </a>
-      </li>
-  </ul>
-
 </nav>
-  <div class="site-search">
-    <div class="popup search-popup">
-    <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocorrect="off" autocapitalize="off"
-           placeholder="Searching..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div id="search-result"></div>
 
-</div>
-<div class="search-pop-overlay"></div>
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Hexo之NexT主题中设置加载进度条">
+              
+            </span>
 
-  </div>
-</div>
-    </header>
-	
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
-
-  <a href="https://github.com/TomAndersen-cc/TomAndersen-cc.github.io" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
-
-	
-	
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content">
             
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-06 12:14" pubdate>
+        2020年3月6日 中午
+      </time>
+    </span>
+  
+</div>
 
-  <div class="posts-expand">
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      292 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
       
+      
+      4
+       分钟
+    </span>
+  
+
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="https://tomandersen-cc.github.io/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%8A%A0%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1/">
+</div>
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/skull.JPG">
-      <meta itemprop="name" content="Tom Andersen">
-      <meta itemprop="description" content="Stay hungry.Stay foolish.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Eden">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          Hexo之NexT主题中设置加载进度条
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-03-06 12:14:35" itemprop="dateCreated datePublished" datetime="2020-03-06T12:14:35+08:00">2020-03-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-12 12:19:16" itemprop="dateModified" datetime="2020-03-12T12:19:16+08:00">2020-03-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index">
-                    <span itemprop="name">个人博客搭建</span>
-                  </a>
-                </span>
-            </span>
+            
+          </div>
 
           
-            <span id="/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%8A%A0%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1/" class="post-meta-item leancloud_visitors" data-flag-title="Hexo之NexT主题中设置加载进度条" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%8A%A0%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%8A%A0%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>1k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1 mins.</span>
-            </span>
-
         </div>
-      </header>
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
       
-        <hr>
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Hexo之NexT主题中设置加载进度条</h1>
+            
+            <div class="markdown-body">
+              <hr>
 <hr>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
 <li><strong>Hexo版本</strong>：4.2.0</li>
@@ -301,22 +248,22 @@
 <hr>
 <a id="more"></a>
 
-<h2 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h2><h3 id="1）进入NexT主题文件夹"><a href="#1）进入NexT主题文件夹" class="headerlink" title="1）进入NexT主题文件夹"></a>1）进入NexT主题文件夹</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> themes/next/</span><br><span class="line">$ ls</span><br><span class="line">_config.yml  docs/        languages/  LICENSE.md    README.md  <span class="built_in">source</span>/</span><br><span class="line">crowdin.yml  gulpfile.js  layout/     package.json  scripts/</span><br></pre></td></tr></table></figure>
+<h2 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h2><h3 id="1）进入NexT主题文件夹"><a href="#1）进入NexT主题文件夹" class="headerlink" title="1）进入NexT主题文件夹"></a>1）进入NexT主题文件夹</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">cd</span> themes/next/<br>$ ls<br>_config.yml  docs/        languages/  LICENSE.md    README.md  <span class="hljs-built_in">source</span>/<br>crowdin.yml  gulpfile.js  layout/     package.json  scripts/<br></code></pre></td></tr></table></figure>
 
 
 
 <h3 id="2）克隆Github仓库（如果使用CDN可跳过此步骤）"><a href="#2）克隆Github仓库（如果使用CDN可跳过此步骤）" class="headerlink" title="2）克隆Github仓库（如果使用CDN可跳过此步骤）"></a>2）克隆Github仓库（如果使用CDN可跳过此步骤）</h3><p><strong>将仓库克隆至<code>themes/next/source/lib</code>路径下</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/theme-next/theme-next-pace <span class="built_in">source</span>/lib/pace</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/theme-next/theme-next-pace <span class="hljs-built_in">source</span>/lib/pace<br></code></pre></td></tr></table></figure>
 
 
 
 <h3 id="3）配置NexT中的-config-xml"><a href="#3）配置NexT中的-config-xml" class="headerlink" title="3）配置NexT中的_config.xml"></a>3）配置NexT中的<code>_config.xml</code></h3><p><strong>开启pace选项</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Progress bar in the top during page loading.</span></span><br><span class="line"><span class="comment"># 设置页面加载时顶部进度条</span></span><br><span class="line"><span class="comment"># Dependencies: https://github.com/theme-next/theme-next-pace</span></span><br><span class="line"><span class="comment"># For more information: https://github.com/HubSpot/pace</span></span><br><span class="line">pace:</span><br><span class="line">  <span class="comment"># enable: false</span></span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line">  <span class="comment"># Themes list:</span></span><br><span class="line">  <span class="comment"># big-counter | bounce | barber-shop | center-atom | center-circle | center-radar | center-simple</span></span><br><span class="line">  <span class="comment"># corner-indicator | fill-left | flat-top | flash | loading-bar | mac-osx | material | minimal</span></span><br><span class="line">  theme: minimal</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Progress bar in the top during page loading.</span><br><span class="hljs-comment"># 设置页面加载时顶部进度条</span><br><span class="hljs-comment"># Dependencies: https://github.com/theme-next/theme-next-pace</span><br><span class="hljs-comment"># For more information: https://github.com/HubSpot/pace</span><br>pace:<br>  <span class="hljs-comment"># enable: false</span><br>  <span class="hljs-built_in">enable</span>: <span class="hljs-literal">true</span><br>  <span class="hljs-comment"># Themes list:</span><br>  <span class="hljs-comment"># big-counter | bounce | barber-shop | center-atom | center-circle | center-radar | center-simple</span><br>  <span class="hljs-comment"># corner-indicator | fill-left | flat-top | flash | loading-bar | mac-osx | material | minimal</span><br>  theme: minimal<br></code></pre></td></tr></table></figure>
 
 
 
 <h3 id="4）配置进度条CDN地址"><a href="#4）配置进度条CDN地址" class="headerlink" title="4）配置进度条CDN地址"></a>4）配置进度条CDN地址</h3><p><strong>在NexT主题的<code>_config.xml</code>文件中找到<code>vendors</code>选项，设置pace的cdn地址（本人设置的进度条为黑色主题，可以在<a href="https://www.jsdelivr.com/package/npm/pace-js?path=themes" target="_blank" rel="noopener">jsdelivr</a>中找到对应的样式最新版cdn地址）</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vendors:</span><br><span class="line">  ...</span><br><span class="line">  pace: https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js</span><br><span class="line">  pace_css: https://cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/black/pace-theme-loading-bar.css</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">vendors:<br>  ...<br>  pace: https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js<br>  pace_css: https://cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/black/pace-theme-loading-bar.css<br></code></pre></td></tr></table></figure>
 
 
 
@@ -328,319 +275,226 @@
 
 <hr>
 <h2 id="End"><a href="#End" class="headerlink" title="End~"></a>End~</h2>
-    </div>
-
-    
-    
-    
-      
-  <div class="popular-posts-header">Related Posts</div>
-  <ul class="popular-posts">
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\06\Hexo之NexT主题中设置canvas-nest特效\" rel="bookmark">Hexo之NexT主题中设置canvas-nest特效</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\06\Hexo之NexT主题中设置symbols-count-time统计单词\" rel="bookmark">Hexo之NexT主题中设置symbols_count_time统计单词</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\15\Hexo之NexT主题设置背景图片\" rel="bookmark">Hexo之NexT主题设置背景图片</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\02\11\从零开始搭建Hexo个人博客到Github上\" rel="bookmark">从零开始搭建Hexo个人博客到Github上</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2020\03\23\Hexo之NexT主题实现点击按钮滚动到指定位置\" rel="bookmark">Hexo之NexT主题实现点击按钮滚动到指定位置</a></div>
-    </li>
-  </ul>
-
-        <div class="reward-container">
-  <div>感谢老板赏赐的辣条和阔落( ^ω^ )</div>
-  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
-    Donate
-  </button>
-  <div id="qr" style="display: none;">
-      
-      <div style="display: inline-block;">
-        <img src="/images/WeChatAppreciation_1.jpg" alt="Tom Andersen WeChat Pay">
-        <p>WeChat Pay</p>
-      </div>
-
-  </div>
-</div>
-
-        
-
-  <div class="followme">
-    
-
-    <div class="social-list">
-
-            <div class="social-item">
-              <a target="_blank" class="social-link" href="/atom.xml">
-                <span class="icon">
-                  <i class="fa fa-rss"></i>
-                </span>
-
-                <span class="label">RSS</span>
-              </a>
             </div>
-    </div>
-  </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">个人博客搭建</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Blog/">Blog</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Hexo/">Hexo</a>
+                    
+                      <a class="hover-with-bg" href="/tags/NexT/">NexT</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/03/15/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E8%AE%BE%E7%BD%AE%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Hexo之NexT主题设置背景图片</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AEcanvas-nest%E7%89%B9%E6%95%88/">
+                        <span class="hidden-mobile">Hexo之NexT主题中设置canvas-nest特效</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
 
-
-      <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/Blog/" rel="tag"><i class="fa fa-tag"></i> Blog</a>
-              <a href="/tags/Hexo/" rel="tag"><i class="fa fa-tag"></i> Hexo</a>
-              <a href="/tags/NexT/" rel="tag"><i class="fa fa-tag"></i> NexT</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2020/03/15/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E8%AE%BE%E7%BD%AE%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87/" rel="prev" title="Hexo之NexT主题设置背景图片">
-      <i class="fa fa-chevron-left"></i> Hexo之NexT主题设置背景图片
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/03/06/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%AE%BE%E7%BD%AEcanvas-nest%E7%89%B9%E6%95%88/" rel="next" title="Hexo之NexT主题中设置canvas-nest特效">
-      Hexo之NexT主题中设置canvas-nest特效 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-  </div>
-
-
-          </div>
-          
-    <div class="comments" id="valine-comments"></div>
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let activeClass = CONFIG.comments.activeClass;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
+            
+          </article>
         </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装部署"><span class="nav-text">安装部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1）进入NexT主题文件夹"><span class="nav-text">1）进入NexT主题文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2）克隆Github仓库（如果使用CDN可跳过此步骤）"><span class="nav-text">2）克隆Github仓库（如果使用CDN可跳过此步骤）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3）配置NexT中的-config-xml"><span class="nav-text">3）配置NexT中的_config.xml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4）配置进度条CDN地址"><span class="nav-text">4）配置进度条CDN地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End"><span class="nav-text">End~</span></a></li></ol></div>
       </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Tom Andersen"
-      src="/images/skull.JPG">
-  <p class="site-author-name" itemprop="name">Tom Andersen</p>
-  <div class="site-description" itemprop="description">Stay hungry.Stay foolish.</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">53</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">11</span>
-        <span class="site-state-item-name">categories</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">35</span>
-        <span class="site-state-item-name">tags</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/TomAndersen-cc/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;TomAndersen-cc&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:1040994898@qq.com" title="E-Mail → mailto:1040994898@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://www.weibo.com/u/3985451521" title="Weibo → https:&#x2F;&#x2F;www.weibo.com&#x2F;u&#x2F;3985451521" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://me.csdn.net/TomAndersen" title="CSDN → https:&#x2F;&#x2F;me.csdn.net&#x2F;TomAndersen" rel="noopener" target="_blank"><i class="fa fa-fw fa-link"></i>CSDN</a>
-      </span>
-  </div>
-
-
-
-      </div>
-	  
-	  	  
-
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">鄂ICP备20003533号-1 </a>
-      <img src="/images/备案图标.png" style="display: inline-block;"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42112702000056" rel="noopener" target="_blank">42112702000056 </a>
-  </div>
-
-<div class="copyright">
-  
-  &copy; 2019 – 
-  <span itemprop="copyrightYear">2020</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Tom Andersen</span>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.1
-  </div>
-
-        
-
-
-
-
-
-
-
 
       </div>
-    </footer>
+    
   </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
 
   
-  
-  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-nest@1/canvas-nest.min.js"></script>
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/muse.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-<script src="/js/bookmark.js"></script>
-
-
-
 
   
+</footer>
 
 
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
 
 
   
-<script src="/js/local-search.js"></script>
-
-
-
-
-
-
-
-
-
-
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
   
 
-  
 
 
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'N6boUhPERzIoLzE9QxXhsmTm-gzGzoHsz',
-      appKey     : 'KktFymvrpTqP9uvFXf7eyWEq',
-      placeholder: "Just go",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : true,
-      lang       : 'zh-cn' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : false,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
 
 </body>
 </html>

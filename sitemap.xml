@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://tomandersen-cc.github.io/about/index.html</loc>
+    
+    <lastmod>2021-03-28T12:37:16.076Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://tomandersen-cc.github.io/2020/04/23/Kafka%E4%B9%8BKafka%20Streams%E4%BD%BF%E7%94%A8%E7%BB%83%E4%B9%A0/</loc>
     
     <lastmod>2020-06-25T01:53:44.246Z</lastmod>
