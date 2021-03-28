@@ -40,7 +40,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","version":"1.8.9","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"touch","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"a068b18edc2d52225241d153c78d9954","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+    var CONFIG = {"hostname":"tomandersen-cc.github.io","root":"/","version":"1.8.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"a068b18edc2d52225241d153c78d9954","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"N6boUhPERzIoLzE9QxXhsmTm-gzGzoHsz","app_key":"KktFymvrpTqP9uvFXf7eyWEq","server_url":null}}};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -53,7 +53,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
-       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+       href="/">&nbsp;<strong>Eden</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -143,7 +143,7 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('/img/spaceman.png') no-repeat center center;
+         style="background: url('/img/adrian-Xft-JdC-Jbc-unsplash.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
@@ -294,22 +294,22 @@ kafka版本：2.11-2.1.1
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/03/23/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%8A%A8%E6%89%93%E5%AD%97%E5%8A%A8%E7%94%BB/">Hexo之NexT主题实现点击按钮滚动到指定位置</a>
+        <a href="/2020/03/23/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%87%BB%E6%8C%89%E9%92%AE%E6%BB%9A%E5%8A%A8%E5%88%B0%E6%8C%87%E5%AE%9A%E4%BD%8D%E7%BD%AE/">Hexo之NexT主题实现点击按钮滚动到指定位置</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/03/23/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%8A%A8%E6%89%93%E5%AD%97%E5%8A%A8%E7%94%BB/">
+        <a href="/2020/03/23/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%87%BB%E6%8C%89%E9%92%AE%E6%BB%9A%E5%8A%A8%E5%88%B0%E6%8C%87%E5%AE%9A%E4%BD%8D%E7%BD%AE/">
           
           
             
           
           
 前言
-本次主要实现的功能是指定组件插入特定文本，并以打字的方式出现。主要是通过使用JavaScript插件typed和jquery实现
+本次主要实现的功能是，点击index页面中的标题或者其他组件，页面会自动向下滚动至文章版块。主要使用JavaScript插件jquery实现
 使用本教程之前记得先将博客备份，以免出现不可逆损失
 Hexo版本：4.2.0
 NexT版本：7.7.1
-typed版本：2.0.4
+jquery版本：1.11.1
 
         </a>
       </p>
@@ -351,22 +351,22 @@ typed版本：2.0.4
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/03/23/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%87%BB%E6%8C%89%E9%92%AE%E6%BB%9A%E5%8A%A8%E5%88%B0%E6%8C%87%E5%AE%9A%E4%BD%8D%E7%BD%AE/">Hexo之NexT主题实现点击按钮滚动到指定位置</a>
+        <a href="/2020/03/23/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%8A%A8%E6%89%93%E5%AD%97%E5%8A%A8%E7%94%BB/">Hexo之NexT主题实现点击按钮滚动到指定位置</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/03/23/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%87%BB%E6%8C%89%E9%92%AE%E6%BB%9A%E5%8A%A8%E5%88%B0%E6%8C%87%E5%AE%9A%E4%BD%8D%E7%BD%AE/">
+        <a href="/2020/03/23/Hexo%E4%B9%8BNexT%E4%B8%BB%E9%A2%98%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%8A%A8%E6%89%93%E5%AD%97%E5%8A%A8%E7%94%BB/">
           
           
             
           
           
 前言
-本次主要实现的功能是，点击index页面中的标题或者其他组件，页面会自动向下滚动至文章版块。主要使用JavaScript插件jquery实现
+本次主要实现的功能是指定组件插入特定文本，并以打字的方式出现。主要是通过使用JavaScript插件typed和jquery实现
 使用本教程之前记得先将博客备份，以免出现不可逆损失
 Hexo版本：4.2.0
 NexT版本：7.7.1
-jquery版本：1.11.1
+typed版本：2.0.4
 
         </a>
       </p>
@@ -465,11 +465,11 @@ kafka版本：2.11-2.1.1
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/03/17/Kafka%E4%B9%8B%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9ATopic-Partition%E7%9A%84lastOffset/">Kafka之获取指定Topic-Partition的lastOffset</a>
+        <a href="/2020/03/17/Kafka%E4%B9%8B%E8%AF%BB%E5%8F%96%E6%8C%87%E5%AE%9ATopic-Partition-Offset%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B6%88%E6%81%AF/">Kafka之读取指定Topic-Partition-Offset之后的消息</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/03/17/Kafka%E4%B9%8B%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9ATopic-Partition%E7%9A%84lastOffset/">
+        <a href="/2020/03/17/Kafka%E4%B9%8B%E8%AF%BB%E5%8F%96%E6%8C%87%E5%AE%9ATopic-Partition-Offset%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B6%88%E6%81%AF/">
           
           
             
@@ -478,7 +478,7 @@ kafka版本：2.11-2.1.1
 前言
 kafka版本：2.11-2.1.1
 基于Kafka Java API
-主要是通过封装Conusmer.endOffsets方法实现此功能
+主要是通过封装Conusmer.assign和Consumer.seek方法实现此功能。前者的作用是将指定Topic-Partition分配给对应的Consumer，后者的作用是将Consumer在指定的Topic-Partition中的Offset置于指定位置
 
         </a>
       </p>
@@ -522,11 +522,11 @@ kafka版本：2.11-2.1.1
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/03/17/Kafka%E4%B9%8B%E8%AF%BB%E5%8F%96%E6%8C%87%E5%AE%9ATopic-Partition-Offset%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B6%88%E6%81%AF/">Kafka之读取指定Topic-Partition-Offset之后的消息</a>
+        <a href="/2020/03/17/Kafka%E4%B9%8B%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9ATopic-Partition%E7%9A%84lastOffset/">Kafka之获取指定Topic-Partition的lastOffset</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/03/17/Kafka%E4%B9%8B%E8%AF%BB%E5%8F%96%E6%8C%87%E5%AE%9ATopic-Partition-Offset%E4%B9%8B%E5%90%8E%E7%9A%84%E6%B6%88%E6%81%AF/">
+        <a href="/2020/03/17/Kafka%E4%B9%8B%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9ATopic-Partition%E7%9A%84lastOffset/">
           
           
             
@@ -535,7 +535,7 @@ kafka版本：2.11-2.1.1
 前言
 kafka版本：2.11-2.1.1
 基于Kafka Java API
-主要是通过封装Conusmer.assign和Consumer.seek方法实现此功能。前者的作用是将指定Topic-Partition分配给对应的Consumer，后者的作用是将Consumer在指定的Topic-Partition中的Offset置于指定位置
+主要是通过封装Conusmer.endOffsets方法实现此功能
 
         </a>
       </p>
@@ -728,7 +728,7 @@ kafka版本：2.11-2.1.1
               <span style="visibility: hidden; width: 0">|</span>
               <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
             
-            <span>ICP</span>
+            <span>42112702000056</span>
           </a>
         </span>
       
@@ -783,6 +783,8 @@ kafka版本：2.11-2.1.1
 
 
 
+
+  <script defer src="/js/leancloud.js" ></script>
 
 
 
